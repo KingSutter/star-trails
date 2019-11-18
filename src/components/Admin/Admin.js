@@ -97,7 +97,7 @@ class Admin extends Component {
                         </thead>
                         <tbody>
                             {this.props.scenarioList.map((scenario)=>(
-                                <tr>
+                                <tr key={scenario.id}>
                                     <td>{scenario.id}</td>
                                     <td>{scenario.prompt}</td>
                                     <td>{scenario.option1}</td>
@@ -155,7 +155,7 @@ class Admin extends Component {
                         </thead>
                         <tbody>
                             {this.props.outcomeList.map((outcome)=>(
-                                <tr>
+                                <tr key={outcome.id}>
                                     <td>{outcome.id}</td>
                                     <td>{outcome.day}</td>
                                     <td>{outcome.distance}</td>
