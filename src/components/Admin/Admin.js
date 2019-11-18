@@ -4,8 +4,7 @@ import './Admin.css';
 
 class Admin extends Component {
     state = {
-        userListShowing: false,
-        scenarioListShowing: false,
+        scenarioListShowing: true,
         scenarioAddInput: {
             prompt: '',
             option1: '',
@@ -25,18 +24,13 @@ class Admin extends Component {
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
     }
-
-    toggleUserList = () => {
-        this.setState({
-            userListShowing: !this.state.userListShowing,
-        })
-    }
     // will toggleScenarioList
-    toggleScenarioList = () => {
+    toggleList = () => {
         this.setState({
             scenarioListShowing: !this.state.scenarioListShowing,
         })
     }
+
     handleScenarioInput = (e) => {
         this.setState({
             scenarioAddInput: {
@@ -45,6 +39,7 @@ class Admin extends Component {
             }
         })
     }
+    
     handleAddScenario = () => {
         //check for empty input
         for (const key in this.state.scenarioAddInput) {
@@ -73,11 +68,12 @@ class Admin extends Component {
     render() {
         return (
             <div>
-                <button onClick={this.toggleUserList}>Users List</button>
-                <button onClick={this.toggleScenarioList} >Scenarios List</button>
-                {/* displays all scenarios from the DB */}
-                <div id="scenarios-table">
+                {this.state.scenarioListShowing ? (
+                    <>
+                <button onClick={this.toggleList}>Show Users List</button><br/>
                     Scenarios: <br/><br/>
+                    {/* displays all scenarios from the DB */}
+                    <div id="scenarios-table">
                     <table>
                         <thead>
                             <tr>
@@ -131,7 +127,7 @@ class Admin extends Component {
                     </table>
                 </div>
                 <br/>
-                {/* displays all of the outcome types from the DB */}
+                {/*  displays all of the outcome types from the DB */}
                 <div id="outcome-types">
                     Outcomes: <br/><br/>
                     <table>
@@ -191,8 +187,35 @@ class Admin extends Component {
                             </tr>
                         </tfoot>
                     </table>
-                </div>
-        {/* <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span> */}
+                </div></>) : (
+                    <div id="usersTable">
+                        <button onClick={this.toggleList}>Show Scenarios</button>
+                        <br/>Users:<br/><br/>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>ID</td>
+                                    <td>Username</td>
+                                    <td>Save ID</td>
+                                    <td>Admin</td>
+                                    <td/>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.props.userList.map((user)=>(
+                                    <tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.username}</td>
+                                        <td>{String(user.save_id)}</td>
+                                        <td>{String(user.admin)}</td>
+                                        <td>{!user.admin? <button>Delete</button>:<></>}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+        {/* <span>{JSON.stringify(this.props.userList,null,2)}</span> */}
             </div>
         )
     }
