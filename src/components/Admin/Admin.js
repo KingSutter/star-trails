@@ -9,7 +9,9 @@ class Admin extends Component {
 
     // fetch all 
     componentDidMount(){
-        this.props.dispatch({type: "GET_USERS"})
+        this.props.dispatch({type: "GET_USERS"});
+        this.props.dispatch({type: "GET_SCENARIOS"});
+        this.props.dispatch({type: "GET_OUTCOMES"});
     }
 
     toggleUserList = () => {

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
-// worker Saga: will be fired on "FETCH_USER" actions
 function* getUsers() {
   try {
     const response = yield axios.get('/api/user/users');
@@ -11,9 +10,28 @@ function* getUsers() {
   }
 }
 
+function* getScenarios() {
+  try {
+    const response = yield axios.get('/api/user/scenarios');
+    yield put({ type: 'SET_SCENARIO_LIST', payload: response.data });
+  } catch (error) {
+    console.log('admin user list get request failed', error);
+  }
+}
+
+function* getOutcomes() {
+  try {
+    const response = yield axios.get('/api/user/outcomes');
+    yield put({ type: 'SET_OUTCOME_LIST', payload: response.data });
+  } catch (error) {
+    console.log('admin user list get request failed', error);
+  }
+}
+
 function* adminSaga() {
   yield takeLatest('GET_USERS', getUsers);
-//   yield takeLastest('GET_SCENARIOS', getScenarios)
+  yield takeLatest('GET_SCENARIOS', getScenarios);
+  yield takeLatest('GET_OUTCOMES', getOutcomes);
 }
 
 export default adminSaga;

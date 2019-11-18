@@ -14,7 +14,15 @@ const scenarioList = (state = [], action) => {
     else return state;
 }
 
+const outcomeList = (state = [], action) => {
+    if (action.type === 'SET_OUTCOME_LIST'){
+        return action.payload;
+    }
+    else return state;
+}
+
 export default combineReducers({
     userList,
     scenarioList,
+    outcomeList,
   });
