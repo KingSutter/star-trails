@@ -21,6 +21,11 @@ class Admin extends Component {
 
     // fetch all lists for admin to edit from DB
     componentDidMount(){
+        // check if user is an admin
+        // if(!admin) {
+        //     this.props.history.push('/')
+        // }
+        // 
         this.props.dispatch({type: "GET_USERS"});
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
