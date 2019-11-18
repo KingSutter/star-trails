@@ -8,7 +8,7 @@ class Admin extends Component {
         scenarioListShowing: false,
     }
 
-    // fetch all 
+    // fetch all lists for admin to edit from DB
     componentDidMount(){
         this.props.dispatch({type: "GET_USERS"});
         this.props.dispatch({type: "GET_SCENARIOS"});
@@ -26,14 +26,12 @@ class Admin extends Component {
             scenarioListShowing: !this.state.scenarioListShowing,
         })
     }
-    getAllLists = () => {
-        return 0;
-    }
     render() {
         return (
             <div>
                 <button onClick={this.toggleUserList}>Users List</button>
                 <button onClick={this.toggleScenarioList} >Scenarios List</button>
+                {/* displays all scenarios from the DB */}
                 <div id="scenarios-table">
                     Scenarios: <br/><br/>
                     <table>
@@ -49,6 +47,8 @@ class Admin extends Component {
                                 <td>Good Outcome ID</td>
                                 <td>Bad Outcome ID</td>
                                 <td>Neutral Outcome ID</td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,12 +64,30 @@ class Admin extends Component {
                                     <td>{scenario.good_outcome_type_id}</td>
                                     <td>{scenario.bad_outcome_type_id}</td>
                                     <td>{scenario.neutral_outcome_type_id}</td>
+                                    <td><button id={scenario.id}>Edit</button></td>
+                                    <td><button id={scenario.id}>Delete</button></td>
                                 </tr>
                             ))}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td><input placeholder="prompt"/></td>
+                                <td><input placeholder="option 1"/></td>
+                                <td><input placeholder="option 2"/></td>
+                                <td><input placeholder="good outcome"/></td>
+                                <td><input placeholder="bad outcome"/></td>
+                                <td><input placeholder="neutral outcome"/></td>
+                                <td><input placeholder="good outcome ID"/></td>
+                                <td><input placeholder="bad outcome ID"/></td>
+                                <td><input placeholder="neutral outcome ID"/></td>
+                                <td><button>Add</button></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <br/>
+                {/* displays all of the outcome types from the DB */}
                 <div id="outcome-types">
                     Outcomes by ID: <br/><br/>
                     <table>
@@ -87,6 +105,8 @@ class Admin extends Component {
                                 <td>Resource4</td>
                                 <td>Resource5</td>
                                 <td>Crew Lost</td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </thead>
                         <tbody>
@@ -104,9 +124,28 @@ class Admin extends Component {
                                     <td>{outcome.resource4}</td>
                                     <td>{outcome.resource5}</td>
                                     <td>{outcome.crew_lost}</td>
+                                    <td><button id={outcome.id}>Edit</button></td>
+                                    <td><button id={outcome.id}>Delete</button></td>
                                 </tr>
                             ))}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><input placeholder="id"/></td>
+                                <td><input placeholder="day"/></td>
+                                <td><input placeholder="distance"/></td>
+                                <td><input placeholder="food"/></td>
+                                <td><input placeholder="money"/></td>
+                                <td><input placeholder="fuel"/></td>
+                                <td><input placeholder="resource 1"/></td>
+                                <td><input placeholder="resource 2"/></td>
+                                <td><input placeholder="resource 3"/></td>
+                                <td><input placeholder="resource 4"/></td>
+                                <td><input placeholder="resource 5"/></td>
+                                <td><input placeholder="crew lost"/></td>
+                                <td><button>Add</button></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
         {/* <span>{JSON.stringify(this.props,null,2)}</span> */}
