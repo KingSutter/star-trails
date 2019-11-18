@@ -37,7 +37,7 @@ input {
 #logoutButton {
     background-color: transparent;
 }
-.log-in:hover, .log-out:hover, .register:hover {
+.log-in:hover, .log-out:hover, .register:hover, #logoutButton:hover {
   background-color: darkgray;
 }
 

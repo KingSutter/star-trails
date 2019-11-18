@@ -40,4 +40,39 @@ router.post('/logout', (req, res) => {
   res.sendStatus(200);
 });
 
+// --- admin routes ---
+
+// gets all users from the DB without passwords
+router.get('/users', rejectUnauthenticated, (req,res) => {
+  const queryText = `SELECT "id","username","save_id","admin" FROM "accounts";`
+  pool.query(queryText)
+  .then((response) => {
+      res.send(response.rows);
+  }).catch((error)=>{
+      res.sendStatus(500);
+  })
+})
+
+// gets all scenarios for editing purposes if admin desires
+router.get('/scenarios', rejectUnauthenticated, (req,res) => {
+  const queryText = `SELECT * FROM "scenarios";`
+  pool.query(queryText)
+  .then((response) => {
+      res.send(response.rows);
+  }).catch((error)=>{
+      res.sendStatus(500);
+  })
+})
+
+// gets all scenario outcomes and sorts by id
+router.get('/outcomes', rejectUnauthenticated, (req,res) => {
+  const queryText = `SELECT * FROM "outcome_type";`
+  pool.query(queryText)
+  .then((response) => {
+      res.send(response.rows);
+  }).catch((error)=>{
+      res.sendStatus(500);
+  })
+})
+
 module.exports = router;
