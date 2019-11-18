@@ -2,7 +2,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0px;
     background-image: url("../../images/space.jpg");
-    color: white
+    color: white;
 }
 
 .alert {

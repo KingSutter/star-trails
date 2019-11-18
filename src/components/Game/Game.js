@@ -15,6 +15,7 @@ class Game extends Component{
         resource3: 0,
         resource4: 0,
         resource5: 0,
+        money: 800
     }
     // sends all data to server and associates that save data with the current user
     createSaveAndStart = () => {
@@ -26,15 +27,20 @@ class Game extends Component{
         return(
             <form onSubmit={this.createSaveAndStart}>
             <div>
-                <h1>Crew</h1>
+                <h2>Crew</h2>
                 <ul>
                     <li>Captain: <input placeholder="name" required /></li>
                     <li>First Mate: <input  placeholder="name" required /></li>
                     <li>Chief Engineer: <input  placeholder="name" required /></li>
                     <li>Helm: <input  placeholder="name" required /></li>
                     <li>Tactical: <input placeholder="name" required /></li>
-                    <li><button type="submit">Start your journey</button></li>
                 </ul>
+                <h2>Food</h2>
+                    <ul><input placeholder="pounds" required /> Cost: ⌬20 per pound</ul>
+                <p id="credits">Credits: ⌬{this.state.money}</p>
+                <div id="startButton">
+                    <button  type="submit">Start your journey</button>
+                </div>
             </div>
             {/* <span>{JSON.stringify(this.props,null,2)}</span> */}
             </form>
