@@ -46,12 +46,12 @@ class Admin extends Component {
         })
     }
     handleAddScenario = () => {
-        // check for empty input
-        // for (const key in this.state.scenarioAddInput) {
-        //     if (this.state.scenarioAddInput[key] === '')
-        //         alert("All input fields must have text")
-        //         return 0;
-        // }
+        //check for empty input
+        for (const key in this.state.scenarioAddInput) {
+            if (this.state.scenarioAddInput[key] === '')
+                alert("All input fields must have text")
+                return 0;
+        }
         // adds input to DB
         this.props.dispatch({type: "ADD_SCENARIO", payload: this.state.scenarioAddInput})
         // effectively reset inputs to default values
@@ -192,7 +192,7 @@ class Admin extends Component {
                         </tfoot>
                     </table>
                 </div>
-        <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span>
+        {/* <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span> */}
             </div>
         )
     }
