@@ -12,10 +12,11 @@ class Admin extends Component {
             good_outcome: '',
             bad_outcome: '',
             neutral_outcome: '',
-            good_outcome_ID: '',
-            bad_outcome_ID: '',
-            neutral_outcome_ID: '',
-        }
+            good_outcome_type_id: '',
+            bad_outcome_type_id: '',
+            neutral_outcome_type_id: '',
+        },
+        editingID: 0,
     }
 
     // fetch all lists for admin to edit from DB
@@ -39,13 +40,16 @@ class Admin extends Component {
             }
         })
     }
-    
+
     handleAddScenario = () => {
+        console.log('handle scenario called');
+        
         //check for empty input
         for (const key in this.state.scenarioAddInput) {
-            if (this.state.scenarioAddInput[key] === '')
+            if (this.state.scenarioAddInput[key] === ''){
                 alert("All input fields must have text")
                 return 0;
+            }
         }
         // adds input to DB
         this.props.dispatch({type: "ADD_SCENARIO", payload: this.state.scenarioAddInput})
@@ -65,6 +69,12 @@ class Admin extends Component {
         })
     }
 
+    // user can edit entire row when called
+    handleEditClick = (e) => {
+        this.setState({
+            editingID: e.target.id,
+        })
+    }  
     render() {
         return (
             <div>
@@ -94,6 +104,8 @@ class Admin extends Component {
                         <tbody>
                             {this.props.scenarioList.map((scenario)=>(
                                 <tr key={scenario.id}>
+                                    {String(this.state.editingID) !== String(scenario.id) ? (
+                                    <>
                                     <td>{scenario.id}</td>
                                     <td>{scenario.prompt}</td>
                                     <td>{scenario.option1}</td>
@@ -104,29 +116,46 @@ class Admin extends Component {
                                     <td>{scenario.good_outcome_type_id}</td>
                                     <td>{scenario.bad_outcome_type_id}</td>
                                     <td>{scenario.neutral_outcome_type_id}</td>
-                                    <td><button id={scenario.id}>Edit</button></td>
+                                    <td><button id={scenario.id} onClick={this.handleEditClick}>Edit</button></td>
                                     <td><button id={scenario.id}>Delete</button></td>
+                                    </>
+                                    ) : 
+                                    <>
+                                    <td></td>
+                                    <td><input placeholder="prompt" value={scenario.prompt} /></td>
+                                    <td><input placeholder="option1" value={scenario.option1} /></td>
+                                    <td><input placeholder="option2" value={scenario.option2} /></td>
+                                    <td><input placeholder="good_outcome" value={scenario.good_outcome} /></td>
+                                    <td><input placeholder="bad_outcome" value={scenario.bad_outcome} /></td>
+                                    <td><input placeholder="neutral_outcome" value={scenario.neutral_outcome} /></td>
+                                    <td><input type="number" min="1" placeholder="good_outcome_type_id" value={scenario.good_outcome_type_id} /></td>
+                                    <td><input type="number" placeholder="bad_outcome_type_id" value={scenario.bad_outcome_type_id} /></td>
+                                    <td><input type="number"placeholder="neutral_outcome_type_id" value={scenario.neutral_outcome_type_id} /></td>
+                                    <td><button onClick={this.handleEditClick}>Submit</button></td>
+                                    </>}
                                 </tr>
                             ))}
+                            
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="prompt" value={this.state.scenarioAddInput.prompt} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="option1" value={this.state.scenarioAddInput.option1} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="option2" value={this.state.scenarioAddInput.option2} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome" value={this.state.scenarioAddInput.good_outcome} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome" value={this.state.scenarioAddInput.bad_outcome} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome" value={this.state.scenarioAddInput.neutral_outcome} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome_type_id" value={this.state.scenarioAddInput.good_outcome_type_id} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome_type_id" value={this.state.scenarioAddInput.bad_outcome_type_id} /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome_type_id" value={this.state.scenarioAddInput.neutral_outcome_type_id} /></td>
-                                <td><button onClick={this.handleAddScenario}>Add</button></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="prompt" value={this.state.scenarioAddInput.prompt} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="option1" value={this.state.scenarioAddInput.option1} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="option2" value={this.state.scenarioAddInput.option2} form="handleAdd" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome" value={this.state.scenarioAddInput.good_outcome} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome" value={this.state.scenarioAddInput.bad_outcome} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome" value={this.state.scenarioAddInput.neutral_outcome} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="good_outcome_type_id" value={this.state.scenarioAddInput.good_outcome_type_id} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="bad_outcome_type_id" value={this.state.scenarioAddInput.bad_outcome_type_id} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="neutral_outcome_type_id" value={this.state.scenarioAddInput.neutral_outcome_type_id} form="handleAdd"/></td>
+                                <td><button type="submit" form="handleAdd">Add</button></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
                 <br/>
+                <form onSubmit={this.handleAddScenario} id="handleAdd"></form>
                 {/*  displays all of the outcome types from the DB */}
                 <div id="outcome-types">
                     Outcomes: <br/><br/>
@@ -182,7 +211,7 @@ class Admin extends Component {
                                 <td><input placeholder="resource 3"/></td>
                                 <td><input placeholder="resource 4"/></td>
                                 <td><input placeholder="resource 5"/></td>
-                                <td><input placeholder="crew lost"/></td>
+                                <td><input placeholder="crew lost" size="10"/></td>
                                 <td><button>Add</button></td>
                             </tr>
                         </tfoot>
@@ -215,7 +244,7 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        {/* <span>{JSON.stringify(this.props.userList,null,2)}</span> */}
+        <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span>
             </div>
         )
     }

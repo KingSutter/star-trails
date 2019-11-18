@@ -1,3 +1,7 @@
+form {
+    max-height: 0px;
+}
+
 table {
     border-collapse: collapse;
   }
@@ -9,4 +13,15 @@ button {
     background-color: transparent;
     color: white;
     font-size: 16px;
+}
+
+input{
+    background-color: transparent;
+    color: white;
+    border: transparent;
+    height: 20px;
+}
+
+::placeholder{
+    color: lightgray;
 }
