@@ -55,7 +55,7 @@ router.get('/users', rejectUnauthenticated, (req,res) => {
 
 // gets all scenarios for editing purposes if admin desires
 router.get('/scenarios', rejectUnauthenticated, (req,res) => {
-  const queryText = `SELECT * FROM "scenarios";`
+  const queryText = `SELECT * FROM "scenarios" ORDER BY "id" ASC;`
   pool.query(queryText)
   .then((response) => {
       res.send(response.rows);
@@ -66,7 +66,7 @@ router.get('/scenarios', rejectUnauthenticated, (req,res) => {
 
 // gets all scenario outcomes and sorts by id
 router.get('/outcomes', rejectUnauthenticated, (req,res) => {
-  const queryText = `SELECT * FROM "outcome_type";`
+  const queryText = `SELECT * FROM "outcome_type" ORDER BY "id" ASC;`
   pool.query(queryText)
   .then((response) => {
       res.send(response.rows);
