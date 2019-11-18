@@ -10,7 +10,7 @@ body {
     margin: 50px;
 }
 
-form {
+.loginForm {
     background-color: transparent;
     width: 30%;
     height: 250px;
@@ -19,7 +19,7 @@ form {
     border-radius: 2px;
 }
 
-input {
+.loginInput {
     margin: 5px;
     margin-bottom: 10px;
 }
