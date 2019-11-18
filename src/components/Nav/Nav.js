@@ -29,9 +29,11 @@ const Nav = (props) => (
       <Link className="nav-link" to="/about">
         About
       </Link>
+      {/* show the admin link only if the user is an admin */}
+      {props.user.admin ? 
       <Link className="nav-link" to="/admin">
         Admin
-      </Link>
+      </Link>: <></>}
     </div>
   </div>
 );
