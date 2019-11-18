@@ -6,6 +6,17 @@ class Admin extends Component {
     state = {
         userListShowing: false,
         scenarioListShowing: false,
+        scenarioAddInput: {
+            prompt: '',
+            option1: '',
+            option2: '',
+            good_outcome: '',
+            bad_outcome: '',
+            neutral_outcome: '',
+            good_outcome_ID: 0,
+            bad_outcome_ID: 0,
+            neutral_outcome_ID: 0,
+        }
     }
 
     // fetch all lists for admin to edit from DB
@@ -26,6 +37,15 @@ class Admin extends Component {
             scenarioListShowing: !this.state.scenarioListShowing,
         })
     }
+    handleScenarioInput = (e) => {
+        this.setState({
+            scenarioAddInput: {
+                ...this.state.scenarioAddInput,
+                [e.target.placeholder]: e.target.value,
+            }
+        })
+    }
+
     render() {
         return (
             <div>
@@ -72,15 +92,15 @@ class Admin extends Component {
                         <tfoot>
                             <tr>
                                 <td></td>
-                                <td><input placeholder="prompt"/></td>
-                                <td><input placeholder="option 1"/></td>
-                                <td><input placeholder="option 2"/></td>
-                                <td><input placeholder="good outcome"/></td>
-                                <td><input placeholder="bad outcome"/></td>
-                                <td><input placeholder="neutral outcome"/></td>
-                                <td><input placeholder="good outcome ID"/></td>
-                                <td><input placeholder="bad outcome ID"/></td>
-                                <td><input placeholder="neutral outcome ID"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="prompt" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="option1" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="option2" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome_ID" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome_ID" /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome_ID" /></td>
                                 <td><button>Add</button></td>
                             </tr>
                         </tfoot>
@@ -89,7 +109,7 @@ class Admin extends Component {
                 <br/>
                 {/* displays all of the outcome types from the DB */}
                 <div id="outcome-types">
-                    Outcomes by ID: <br/><br/>
+                    Outcomes: <br/><br/>
                     <table>
                         <thead>
                             <tr>
@@ -131,7 +151,7 @@ class Admin extends Component {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td><input placeholder="id"/></td>
+                                <td></td>
                                 <td><input placeholder="day"/></td>
                                 <td><input placeholder="distance"/></td>
                                 <td><input placeholder="food"/></td>
@@ -148,7 +168,7 @@ class Admin extends Component {
                         </tfoot>
                     </table>
                 </div>
-        {/* <span>{JSON.stringify(this.props,null,2)}</span> */}
+        <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span>
             </div>
         )
     }
