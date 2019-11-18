@@ -13,9 +13,9 @@ class Admin extends Component {
             good_outcome: '',
             bad_outcome: '',
             neutral_outcome: '',
-            good_outcome_ID: 0,
-            bad_outcome_ID: 0,
-            neutral_outcome_ID: 0,
+            good_outcome_ID: '',
+            bad_outcome_ID: '',
+            neutral_outcome_ID: '',
         }
     }
 
@@ -42,6 +42,30 @@ class Admin extends Component {
             scenarioAddInput: {
                 ...this.state.scenarioAddInput,
                 [e.target.placeholder]: e.target.value,
+            }
+        })
+    }
+    handleAddScenario = () => {
+        // check for empty input
+        // for (const key in this.state.scenarioAddInput) {
+        //     if (this.state.scenarioAddInput[key] === '')
+        //         alert("All input fields must have text")
+        //         return 0;
+        // }
+        // adds input to DB
+        this.props.dispatch({type: "ADD_SCENARIO", payload: this.state.scenarioAddInput})
+        // effectively reset inputs to default values
+        this.setState({
+            scenarioAddInput: {
+                prompt: '',
+                option1: '',
+                option2: '',
+                good_outcome: '',
+                bad_outcome: '',
+                neutral_outcome: '',
+                good_outcome_type_id: '',
+                bad_outcome_type_id: '',
+                neutral_outcome_type_id: '',
             }
         })
     }
@@ -92,16 +116,16 @@ class Admin extends Component {
                         <tfoot>
                             <tr>
                                 <td></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="prompt" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="option1" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="option2" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome_ID" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome_ID" /></td>
-                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome_ID" /></td>
-                                <td><button>Add</button></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="prompt" value={this.state.scenarioAddInput.prompt} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="option1" value={this.state.scenarioAddInput.option1} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="option2" value={this.state.scenarioAddInput.option2} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome" value={this.state.scenarioAddInput.good_outcome} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome" value={this.state.scenarioAddInput.bad_outcome} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome" value={this.state.scenarioAddInput.neutral_outcome} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome_type_id" value={this.state.scenarioAddInput.good_outcome_type_id} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome_type_id" value={this.state.scenarioAddInput.bad_outcome_type_id} /></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome_type_id" value={this.state.scenarioAddInput.neutral_outcome_type_id} /></td>
+                                <td><button onClick={this.handleAddScenario}>Add</button></td>
                             </tr>
                         </tfoot>
                     </table>

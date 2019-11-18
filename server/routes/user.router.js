@@ -75,4 +75,20 @@ router.get('/outcomes', rejectUnauthenticated, (req,res) => {
   })
 })
 
+// adds a scenario to DB
+router.post('/scenario', rejectUnauthenticated, (req,res) => {
+  const queryText = `
+  INSERT INTO "scenarios" ("prompt","option1","option2","good_outcome","bad_outcome","neutral_outcome","good_outcome_type_id","bad_outcome_type_id","neutral_outcome_type_id")
+  VALUES ('${req.body.prompt}','${req.body.option1}','${req.body.option2}','${req.body.good_outcome}','${req.body.bad_outcome}','${req.body.neutral_outcome}','${req.body.good_outcome_type_id}','${req.body.bad_outcome_type_id}','${req.body.neutral_outcome_type_id}');
+  `
+  pool.query(queryText)
+  .then((response) => {
+      res.send(response.rows);
+  }).catch((error)=>{
+      console.log(error);
+      
+      res.sendStatus(500);
+  })
+})
+
 module.exports = router;
