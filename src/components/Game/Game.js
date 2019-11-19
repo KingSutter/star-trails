@@ -18,6 +18,7 @@ class Game extends Component{
         resource5: 0,
         money: 800,
         available: 800,
+        exceededLimit: false,
     }
     // sends all data to server and associates that save data with the current user
     createSaveAndStart = () => {
@@ -30,42 +31,48 @@ class Game extends Component{
             food: Number(e.target.value),
             available: this.state.money - (Number(e.target.value)*.2) - this.state.resource1*10 - this.state.resource2*2 -
             this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10
-        })
+        },this.checkBalance)
     }
     handleClothesChange = (e) => {
         this.setState({
             resource1: Number(e.target.value),
             available: this.state.money - this.state.food*.2 - e.target.value*10 - this.state.resource2*2 -
             this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10
-        })
+        },this.checkBalance)
     }
     handleAmmoChange = (e) => {
         this.setState({
             resource2: Number(e.target.value),
             available: this.state.money - this.state.food*.2 - this.state.resource1*10 - e.target.value*2 -
             this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10
-        })
+        },this.checkBalance)
     }
     handleSpare1Change = (e) => {
         this.setState({
             resource3: Number(e.target.value),
             available: this.state.money - this.state.food*.2 - this.state.resource1*10 - this.state.resource2*2 -
             e.target.value*10 - this.state.resource4*10 - this.state.resource5*10
-        })
+        },this.checkBalance)
+        
     }
     handleSpare2Change = (e) => {
         this.setState({
             resource4: Number(e.target.value),
             available: this.state.money - this.state.food*.2 - this.state.resource1*10 - this.state.resource2*2 -
             this.state.resource3*10 - e.target.value*10 - this.state.resource5*10
-        })
+        },this.checkBalance)
+        
     }
     handleSpare3Change = (e) => {
         this.setState({
             resource5: Number(e.target.value),
             available: this.state.money - this.state.food*.2 - this.state.resource1*10 - this.state.resource2*2 -
-            this.state.resource3*10 - this.state.resource4*10 - e.target.value*10
-        })
+            this.state.resource3*10 - this.state.resource4*10 - e.target.value*10,
+        },this.checkBalance)
+        // 
+    }
+    checkBalance = () => {
+        (this.state.available<0)?this.setState({exceededLimit: true}) : this.setState({exceededLimit: false})
     }
 
     render(){
@@ -104,7 +111,9 @@ class Game extends Component{
                     </ul>
                 </div>
                 {/* <div id="totalCredits">Total Credits: ⌬{this.state.money}</div> */}
-                <div id="availableCredits">Available Credits: ⌬{this.state.available}</div>
+                {/* Conditionally render Available Credits to highlight when negative */}
+                {!this.state.exceededLimit ? (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
+                (<div id="availableCredits"><span class="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
                 <div id="startButton">
                     <button  type="submit">Start your journey</button>
                 </div>
