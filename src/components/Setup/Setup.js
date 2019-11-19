@@ -10,7 +10,7 @@ class Setup extends Component{
         engineer: '',
         helm: '',
         tactical: '',
-        food: '',
+        food: 0,
         batteries: 0,
         warp_coils: 0,
         antimatter_flow_regulators: 0,
