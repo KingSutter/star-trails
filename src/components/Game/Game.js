@@ -23,6 +23,10 @@ class Game extends Component{
     // sends all data to server and associates that save data with the current user
     createSaveAndStart = (e) => {
         e.preventDefault();
+        if (this.state.exceededLimit){
+            alert("You cannot be in debt. Please fix your bill accordingly")
+            return 0;
+        }
         if(window.confirm("Is everything here okay?")){
             console.log("yes");
         }
