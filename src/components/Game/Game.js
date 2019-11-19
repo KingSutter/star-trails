@@ -21,7 +21,8 @@ class Game extends Component{
     }
 
     // sends all data to server and associates that save data with the current user
-    createSaveAndStart = () => {
+    createSaveAndStart = (e) => {
+        e.preventDefault();
         if(window.confirm("Is everything here okay?")){
             console.log("yes");
         }
@@ -38,7 +39,7 @@ class Game extends Component{
     
     // update the balance and check if that balance is negative
     checkBalance = () => {
-        const newBalance = Math.round(this.state.money - this.state.food - this.state.resource1*10 - this.state.resource2*2 - this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10);
+        const newBalance = Math.round(this.state.money - this.state.food - this.state.resource1*40 - this.state.resource2*2 - this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10);
         (newBalance < 0) ? this.setState({available: newBalance, exceededLimit: true}) : this.setState({available: newBalance, exceededLimit: false})
     }
 
@@ -48,33 +49,32 @@ class Game extends Component{
             <div>
                 <h2>Crew</h2>
                 <ul>
-                    <li>Captain: <input placeholder="name" required /></li>
-                    <li>First Mate: <input  placeholder="name" required /></li>
-                    <li>Chief Engineer: <input  placeholder="name" required /></li>
-                    <li>Helm: <input  placeholder="name" required /></li>
-                    <li>Tactical: <input placeholder="name" required /></li>
+                    <li>Captain: <input placeholder="name" className="setUpInput" required /></li>
+                    <li>First Mate: <input  placeholder="name" className="setUpInput" required /></li>
+                    <li>Chief Engineer: <input  placeholder="name" className="setUpInput" required /></li>
+                    <li>Helm: <input  placeholder="name" className="setUpInput" required /></li>
+                    <li>Tactical: <input placeholder="name" className="setUpInput" required /></li>
                 </ul>
                 <h2>Food</h2>
-                <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" required /> Cost: ⌬1 per pound</ul>
-                <h2>Clothes</h2>
-                <ul><input onChange={this.handleChange} placeholder="sets of clothing" type="number" min="0" name="resource1" required /> Cost: ⌬10 per set</ul>
+                <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" required /> Cost: ⌬1 per pound</ul>
                 <h2>Ammunition</h2>
-                <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="resource2" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts</ul>
+                <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="resource2" className="setUpInput" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts</ul>
                 <h2>Spare Parts</h2>
                 <ul>
-                    <li><input onChange={this.handleChange} placeholder="number" type="number" min="0" name="resource3" required /> Cost: ⌬10 per </li>
-                    <li><input onChange={this.handleChange} placeholder="number" type="number" min="0" name="resource4" required /> Cost: ⌬10 per </li>
-                    <li><input onChange={this.handleChange} placeholder="number" type="number" min="0" name="resource5" required /> Cost: ⌬10 per </li>
+                <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="resource1" className="setUpInput" required /> Cost: ⌬40 per warp coil</li>
+                    <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="resource3" className="setUpInput" required /> Cost: ⌬10 per antimatter flow regulator</li>
+                    <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="resource4" className="setUpInput" required /> Cost: ⌬10 per magnetic constrictor</li>
+                    <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="resource5" className="setUpInput" required /> Cost: ⌬10 per plasma injector</li>
                 </ul>
                 <div id="bill">
                     <h2>Bill:</h2>
                     <ul>
                         <li>Food: ⌬{Math.round(this.state.food)}</li>
-                        <li>Clothes: ⌬{Math.round(this.state.resource1 * 10)}</li>
-                        <li>Ammo: ⌬{Math.round(this.state.resource2 * 2)}</li>
-                        <li>Spare Part 1: ⌬{Math.round(this.state.resource3 * 10)}</li>
-                        <li>Spare Part 2: ⌬{Math.round(this.state.resource4 * 10)}</li>
-                        <li>Spare Part 3: ⌬{Math.round(this.state.resource5 * 10)}</li>
+                        <li>Batteries: ⌬{Math.round(this.state.resource2 * 2)}</li>
+                        <li>Warp Coils: ⌬{Math.round(this.state.resource1 * 40)}</li>
+                        <li>Antimatter Flow Regulators: ⌬{Math.round(this.state.resource3 * 10)}</li>
+                        <li>Magnetic Constrictors: ⌬{Math.round(this.state.resource4 * 10)}</li>
+                        <li>Plasma Injectors: ⌬{Math.round(this.state.resource5 * 10)}</li>
                     </ul>
                 </div>
                 {/* <div id="totalCredits">Total Credits: ⌬{this.state.money}</div> */}

@@ -8,10 +8,10 @@
     font-family: 'Orbitron', sans-serif;
 
 }
-@font-face{
+/* @font-face{
   font-family: 'Roddenberry';
   src: url(RoddenberryItalic.otf)
-}
+} */
 
 .nav {
   overflow: hidden;
