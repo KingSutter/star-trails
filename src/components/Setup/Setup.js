@@ -32,8 +32,6 @@ class Setup extends Component{
         // if the user confirms, create a save for the user and push to the main game page
         if(window.confirm("Is everything here okay?")){
             const saveData = {...this.state, userID: this.props.user.id}
-            console.log(saveData);
-            
             this.props.dispatch({type: "CREATE_SAVE", payload: saveData})
             this.props.history.push('/game');
         }
@@ -47,11 +45,14 @@ class Setup extends Component{
         // this will keep the input box floored. Intergalatic credits don't use change!
         e.target.value = Math.floor(Number(e.target.value));
     }
+    
+    // changes name in state to whatever the user is inputting by field
     handleNameChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value,
         })
     }
+
     // update the balance and check if that balance is negative
     checkBalance = () => {
         const newBalance = Math.round(this.state.money - this.state.food - this.state.warp_coils*40 - this.state.batteries*2 - this.state.antimatter_flow_regulators*10 - this.state.magnetic_constrictors*10 - this.state.plasma_injectors*10);
@@ -64,22 +65,22 @@ class Setup extends Component{
             <div>
                 <h2>Crew</h2>
                 <ul>
-                    <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" required /></li>
-                    <li>First Mate: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="first" required /></li>
-                    <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" required /></li>
-                    <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" required /></li>
-                    <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" required /></li>
+                    <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autocomplete="off" required /></li>
+                    <li>First Mate: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="first" autocomplete="off" required /></li>
+                    <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autocomplete="off" required /></li>
+                    <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autocomplete="off" required /></li>
+                    <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autocomplete="off"  required /></li>
                 </ul>
                 <h2>Food</h2>
-                <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" required /> Cost: ⌬1 per pound</ul>
+                <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autocomplete="off" required /> Cost: ⌬1 per pound</ul>
                 <h2>Ammunition</h2>
-                <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="resource2" className="setUpInput" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts</ul>
+                <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autocomplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts</ul>
                 <h2>Spare Parts</h2>
                 <ul>
-                <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="resource1" className="setUpInput" required /> Cost: ⌬40 per warp coil</li>
-                    <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="resource3" className="setUpInput" required /> Cost: ⌬10 per antimatter flow regulator</li>
-                    <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="resource4" className="setUpInput" required /> Cost: ⌬10 per magnetic constrictor</li>
-                    <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="resource5" className="setUpInput" required /> Cost: ⌬10 per plasma injector</li>
+                <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autocomplete="off" required /> Cost: ⌬40 per warp coil</li>
+                    <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="antimatter_flow_regulators" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per antimatter flow regulator</li>
+                    <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="magnetic_constrictors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per magnetic constrictor</li>
+                    <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="plasma_injectors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per plasma injector</li>
                 </ul>
                 <div id="bill">
                     <h2>Bill:</h2>
@@ -100,7 +101,7 @@ class Setup extends Component{
                     <button  type="submit">Start your journey</button>
                 </div>
             </div>
-            <span>{JSON.stringify(this.props.user.id,null,2)}</span>
+            <span>{JSON.stringify(this.state,null,2)}</span>
             </form>
         )
     }

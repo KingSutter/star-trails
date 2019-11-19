@@ -13,9 +13,9 @@ ul{
 
 .setUpInput {
     font-size: 16px;
-    width: 150px
+    width: 150px;
 }
 
 .exceeded{
-    background-color: red
+    background-color: red;
 }

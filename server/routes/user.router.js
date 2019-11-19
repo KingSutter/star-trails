@@ -101,7 +101,6 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
   RETURNING "id";
   `
-
   pool.query(saveQueryText, [req.body.food, req.body.available, req.body.batteries, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, req.body.first, req.body.engineer, req.body.helm, req.body.tactical])
   .then((response) => {
       const newSaveID = response.rows[0].id
@@ -122,8 +121,6 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
       console.log(error);
       res.sendStatus(500);
   })
-  
-  
 })
 
 
