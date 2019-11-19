@@ -8,7 +8,8 @@ const saveData = (state = {}, action) => {
     else return state;
 }
 
-
+// user will be on the redux state at:
+// state.game
 export default combineReducers({
     saveData,
   });

@@ -107,10 +107,10 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
       // set that new save to the user who created it
       const userQueryText = `
       UPDATE "accounts"
-      SET "save_id" = '${newSaveID}'
-      WHERE "id" = ${req.body.userID};
+      SET "save_id" = $1
+      WHERE "id" = $2;
       `;
-      pool.query(userQueryText)
+      pool.query(userQueryText, [newSaveID,req.user.id])
       .then(() => {
           res.sendStatus(200);
       }).catch((error)=>{
@@ -123,5 +123,18 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
   })
 })
 
+// gets save data by user ID
+router.get('/save', rejectUnauthenticated, (req,res) => {
+  const queryText = `
+  SELECT * FROM "save"
+  WHERE id=$1
+  `
+  pool.query(queryText,[req.user.id])
+  .then((response) => {
+    res.send(response.rows);
+  }).catch((error)=>{
+    res.sendStatus(500);
+  })
+})
 
 module.exports = router;

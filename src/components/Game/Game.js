@@ -2,6 +2,9 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 
 class Game extends Component{
+    componentDidMount(){
+        this.props.dispatch({type: "GET_SAVE"})
+    }
     render(){
         return(
             <>
@@ -9,21 +12,27 @@ class Game extends Component{
                 Test
             </div>
             <div id="distanceTravelledGraph">
-
+            
             </div>
             <div id="suppliesGraph">
+                <table>
 
+                </table>
             </div>
             <footer id="buttons">
                 
             </footer>
+            <span>{JSON.stringify(this.props,null,2)}</span>
             </>
         )
     }
 }
 
 const mapReduxStateToProps = (reduxState) => {
-    return {saveData: reduxState.saveReducer}
+    return {
+        saveData: reduxState.game,
+        user: reduxState.user,
+    }
 }
 
 export default connect(mapReduxStateToProps)(Game);
