@@ -11,11 +11,11 @@ class Setup extends Component{
         crew4: '',
         crew5: '',
         food: '',
-        resource1: 0,
-        resource2: 0,
-        resource3: 0,
-        resource4: 0,
-        resource5: 0,
+        batteries: 0,
+        warp_coils: 0,
+        antimatter_flow_regulators: 0,
+        magnetic_constrictors: 0,
+        plasma_injectors: 0,
         money: 950,
         available: 950,
         exceededLimit: false,
@@ -24,12 +24,15 @@ class Setup extends Component{
     // sends all data to server and associates that save data with the current user
     createSaveAndStart = (e) => {
         e.preventDefault();
+        // if the user is trying to spend more money than they have. Make them correct that
         if (this.state.exceededLimit){
             alert("You cannot be in debt. Please fix your bill accordingly")
             return 0;
         }
+        // if the user confirms, create a save for the user and push to the main game page
         if(window.confirm("Is everything here okay?")){
-            this.props.history.push('/game')
+            
+            this.props.history.push('/game');
         }
     }
     
@@ -44,7 +47,7 @@ class Setup extends Component{
     
     // update the balance and check if that balance is negative
     checkBalance = () => {
-        const newBalance = Math.round(this.state.money - this.state.food - this.state.resource1*40 - this.state.resource2*2 - this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10);
+        const newBalance = Math.round(this.state.money - this.state.food - this.state.warp_coils*40 - this.batteries*2 - this.state.antimatter_flow_regulators*10 - this.state.magnetic_constrictors*10 - this.state.plasma_injectors*10);
         (newBalance < 0) ? this.setState({available: newBalance, exceededLimit: true}) : this.setState({available: newBalance, exceededLimit: false})
     }
 
@@ -74,12 +77,12 @@ class Setup extends Component{
                 <div id="bill">
                     <h2>Bill:</h2>
                     <ul>
-                        <li>Food: ⌬{Math.round(this.state.food)}</li>
-                        <li>Batteries: ⌬{Math.round(this.state.resource2 * 2)}</li>
-                        <li>Warp Coils: ⌬{Math.round(this.state.resource1 * 40)}</li>
-                        <li>Antimatter Flow Regulators: ⌬{Math.round(this.state.resource3 * 10)}</li>
-                        <li>Magnetic Constrictors: ⌬{Math.round(this.state.resource4 * 10)}</li>
-                        <li>Plasma Injectors: ⌬{Math.round(this.state.resource5 * 10)}</li>
+                        <li>Food: ⌬{this.state.food}</li>
+                        <li>Batteries: ⌬{this.state.batteries * 2}</li>
+                        <li>Warp Coils: ⌬{this.state.warp_coils * 40}</li>
+                        <li>Antimatter Flow Regulators: ⌬{this.state.antimatter_flow_regulators * 10}</li>
+                        <li>Magnetic Constrictors: ⌬{this.state.magnetic_constrictors * 10}</li>
+                        <li>Plasma Injectors: ⌬{this.state.plasma_injectors * 10}</li>
                     </ul>
                 </div>
                 {/* Conditionally render Available Credits to highlight when negative */}
