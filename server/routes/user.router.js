@@ -98,34 +98,32 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
   // creates a new save
   const saveQueryText = `
   INSERT INTO "save" ("food","money","batteries","warp_coils","antimatter_flow_regulators","magnetic_constrictors","plasma_injectors","captain","mate","engineer","helm","tactical")
-  VALUES ('$1','$2','$3','$4','$5','$6','$7','$8','$9','$10','$11','$12')
+  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
   RETURNING "id";
   `
-  let newSaveID = 0;
-  pool.query(saveQueryText, [req.body.food, req.body.money, req.body.batteries, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, req.body.mate, req.body.engineer, req.body.helm, req.body.tactical])
+
+  pool.query(saveQueryText, [req.body.food, req.body.available, req.body.batteries, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, req.body.first, req.body.engineer, req.body.helm, req.body.tactical])
   .then((response) => {
-      newSaveID = response.rows.id
-      console.log(newSaveID);
-      res.sendStatus(200);
+      const newSaveID = response.rows[0].id
+      // set that new save to the user who created it
+      const userQueryText = `
+      UPDATE "accounts"
+      SET "save_id" = '${newSaveID}'
+      WHERE "id" = ${req.body.userID};
+      `;
+      pool.query(userQueryText)
+      .then(() => {
+          res.sendStatus(200);
+      }).catch((error)=>{
+          console.log(error);
+          res.sendStatus(500);
+      });
   }).catch((error)=>{
       console.log(error);
-      
       res.sendStatus(500);
   })
-  // sets that new save to the user who created it
-  const userQueryText = `
-  UPDATE "accounts"
-  SET "save_id" = '$1'
-  WHERE "id" = $2;
-  `
-  pool.query(userQueryText, [newSaveID,req.body.userID])
-  .then(() => {
-      res.sendStatus(200);
-  }).catch((error)=>{
-      console.log(error);
-      
-      res.sendStatus(500);
-  })
+  
+  
 })
 
 

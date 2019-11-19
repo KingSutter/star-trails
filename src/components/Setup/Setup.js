@@ -31,7 +31,10 @@ class Setup extends Component{
         }
         // if the user confirms, create a save for the user and push to the main game page
         if(window.confirm("Is everything here okay?")){
+            const saveData = {...this.state, userID: this.props.user.id}
+            console.log(saveData);
             
+            this.props.dispatch({type: "CREATE_SAVE", payload: saveData})
             this.props.history.push('/game');
         }
     }
@@ -97,7 +100,7 @@ class Setup extends Component{
                     <button  type="submit">Start your journey</button>
                 </div>
             </div>
-            <span>{JSON.stringify(this.state,null,2)}</span>
+            <span>{JSON.stringify(this.props.user.id,null,2)}</span>
             </form>
         )
     }
