@@ -26,53 +26,19 @@ class Game extends Component{
             console.log("yes");
         }
     }
-    handleFoodChange = (e) => {
+    
+    // handles the changing of any input and changes that respective input in state
+    handleChange = (e) => {
         this.setState({
-            food: Number(e.target.value),
-            available: this.state.money - (Number(e.target.value)*.2) - this.state.resource1*10 - this.state.resource2*2 -
-            this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10
+            [e.target.name]: Number(e.target.value),
         },this.checkBalance)
     }
-    handleClothesChange = (e) => {
-        this.setState({
-            resource1: Number(e.target.value),
-            available: this.state.money - this.state.food*.2 - e.target.value*10 - this.state.resource2*2 -
-            this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10
-        },this.checkBalance)
-    }
-    handleAmmoChange = (e) => {
-        this.setState({
-            resource2: Number(e.target.value),
-            available: this.state.money - this.state.food*.2 - this.state.resource1*10 - e.target.value*2 -
-            this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10
-        },this.checkBalance)
-    }
-    handleSpare1Change = (e) => {
-        this.setState({
-            resource3: Number(e.target.value),
-            available: this.state.money - this.state.food*.2 - this.state.resource1*10 - this.state.resource2*2 -
-            e.target.value*10 - this.state.resource4*10 - this.state.resource5*10
-        },this.checkBalance)
-        
-    }
-    handleSpare2Change = (e) => {
-        this.setState({
-            resource4: Number(e.target.value),
-            available: this.state.money - this.state.food*.2 - this.state.resource1*10 - this.state.resource2*2 -
-            this.state.resource3*10 - e.target.value*10 - this.state.resource5*10
-        },this.checkBalance)
-        
-    }
-    handleSpare3Change = (e) => {
-        this.setState({
-            resource5: Number(e.target.value),
-            available: this.state.money - this.state.food*.2 - this.state.resource1*10 - this.state.resource2*2 -
-            this.state.resource3*10 - this.state.resource4*10 - e.target.value*10,
-        },this.checkBalance)
-        // 
-    }
+    
+    // update the balance and check if that balance is negative
     checkBalance = () => {
-        (this.state.available<0)?this.setState({exceededLimit: true}) : this.setState({exceededLimit: false})
+        const newBalance = this.state.money - this.state.food*.2 - this.state.resource1*10 - this.state.resource2*2 -
+            this.state.resource3*10 - this.state.resource4*10 - this.state.resource5*10
+        (newBalance < 0) ? this.setState({available: newBalance, exceededLimit: true}) : this.setState({available: newBalance, exceededLimit: false})
     }
 
     render(){
@@ -88,16 +54,16 @@ class Game extends Component{
                     <li>Tactical: <input placeholder="name" required /></li>
                 </ul>
                 <h2>Food</h2>
-                <ul><input onChange={this.handleFoodChange} placeholder="pounds" type="number" min="0" required /> Cost: ⌬0.20 per pound</ul>
+                <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" required /> Cost: ⌬0.20 per pound</ul>
                 <h2>Clothes</h2>
-                <ul><input onChange={this.handleClothesChange} placeholder="sets of clothing" type="number" min="0" required /> Cost: ⌬10 per set</ul>
+                <ul><input onChange={this.handleChange} placeholder="sets of clothing" type="number" min="0" name="resource1" required /> Cost: ⌬10 per set</ul>
                 <h2>Ammo</h2>
-                <ul><input onChange={this.handleAmmoChange} placeholder="boxes of ammo" type="number" min="0" required /> Cost: ⌬2 per box</ul>
+                <ul><input onChange={this.handleChange} placeholder="boxes of ammo" type="number" min="0" name="resource2" required /> Cost: ⌬2 per box</ul>
                 <h2>Spare Parts</h2>
                 <ul>
-                    <li><input onChange={this.handleSpare1Change} placeholder="number" type="number" min="0" required /> Cost: ⌬10 per </li>
-                    <li><input onChange={this.handleSpare2Change} placeholder="number" type="number" min="0" required /> Cost: ⌬10 per </li>
-                    <li><input onChange={this.handleSpare3Change} placeholder="number" type="number" min="0" required /> Cost: ⌬10 per </li>
+                    <li><input onChange={this.handleChange} placeholder="number" type="number" min="0" name="resource3" required /> Cost: ⌬10 per </li>
+                    <li><input onChange={this.handleChange} placeholder="number" type="number" min="0" name="resource4" required /> Cost: ⌬10 per </li>
+                    <li><input onChange={this.handleChange} placeholder="number" type="number" min="0" name="resource5" required /> Cost: ⌬10 per </li>
                 </ul>
                 <div id="bill">
                     <h2>Bill:</h2>
