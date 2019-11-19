@@ -17,9 +17,11 @@ import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import Admin from '../Admin/Admin';
+import Setup from '../Setup/Setup';
 import Game from '../Game/Game';
 
 import './App.css';
+
 
 class App extends Component {
   componentDidMount () {
@@ -61,6 +63,11 @@ class App extends Component {
               exact
               path="/admin"
               component={Admin}
+            />
+            <ProtectedRoute
+              exact
+              path="/setup"
+              component={Setup}
             />
             <ProtectedRoute
               exact

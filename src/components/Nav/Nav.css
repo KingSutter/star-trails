@@ -4,13 +4,13 @@
     display: inline-block;
     color: #f2f2f2;
     padding-left: 10px;  
-    font-family: 'Roddenberry';
+    font-family: 'RoddenberryItalic';
     /* font-family: 'Orbitron', sans-serif; */
 
 }
 @font-face{
-  font-family: 'Roddenberry';
-  src: url(RoddenberryItalic.otf)
+  font-family: 'RoddenberryItalic';
+  src: url(./RoddenberryItalic.otf);
 }
 
 .nav {
