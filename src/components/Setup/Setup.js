@@ -5,11 +5,11 @@ import {withRouter} from 'react-router-dom';
 
 class Setup extends Component{
     state= {
-        crew1: '',
-        crew2: '',
-        crew3: '',
-        crew4: '',
-        crew5: '',
+        captain: '',
+        first: '',
+        engineer: '',
+        helm: '',
+        tactical: '',
         food: '',
         batteries: 0,
         warp_coils: 0,
@@ -44,10 +44,14 @@ class Setup extends Component{
         // this will keep the input box floored. Intergalatic credits don't use change!
         e.target.value = Math.floor(Number(e.target.value));
     }
-    
+    handleNameChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value,
+        })
+    }
     // update the balance and check if that balance is negative
     checkBalance = () => {
-        const newBalance = Math.round(this.state.money - this.state.food - this.state.warp_coils*40 - this.batteries*2 - this.state.antimatter_flow_regulators*10 - this.state.magnetic_constrictors*10 - this.state.plasma_injectors*10);
+        const newBalance = Math.round(this.state.money - this.state.food - this.state.warp_coils*40 - this.state.batteries*2 - this.state.antimatter_flow_regulators*10 - this.state.magnetic_constrictors*10 - this.state.plasma_injectors*10);
         (newBalance < 0) ? this.setState({available: newBalance, exceededLimit: true}) : this.setState({available: newBalance, exceededLimit: false})
     }
 
@@ -57,11 +61,11 @@ class Setup extends Component{
             <div>
                 <h2>Crew</h2>
                 <ul>
-                    <li>Captain: <input placeholder="name" className="setUpInput" required /></li>
-                    <li>First Mate: <input  placeholder="name" className="setUpInput" required /></li>
-                    <li>Chief Engineer: <input  placeholder="name" className="setUpInput" required /></li>
-                    <li>Helm: <input  placeholder="name" className="setUpInput" required /></li>
-                    <li>Tactical: <input placeholder="name" className="setUpInput" required /></li>
+                    <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" required /></li>
+                    <li>First Mate: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="first" required /></li>
+                    <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" required /></li>
+                    <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" required /></li>
+                    <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" required /></li>
                 </ul>
                 <h2>Food</h2>
                 <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" required /> Cost: ⌬1 per pound</ul>
@@ -93,7 +97,7 @@ class Setup extends Component{
                     <button  type="submit">Start your journey</button>
                 </div>
             </div>
-            <span>{JSON.stringify(this.props,null,2)}</span>
+            <span>{JSON.stringify(this.state,null,2)}</span>
             </form>
         )
     }
