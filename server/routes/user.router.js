@@ -126,13 +126,16 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
 // gets save data by user ID
 router.get('/save', rejectUnauthenticated, (req,res) => {
   const queryText = `
-  SELECT * FROM "save"
-  WHERE id=$1
-  `
+  SELECT "save".*
+  FROM "save"
+  JOIN "accounts" ON "accounts".save_id = "save".id
+  WHERE "accounts".id=$1;`;
+
   pool.query(queryText,[req.user.id])
   .then((response) => {
     res.send(response.rows);
   }).catch((error)=>{
+    console.log(error);
     res.sendStatus(500);
   })
 })

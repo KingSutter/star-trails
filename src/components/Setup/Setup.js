@@ -106,8 +106,8 @@ class Setup extends Component{
     }
 }
 
-const mapReduxStateToProps = (reduxState) => {
-    return reduxState;
-}
+// const mapReduxStateToProps = (reduxState) => {
+//     return reduxState;
+// }
 
-export default withRouter(connect(mapReduxStateToProps)(Setup));
+export default withRouter(connect()(Setup));

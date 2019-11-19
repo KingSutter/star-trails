@@ -31,7 +31,6 @@ class Game extends Component{
 const mapReduxStateToProps = (reduxState) => {
     return {
         saveData: reduxState.game,
-        user: reduxState.user,
     }
 }
 
