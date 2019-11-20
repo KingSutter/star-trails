@@ -1,0 +1,8 @@
+#suppliesGraph thead, #crewGraph thead, #crewGraph tbody {
+    text-align: center;
+}
+
+#suppliesGraph caption, #crewGraph caption{
+    font-weight: bold;
+    font-size: large;
+}

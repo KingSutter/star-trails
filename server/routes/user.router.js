@@ -97,11 +97,11 @@ router.post('/scenario', rejectUnauthenticated, (req,res) => {
 router.post('/save', rejectUnauthenticated, (req,res) => {
   // creates a new save
   const saveQueryText = `
-  INSERT INTO "save" ("food","money","batteries","warp_coils","antimatter_flow_regulators","magnetic_constrictors","plasma_injectors","captain","mate","engineer","helm","tactical")
+  INSERT INTO "save" ("food","money","phaser_energy","warp_coils","antimatter_flow_regulators","magnetic_constrictors","plasma_injectors","captain","medic","engineer","helm","tactical")
   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
   RETURNING "id";
   `
-  pool.query(saveQueryText, [req.body.food, req.body.available, req.body.batteries, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, req.body.first, req.body.engineer, req.body.helm, req.body.tactical])
+  pool.query(saveQueryText, [req.body.food, req.body.available, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, req.body.medic, req.body.engineer, req.body.helm, req.body.tactical])
   .then((response) => {
       const newSaveID = response.rows[0].id
       // set that new save to the user who created it
@@ -133,7 +133,7 @@ router.get('/save', rejectUnauthenticated, (req,res) => {
 
   pool.query(queryText,[req.user.id])
   .then((response) => {
-    res.send(response.rows);
+    res.send(response.rows[0]);
   }).catch((error)=>{
     console.log(error);
     res.sendStatus(500);

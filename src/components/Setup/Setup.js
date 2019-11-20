@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom';
 class Setup extends Component{
     state= {
         captain: '',
-        first: '',
+        medic: '',
         engineer: '',
         helm: '',
         tactical: '',
@@ -18,6 +18,7 @@ class Setup extends Component{
         plasma_injectors: 0,
         money: 950,
         available: 950,
+        phaser_energy: 0,
         exceededLimit: false,
     }
 
@@ -40,6 +41,7 @@ class Setup extends Component{
     handleChange = (e) => {
         this.setState({
             [e.target.name]: Math.floor(Number(e.target.value)),
+            phaser_energy: this.state.batteries*20,
         },this.checkBalance)
         // this will keep the input box floored. Intergalatic credits don't use change!
         e.target.value = Math.floor(Number(e.target.value));
@@ -65,7 +67,7 @@ class Setup extends Component{
                 <h2>Crew</h2>
                 <ul>
                     <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autocomplete="off" required /></li>
-                    <li>First Mate: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="first" autocomplete="off" required /></li>
+                    <li>Chief of Medicine: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="medic" autocomplete="off" required /></li>
                     <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autocomplete="off" required /></li>
                     <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autocomplete="off" required /></li>
                     <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autocomplete="off"  required /></li>
@@ -73,7 +75,7 @@ class Setup extends Component{
                 <h2>Food</h2>
                 <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autocomplete="off" required /> Cost: ⌬1 per pound</ul>
                 <h2>Ammunition</h2>
-                <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autocomplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts</ul>
+                <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autocomplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts of energy</ul>
                 <h2>Spare Parts</h2>
                 <ul>
                 <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autocomplete="off" required /> Cost: ⌬40 per warp coil</li>
