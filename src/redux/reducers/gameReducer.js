@@ -8,8 +8,17 @@ const saveData = (state = {}, action) => {
     else return state;
 }
 
+// save data will be stored here
+const scenarios = (state = [], action) => {
+    if (action.type === 'SET_SCENARIOS'){
+        return action.payload;
+    }
+    else return state;
+}
+
 // user will be on the redux state at:
 // state.game
 export default combineReducers({
     saveData,
+    scenarios,
   });
