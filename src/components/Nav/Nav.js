@@ -16,6 +16,12 @@ const Nav = (props) => (
         and call this link 'Login / Register' if they are not */}
         {props.user.id ? 'Home' : 'Login / Register'}
       </Link>
+      {/* show this route only if the user is logged in. */}
+      {/* REMOVE ONCE RESUME FEATURE IS IMPLEMENTED */}
+      {props.user.id ? 
+      <Link className="nav-link" to="/game">
+        Play
+      </Link>: <></>}
       {/* Always show this link since the about page is not protected */}
       <Link className="nav-link" to="/about">
         How to Play
