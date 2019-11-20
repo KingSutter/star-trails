@@ -1,6 +1,8 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+// import ProgressBar from 'react-bootstrap/ProgressBar';
 import './Game.css';
+import shipflying from './shipflying2.gif'
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -15,11 +17,16 @@ class Game extends Component{
         return(
             <>
             <div id="shipImage">
-                <img alt="ship" />
+                {/* other link to try https://i.imgur.com/U8iGpMC.gif */}
+                {/* http://i.imgur.com/1iuK86O.gif */}
+                {/* dodging bullets http://www.elginpk.com/worsley1415_1/woolley/spaceship2.gif */}
+                {/* chill https://media.giphy.com/media/lUlcicyv8d6G4/giphy.gif */}
+                {/* https://www.google.com/search?biw=960&bih=945&tbm=isch&sxsrf=ACYBGNSqH4MGVs0i7D5YaA8bCAq_8aAl4g%3A1574215455571&sa=1&ei=H5_UXZ7EIszSsAXKwpZI&q=pixel+enterprise+gif&oq=pixel+enterprise+gif&gs_l=img.3...5534.6294..6395...1.0..0.65.300.5......0....1..gws-wiz-img.......0i8i30j0i24.EYlqo412fhU&ved=0ahUKEwjez53I2fflAhVMKawKHUqhBQkQ4dUDCAc&uact=5#imgrc=1XEjFgTvropdAM: */}
+                <img src={shipflying} alt="ship" />
             </div>
             <br/>
-            <div id="distanceTravelledGraph">
-            
+            <div id="progressBar">
+                <progress value={this.props.game.saveData.distance} max="100"/>
             </div>
             <br/>
             <div id="suppliesGraph">
@@ -87,7 +94,7 @@ class Game extends Component{
             <footer id="buttons">
                 
             </footer>
-            <span>{JSON.stringify(this.props.game.saveData,null,2)}</span>
+            {/* <span>{JSON.stringify(this.props.game.saveData,null,2)}</span> */}
             </>
         )
     }
