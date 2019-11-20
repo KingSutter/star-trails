@@ -13,6 +13,10 @@ class Game extends Component{
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"})
     }
+    handleNewDay = () => {
+        console.log("New Day clicked");
+    }
+
     render(){
         return(
             <>
@@ -22,7 +26,7 @@ class Game extends Component{
                 {/* dodging bullets http://www.elginpk.com/worsley1415_1/woolley/spaceship2.gif */}
                 {/* chill https://media.giphy.com/media/lUlcicyv8d6G4/giphy.gif */}
                 {/* https://www.google.com/search?biw=960&bih=945&tbm=isch&sxsrf=ACYBGNSqH4MGVs0i7D5YaA8bCAq_8aAl4g%3A1574215455571&sa=1&ei=H5_UXZ7EIszSsAXKwpZI&q=pixel+enterprise+gif&oq=pixel+enterprise+gif&gs_l=img.3...5534.6294..6395...1.0..0.65.300.5......0....1..gws-wiz-img.......0i8i30j0i24.EYlqo412fhU&ved=0ahUKEwjez53I2fflAhVMKawKHUqhBQkQ4dUDCAc&uact=5#imgrc=1XEjFgTvropdAM: */}
-                <img src={shipflying} alt="ship" />
+                <img src={shipflying} alt="ship" id="shipGIF" />
             </div>
             <br/>
             <div id="progressBar">
@@ -92,7 +96,7 @@ class Game extends Component{
             </div>
             <br/>
             <footer id="buttons">
-                
+                <button onClick={this.handleNewDay}> New day</button>
             </footer>
             {/* <span>{JSON.stringify(this.props.game.saveData,null,2)}</span> */}
             </>
