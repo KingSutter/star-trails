@@ -14,7 +14,8 @@ class Game extends Component{
         this.props.dispatch({type: "GET_SAVE"})
     }
     handleNewDay = () => {
-        console.log("New Day clicked");
+        const random = Math.floor(Math.random() * (20 - 1) ) + 1;    // returns a random integer from 1 to 20
+        console.log(random);
     }
 
     render(){
