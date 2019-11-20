@@ -13,11 +13,33 @@ class Game extends Component{
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"})
     }
+
+    // will handle all logic for whether an event happens and send updated data to save
     handleNewDay = () => {
-        const random = Math.floor(Math.random() * (20 - 1) ) + 1;    // returns a random integer from 1 to 20
-        console.log(random);
+        const scenario = (Math.floor(Math.random() * (7 - 1) ) + 1)===1;    // if the random integer (1-14) returned is 1, an scenario will occur
+        console.log(scenario);
+        const newSave = {
+            day: this.props.game.saveData.day + 1, // next day
+            distance: this.props.game.saveData.distance + 1, // travel +1 lightyear
+            food: this.props.game.saveData.food - 10, // eat 10 food (-10)
+            money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
+            phaser_energy: this.props.game.saveData.phaser_energy,
+            warp_coils: this.props.game.saveData.warp_coils,
+            antimatter_flow_regulators: this.props.game.saveData.antimatter_flow_regulators,
+            magnetic_constrictors: this.props.game.saveData.magnetic_constrictors,
+            plasma_injectors: this.props.game.saveData.plasma_injectors,
+            captain_status: this.props.game.saveData.captain_status,
+            medic_status: this.props.game.saveData.medic_status,
+            engineer_status: this.props.game.saveData.engineer_status,
+            helm_status: this.props.game.saveData.helm_status,
+            tactical_status: this.props.game.saveData.tactical_status,
+        }
     }
 
+    // send newSave to DB and change respective values
+    updateSave = (newSave) => {
+        this.props.dispatch({type: "UPDATE_SAVE", payload: newSave})
+    }
     render(){
         return(
             <>
@@ -31,7 +53,7 @@ class Game extends Component{
             </div>
             <br/>
             <div id="progressBar">
-                <progress value={this.props.game.saveData.distance} max="100"/>
+                <progress value={this.props.game.saveData.distance} max="150"/>
             </div>
             <br/>
             <div id="suppliesGraph">

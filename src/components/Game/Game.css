@@ -10,3 +10,7 @@
 #shipGIF {
     max-width: 300px;
 }
+
+#crewGraph td, #suppliesGraph td{
+    padding: 5px;
+}
