@@ -34,11 +34,12 @@ class Game extends Component{
             helm_status: this.props.game.saveData.helm_status,
             tactical_status: this.props.game.saveData.tactical_status,
         }
+        this.updateSave(newSave);
     }
 
     // send newSave to DB and change respective values
-    updateSave = (newSave) => {
-        this.props.dispatch({type: "UPDATE_SAVE", payload: newSave})
+    updateSave = (saveData) => {
+        this.props.dispatch({type: "UPDATE_SAVE", payload: saveData})
     }
     render(){
         return(
@@ -72,8 +73,8 @@ class Game extends Component{
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{this.props.game.saveData.food}</td>
-                            <td>{this.props.game.saveData.money}</td>
+                            <td>{this.props.game.saveData.food} lbs</td>
+                            <td>⌬{this.props.game.saveData.money}</td>
                             <td>{this.props.game.saveData.phaser_energy}</td>
                             <td>{this.props.game.saveData.warp_coils}</td>
                             <td>{this.props.game.saveData.antimatter_flow_regulators}</td>
@@ -121,7 +122,7 @@ class Game extends Component{
             <footer id="buttons">
                 <button onClick={this.handleNewDay}> New day</button>
             </footer>
-            {/* <span>{JSON.stringify(this.props.game.saveData,null,2)}</span> */}
+            <span>{JSON.stringify(this.props.game.saveData,null,2)}</span>
             </>
         )
     }

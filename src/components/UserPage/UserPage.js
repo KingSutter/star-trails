@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { withRouter } from "react-router";
+import './UserPage.css';
 
 
 // this could also be written with destructuring parameters as:
