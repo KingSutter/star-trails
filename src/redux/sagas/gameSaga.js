@@ -18,9 +18,19 @@ function* getSave(){
     }
 }
 
+function* updateSave(action){
+    try {
+        const response = yield axios.put('/api/user/save', action.payload);
+        yield put({ type: 'SET_SAVE_DATA', payload: response.data});
+      } catch (error) {
+        console.log('update save put route failed', error);
+      }
+}
+
 function* gameSaga() {
     yield takeLatest('CREATE_SAVE',createSave);
     yield takeLatest('GET_SAVE',getSave);
+    yield takeLatest('UPDATE_SAVE',updateSave);
   }
 
 export default gameSaga;

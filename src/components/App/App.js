@@ -31,7 +31,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <div id="app">
           <Nav />
           <Switch>
             {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
@@ -51,6 +51,7 @@ class App extends Component {
               exact
               path="/home"
               component={UserPage}
+              id="Home"
             />
             {/* This works the same as the other protected route, except that if the user is logged in,
             they will see the info page instead. */}

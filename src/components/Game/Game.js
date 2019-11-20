@@ -13,6 +13,34 @@ class Game extends Component{
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"})
     }
+
+    // will handle all logic for whether an event happens and send updated data to save
+    handleNewDay = () => {
+        const scenario = (Math.floor(Math.random() * (7 - 1) ) + 1)===1;    // if the random integer (1-14) returned is 1, an scenario will occur
+        console.log(scenario);
+        const newSave = {
+            day: this.props.game.saveData.day + 1, // next day
+            distance: this.props.game.saveData.distance + 1, // travel +1 lightyear
+            food: this.props.game.saveData.food - 10, // eat 10 food (-10)
+            money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
+            phaser_energy: this.props.game.saveData.phaser_energy,
+            warp_coils: this.props.game.saveData.warp_coils,
+            antimatter_flow_regulators: this.props.game.saveData.antimatter_flow_regulators,
+            magnetic_constrictors: this.props.game.saveData.magnetic_constrictors,
+            plasma_injectors: this.props.game.saveData.plasma_injectors,
+            captain_status: this.props.game.saveData.captain_status,
+            medic_status: this.props.game.saveData.medic_status,
+            engineer_status: this.props.game.saveData.engineer_status,
+            helm_status: this.props.game.saveData.helm_status,
+            tactical_status: this.props.game.saveData.tactical_status,
+        }
+        this.updateSave(newSave);
+    }
+
+    // send newSave to DB and change respective values
+    updateSave = (saveData) => {
+        this.props.dispatch({type: "UPDATE_SAVE", payload: saveData})
+    }
     render(){
         return(
             <>
@@ -22,11 +50,11 @@ class Game extends Component{
                 {/* dodging bullets http://www.elginpk.com/worsley1415_1/woolley/spaceship2.gif */}
                 {/* chill https://media.giphy.com/media/lUlcicyv8d6G4/giphy.gif */}
                 {/* https://www.google.com/search?biw=960&bih=945&tbm=isch&sxsrf=ACYBGNSqH4MGVs0i7D5YaA8bCAq_8aAl4g%3A1574215455571&sa=1&ei=H5_UXZ7EIszSsAXKwpZI&q=pixel+enterprise+gif&oq=pixel+enterprise+gif&gs_l=img.3...5534.6294..6395...1.0..0.65.300.5......0....1..gws-wiz-img.......0i8i30j0i24.EYlqo412fhU&ved=0ahUKEwjez53I2fflAhVMKawKHUqhBQkQ4dUDCAc&uact=5#imgrc=1XEjFgTvropdAM: */}
-                <img src={shipflying} alt="ship" />
+                <img src={shipflying} alt="ship" id="shipGIF" />
             </div>
             <br/>
             <div id="progressBar">
-                <progress value={this.props.game.saveData.distance} max="100"/>
+                <progress value={this.props.game.saveData.distance} max="150"/>
             </div>
             <br/>
             <div id="suppliesGraph">
@@ -45,8 +73,8 @@ class Game extends Component{
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{this.props.game.saveData.food}</td>
-                            <td>{this.props.game.saveData.money}</td>
+                            <td>{this.props.game.saveData.food} lbs</td>
+                            <td>⌬{this.props.game.saveData.money}</td>
                             <td>{this.props.game.saveData.phaser_energy}</td>
                             <td>{this.props.game.saveData.warp_coils}</td>
                             <td>{this.props.game.saveData.antimatter_flow_regulators}</td>
@@ -92,9 +120,9 @@ class Game extends Component{
             </div>
             <br/>
             <footer id="buttons">
-                
+                <button onClick={this.handleNewDay}> New day</button>
             </footer>
-            {/* <span>{JSON.stringify(this.props.game.saveData,null,2)}</span> */}
+            <span>{JSON.stringify(this.props.game.saveData,null,2)}</span>
             </>
         )
     }
