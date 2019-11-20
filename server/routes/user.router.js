@@ -66,7 +66,7 @@ router.get('/scenarios', rejectUnauthenticated, (req,res) => {
 
 // gets all scenario outcomes and sorts by id
 router.get('/outcomes', rejectUnauthenticated, (req,res) => {
-  const queryText = `SELECT * FROM "outcome_type" ORDER BY "id" ASC;`
+  const queryText = `SELECT * FROM "outcomes" ORDER BY "id" ASC;`
   pool.query(queryText)
   .then((response) => {
       res.send(response.rows);
@@ -78,8 +78,8 @@ router.get('/outcomes', rejectUnauthenticated, (req,res) => {
 // adds a scenario to DB
 router.post('/scenario', rejectUnauthenticated, (req,res) => {
   const queryText = `
-  INSERT INTO "scenarios" ("prompt","option1","option2","good_outcome","bad_outcome","neutral_outcome","good_outcome_type_id","bad_outcome_type_id","neutral_outcome_type_id")
-  VALUES ('${req.body.prompt}','${req.body.option1}','${req.body.option2}','${req.body.good_outcome}','${req.body.bad_outcome}','${req.body.neutral_outcome}','${Number(req.body.good_outcome_type_id)}','${Number(req.body.bad_outcome_type_id)}','${Number(req.body.neutral_outcome_type_id)}');
+  INSERT INTO "scenarios" ("prompt","option1","option2","good_outcome","bad_outcome","neutral_outcome","good_outcome_id","bad_outcome_id","neutral_outcome_id")
+  VALUES ('${req.body.prompt}','${req.body.option1}','${req.body.option2}','${req.body.good_outcome}','${req.body.bad_outcome}','${req.body.neutral_outcome}','${Number(req.body.good_outcome_id)}','${Number(req.body.bad_outcome_id)}','${Number(req.body.neutral_outcome_id)}');
   `
   pool.query(queryText)
   .then((response) => {
@@ -153,6 +153,33 @@ router.put('/save', rejectUnauthenticated, (req,res) => {
   pool.query(queryText,[req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain_status, req.body.medic_status, req.body.engineer_status, req.body.helm_status, req.body.tactical_status, req.user.id])
   .then((response) => {
     res.send(response.rows[0]);
+  }).catch((error)=>{
+    console.log(error);
+    res.sendStatus(500);
+  })
+})
+
+// gets all scenario data
+router.get('/scenarios', rejectUnauthenticated, (req,res) => {
+  const queryText = `SELECT * FROM "scenarios";`;
+
+  pool.query(queryText)
+  .then((response) => {
+    res.send(response.rows);
+  }).catch((error)=>{
+    console.log(error);
+    res.sendStatus(500);
+  })
+})
+
+// gets all outcomes. Only needs to be called once for the duration of the game
+// because these never change.
+router.get('/outcomes', rejectUnauthenticated, (req,res) => {
+  const queryText = `SELECT * FROM "outcomes";`
+
+  pool.query(queryText)
+  .then((response) => {
+    res.send(response.rows);
   }).catch((error)=>{
     console.log(error);
     res.sendStatus(500);

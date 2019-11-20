@@ -11,7 +11,9 @@ import shipflying from './shipflying2.gif'
 
 class Game extends Component{
     componentDidMount(){
-        this.props.dispatch({type: "GET_SAVE"})
+        this.props.dispatch({type: "GET_SAVE"});
+        this.props.dispatch({type: "GET_SCENARIOS"});
+        this.props.dispatch({type: "GET_OUTCOMES"});
     }
 
     // will handle all logic for whether an event happens and send updated data to save
@@ -110,7 +112,7 @@ class Game extends Component{
                             <td>{this.props.game.saveData.captain_status}</td>
                         </tr>
                         <tr>
-                            <td>Cheif Medic {this.props.game.saveData.medic}</td>
+                            <td>Chief Medic {this.props.game.saveData.medic}</td>
                             <td>{this.props.game.saveData.medic_status}</td>
                         </tr>
                         <tr>
@@ -132,7 +134,7 @@ class Game extends Component{
             <footer id="buttons">
                 <button onClick={this.handleNewDay}> New day</button>
             </footer>
-            <span>{JSON.stringify(this.props.game.saveData,null,2)}</span>
+            <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span>
             </>
         )
     }
