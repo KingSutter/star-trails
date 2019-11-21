@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
 import './Game.css';
 import shipflying from './shipflying2.gif'
+import { stat } from 'fs';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -92,8 +93,7 @@ class Game extends Component{
         });
         // get outcome text
         const text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]
-        console.log(text);
-        
+        this.addSaves(outcome)
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
     }
@@ -117,6 +117,43 @@ class Game extends Component{
     // gets random integer from inlcusive min to inclusive max
     randomInt = (min, max) => {
         return Math.floor(Math.random() * (max + 1 - min) + min)
+    }
+
+    // returns new save data per a scenario outcome dataset
+    addSaves = (outcome) => {
+        // if a crew member(s) was lost, determine who
+        let crew = [["captain_status", this.props.game.saveData.captain_status], ["medic_status", this.props.game.saveData.medic_status], ["engineer_status", this.props.game.saveData.engineer_status], ["helm_status", this.props.game.saveData.helm_status], ["tactical_status", this.props.game.saveData.tactical_status]]
+        let changedCrew = {}
+        for (let index = 0; index < outcome.crew_lost; index++) {
+            let indexToKill = this.randomInt(0,4);
+            // if that person is not already dead, kill them
+            if (crew[indexToKill][1] !== "dead"){
+                changedCrew[crew[indexToKill][0]] = "dead";
+
+                // consider implementing the name of the person who died
+            }else{index-=1;}
+        }
+        console.log(changedCrew);
+        
+        const newSave = {
+            day: this.props.game.saveData.day + outcome.day, // next day
+            distance: this.props.game.saveData.distance + outcome.distance, // travel +1 lightyear
+            food: this.props.game.saveData.food + outcome.food, // eat 10 food (-10)
+            money: this.props.game.saveData.money + outcome.money, // the rest below will remain the same, but need to be here for the update route
+            phaser_energy: this.props.game.saveData.phaser_energy + outcome.phaser_energy,
+            warp_coils: this.props.game.saveData.warp_coils + outcome.warp_coils,
+            antimatter_flow_regulators: this.props.game.saveData.antimatter_flow_regulators + outcome.antimatter_flow_regulators,
+            magnetic_constrictors: this.props.game.saveData.magnetic_constrictors + outcome.magnetic_constrictors,
+            plasma_injectors: this.props.game.saveData.plasma_injectors + outcome.plasma_injectors,
+            captain_status: this.props.game.saveData.captain_status,
+            medic_status: this.props.game.saveData.medic_status,
+            engineer_status: this.props.game.saveData.engineer_status,
+            helm_status: this.props.game.saveData.helm_status,
+            tactical_status: this.props.game.saveData.tactical_status,
+            ...changedCrew,
+        }
+        console.log(newSave);
+        
     }
 
     render(){
