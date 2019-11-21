@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
 import './Game.css';
 import shipflying from './shipflying2.gif'
-import { thisTypeAnnotation } from '@babel/types';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -16,7 +15,7 @@ class Game extends Component{
         scenario: null,
         outcomeTriggered: false,
         outcomeText: 'this is what happened',
-        outcomeChanges: {day: 1, food: -10}
+        outcome: {},
     }
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"});
@@ -27,7 +26,7 @@ class Game extends Component{
     // will handle all logic for whether an event happens and send updated data to save
     handleNewDay = () => {
         // if the rng function returns true, run a random scenario
-        const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-10) returned is 1, an scenario will occur
+        const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-7) returned is 1, an scenario will occur
         if (scenarioTrigger){     // do if we're in a scenario
             let allScenarioIds = [];
             // get all scenarioIDs (DB may not have linear IDs)
@@ -65,12 +64,21 @@ class Game extends Component{
 
     handleOption1 = () => {
         console.log("doing option1");        
-        this.setState({outcomeTriggered: true, outcomeChanges: this.props.game.scenarios.option1_outcomes})
+        this.setState({outcomeTriggered: true, outcomeChanges: this.state.scenario.option1_outcomes})
     }
 
     handleOption2 = () => {
         console.log("doing option2");
-        this.setState({outcomeTriggered: true, outcomeChanges: this.props.game.scenarios.option2_outcomes})
+        const outcomeID = this.state.scenario.option2_outcomes[this.calculateOutcome()]; 
+        console.log(outcomeID);
+        // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
+        let outcome = {}
+        this.props.game.outcomes.forEach(OUTCOME => {
+            if(OUTCOME.id == outcomeID){outcome = OUTCOME}
+        });
+        
+        console.log(outcome);
+        this.setState({outcomeTriggered: true, outcome: outcome})
     }
 
     handleContinue = () => {
@@ -82,13 +90,16 @@ class Game extends Component{
         this.props.dispatch({type: "UPDATE_SAVE", payload: saveData})
     }
 
+    // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
-        return this.randomInt(0,1)
+        // currently the outcome is just a 50/50 chance.
+        // will implement factors that will sway the outcome
+        return this.randomInt(0,1) 
     }
 
-    // gets random integer from min to max
+    // gets random integer from inlcusive min to inclusive max
     randomInt = (min, max) => {
-        return Math.floor(Math.random() * (max - min) ) + min
+        return Math.floor(Math.random() * (max + 1 - min) + min)
     }
 
     render(){
@@ -190,13 +201,13 @@ class Game extends Component{
                 ) : (
                     <div id="outcomeView">
                         <h3>{this.state.outcomeText}</h3>
-                        <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p>
+                        <p>{JSON.stringify(this.state.outcome,null,2)}</p>
                         <button onClick={this.handleContinue}>Continue</button>
                     </div>
                 )}
                 </>
             )}
-            <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span>
+            <span>{JSON.stringify(this.state.scenario,null,2)}</span>
             </div>
         )
     }
