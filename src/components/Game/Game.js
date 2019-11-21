@@ -14,8 +14,8 @@ class Game extends Component{
         scenarioTriggered: false,
         scenario: null,
         outcomeTriggered: false,
-        outcomeText: 'this is what happened',
-        outcome: {},
+        outcomeText: '',
+        outcomeChanges: {},
     }
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"});
@@ -62,23 +62,40 @@ class Game extends Component{
         }
     }
 
+    // logic behind when option 1 button is pressed.
+    // this will alter the save state to whatever the outcome result will be
     handleOption1 = () => {
-        console.log("doing option1");        
-        this.setState({outcomeTriggered: true, outcomeChanges: this.state.scenario.option1_outcomes})
-    }
-
-    handleOption2 = () => {
-        console.log("doing option2");
-        const outcomeID = this.state.scenario.option2_outcomes[this.calculateOutcome()]; 
-        console.log(outcomeID);
+        console.log("doing option1");
+        const result = this.calculateOutcome();
+        const outcomeID = this.state.scenario.option1_outcomes[result]; 
         // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
         let outcome = {}
         this.props.game.outcomes.forEach(OUTCOME => {
             if(OUTCOME.id == outcomeID){outcome = OUTCOME}
         });
+        // get outcome text
+        const text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]
+        // set state for use by outcome view
+        this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
+    }
+    
+    // logic behind when option 2 button is pressed.
+    // this will alter the save state to whatever the outcome result will be
+    handleOption2 = () => {
+        console.log("doing option2");
+        const result = this.calculateOutcome();
+        const outcomeID = this.state.scenario.option2_outcomes[result]; 
+        // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
+        let outcome = {}
+        this.props.game.outcomes.forEach(OUTCOME => {
+            if(OUTCOME.id == outcomeID){outcome = OUTCOME}
+        });
+        // get outcome text
+        const text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]
+        console.log(text);
         
-        console.log(outcome);
-        this.setState({outcomeTriggered: true, outcome: outcome})
+        // set state for use by outcome view
+        this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
     }
 
     handleContinue = () => {
@@ -201,13 +218,13 @@ class Game extends Component{
                 ) : (
                     <div id="outcomeView">
                         <h3>{this.state.outcomeText}</h3>
-                        <p>{JSON.stringify(this.state.outcome,null,2)}</p>
+                        <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p>
                         <button onClick={this.handleContinue}>Continue</button>
                     </div>
                 )}
                 </>
             )}
-            <span>{JSON.stringify(this.state.scenario,null,2)}</span>
+            {/* <span>{JSON.stringify(this.state.scenarios,null,2)}</span> */}
             </div>
         )
     }
