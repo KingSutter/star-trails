@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
 import './Game.css';
 import shipflying from './shipflying2.gif'
-import { stat } from 'fs';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -64,6 +63,7 @@ class Game extends Component{
                 tactical_status: this.props.game.saveData.tactical_status,
             }
             this.updateSave(newSave);
+            this.checkWinLoss();
         }
     }
 
@@ -84,6 +84,7 @@ class Game extends Component{
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
+        this.checkWinLoss();
     }
     
     // logic behind when option 2 button is pressed.
@@ -103,6 +104,7 @@ class Game extends Component{
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
+        this.checkWinLoss();
     }
 
     handleContinue = () => {
@@ -166,7 +168,7 @@ class Game extends Component{
     }
 
     checkWinLoss = () => {
-        if (this.props.game.saveData.distance = 150){
+        if (this.props.game.saveData.distance >= 149){
             this.setState({endGame: "win"})
         }
         else if (
@@ -180,6 +182,8 @@ class Game extends Component{
 
     render(){
         return(
+            <>
+            {!this.state.endGame ? (
             <div class="gameView">
             {/* this is what displays when a scenario is NOT ongoing */}
             {!this.state.scenarioTriggered ? (
@@ -286,6 +290,20 @@ class Game extends Component{
             )}
             {/* <span>{JSON.stringify(this.state.scenarios,null,2)}</span> */}
             </div>
+            ):(
+                <div id="gameResultView">
+                    {this.state.endGame==="win"? (
+                        <div id="winView">
+                            You won!
+                        </div>
+                    ):(
+                        <div id="lossView">
+                            You lost.
+                        </div>
+                    )}
+                </div>
+            )}
+            </>
         )
     }
 }
