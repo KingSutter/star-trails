@@ -59,9 +59,14 @@ class Game extends Component{
         }
     }
 
-    handleOutcome = () => {
-        console.log("doing outcome");
-        
+    handleOption1 = () => {
+        console.log("doing option1");
+        this.setState({scenarioTriggered: false})        
+    }
+
+    handleOption2 = () => {
+        console.log("doing option2");
+        this.setState({scenarioTriggered: false})        
     }
 
     // send newSave to DB and change respective values
@@ -156,8 +161,8 @@ class Game extends Component{
             ) : (
                 <div id="scenarioView">
                     <h3>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
-                    <button onClick={this.handleOutcome1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button><br/>
-                    <button onClick={this.handleOutcome2} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option2}</button>
+                    <button onClick={this.handleOption1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button><br/>
+                    <button onClick={this.handleOption2} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option2}</button>
                 </div>
             )}
             {/* <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span> */}
