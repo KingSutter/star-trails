@@ -82,7 +82,7 @@ class Admin extends Component {
     }  
     render() {
         return (
-            <div>
+            <div class="adminView">
                 {this.state.scenarioListShowing ? (
                     <>
                 <button onClick={this.toggleList}>Show Users List</button><br/>

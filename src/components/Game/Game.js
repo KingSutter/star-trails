@@ -70,7 +70,7 @@ class Game extends Component{
     }
     render(){
         return(
-            <>
+            <div class="gameView">
             {/* this is what displays when a scenario is NOT ongoing */}
             {!this.state.scenarioTriggered ? (
                 <div id="mainGameView">
@@ -155,13 +155,13 @@ class Game extends Component{
                 </div>
             ) : (
                 <div id="scenarioView">
-                    <h3 onClick={this.handleOutcome}>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
-                    <h4 onClick={this.handleOutcome}>{this.props.game.scenarios[this.state.scenarioID].option1}</h4>
-                    <h4 onClick={this.handleOutcome}>{this.props.game.scenarios[this.state.scenarioID].option2}</h4>
+                    <h3>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
+                    <button onClick={this.handleOutcome1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button>
+                    <button onClick={this.handleOutcome2} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option2}</button>
                 </div>
             )}
             {/* <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span> */}
-            </>
+            </div>
         )
     }
 }

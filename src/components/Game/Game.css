@@ -11,12 +11,45 @@
     max-width: 300px;
 }
 
-#crewGraph td, #suppliesGraph td{
+.gameView td{
     padding: 5px;
+}
+
+.gameView button {
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+}
+
+.gameView input[type="button"]{
+    background-color: transparent;
+    color: white;
+    border: transparent;
+    height: 20px;
+}
+
+.gameView table {
+    border-collapse: collapse;
+  }
+  
+.gameView td {
+    border: 1px solid white;
 }
 
 #suppliesGraph thead td{
     width: 100px;
     background-color: rgba(46, 46, 46, .7);
     /* opacity: 50%; */
+}
+
+#optionButton{
+    font-size: 30px;
+    background-color: white;
+    width: 30px;
+    height: 30px;
+}
+
+#optionText{
+    font-size: 20px;
+    padding: 20px;
 }
