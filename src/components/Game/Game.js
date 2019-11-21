@@ -18,6 +18,8 @@ class Game extends Component{
         outcomeText: '',
         outcomeChanges: {},
     }
+
+    // get all relevant data from the DB for use throughout the entirety of the game
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"});
         this.props.dispatch({type: "GET_SCENARIOS"});
@@ -59,7 +61,7 @@ class Game extends Component{
                 helm_status: this.props.game.saveData.helm_status,
                 tactical_status: this.props.game.saveData.tactical_status,
             }
-            // this.updateSave(newSave);
+            this.updateSave(newSave);
         }
     }
 
@@ -171,7 +173,8 @@ class Game extends Component{
                     </div>
                     <br/>
                     <div id="date">
-                        Day: {this.props.game.saveData.day}
+                        Day: {this.props.game.saveData.day}<br/>
+                        Distance Travelled: {this.props.game.saveData.distance} light years / 150 light years
                     </div>
                     <div id="progressBar">
                         <progress value={this.props.game.saveData.distance} max="150"/>
@@ -210,29 +213,29 @@ class Game extends Component{
                             <caption>Crew</caption>
                             <thead>
                                 <tr>
-                                    <td>Crew Member</td>
+                                    <td>Title</td>
                                     <td>Status</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Captain {this.props.game.saveData.captain}</td>
+                                    <td className="title">Captain {this.props.game.saveData.captain}</td>
                                     <td>{this.props.game.saveData.captain_status}</td>
                                 </tr>
                                 <tr>
-                                    <td>Chief Medic {this.props.game.saveData.medic}</td>
+                                    <td className="title">Chief Medic {this.props.game.saveData.medic}</td>
                                     <td>{this.props.game.saveData.medic_status}</td>
                                 </tr>
                                 <tr>
-                                    <td>Chief Engineer {this.props.game.saveData.engineer}</td>
+                                    <td className="title">Chief Engineer {this.props.game.saveData.engineer}</td>
                                     <td>{this.props.game.saveData.engineer_status}</td>
                                 </tr>
                                 <tr>
-                                    <td>Helmsman {this.props.game.saveData.helm}</td>
+                                    <td className="title">Helmsman {this.props.game.saveData.helm}</td>
                                     <td>{this.props.game.saveData.helm_status}</td>
                                 </tr>
                                 <tr>
-                                    <td>Tactical Officer {this.props.game.saveData.tactical}</td>
+                                    <td className="title">Tactical Officer {this.props.game.saveData.tactical}</td>
                                     <td>{this.props.game.saveData.tactical_status}</td>
                                 </tr>
                             </tbody>
