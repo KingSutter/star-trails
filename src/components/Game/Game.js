@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
 import './Game.css';
 import shipflying from './shipflying2.gif'
+import { thisTypeAnnotation } from '@babel/types';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -12,7 +13,7 @@ import shipflying from './shipflying2.gif'
 class Game extends Component{
     state = {
         scenarioTriggered: false,
-        scenarioID: null,
+        scenario: null,
         outcomeTriggered: false,
         outcomeText: 'this is what happened',
         outcomeChanges: {day: 1, food: -10}
@@ -38,7 +39,7 @@ class Game extends Component{
             // refresh state with new scenario information      
             this.setState({
                 scenarioTriggered: scenarioTrigger,
-                scenarioID: id,
+                scenario: this.props.game.scenarios[id],
             })
         }
         else{
@@ -63,13 +64,13 @@ class Game extends Component{
     }
 
     handleOption1 = () => {
-        console.log("doing option1");
-        this.setState({outcomeTriggered: true})
+        console.log("doing option1");        
+        this.setState({outcomeTriggered: true, outcomeChanges: this.props.game.scenarios.option1_outcomes})
     }
 
     handleOption2 = () => {
         console.log("doing option2");
-        this.setState({outcomeTriggered: true})
+        this.setState({outcomeTriggered: true, outcomeChanges: this.props.game.scenarios.option2_outcomes})
     }
 
     handleContinue = () => {
@@ -80,6 +81,8 @@ class Game extends Component{
     updateSave = (saveData) => {
         this.props.dispatch({type: "UPDATE_SAVE", payload: saveData})
     }
+
+
     render(){
         return(
             <div class="gameView">
@@ -172,19 +175,20 @@ class Game extends Component{
                 <>
                 {!this.state.outcomeTriggered ? (
                     <div id="scenarioView">
-                        <h3>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
-                        <button onClick={this.handleOption1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button><br/>
-                        <button onClick={this.handleOption2} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option2}</button>
+                        <h3>{this.state.scenario.prompt}</h3>
+                        <button onClick={this.handleOption1} id="optionButton">{this.state.scenario.option1}</button><br/>
+                        <button onClick={this.handleOption2} id="optionButton">{this.state.scenario.option2}</button>
                     </div>
                 ) : (
                     <div id="outcomeView">
                         <h3>{this.state.outcomeText}</h3>
-                        <p>{this.outcomeChanges}</p>
+                        <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p>
+                        <button onClick={this.handleContinue}>Continue</button>
                     </div>
                 )}
                 </>
             )}
-            <span>{JSON.stringify(this.state,null,2)}</span>
+            <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span>
             </div>
         )
     }
