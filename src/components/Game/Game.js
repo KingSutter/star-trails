@@ -10,6 +10,10 @@ import shipflying from './shipflying2.gif'
 // start a new day, and quit the game.
 
 class Game extends Component{
+    state = {
+        scenarioTriggered: false,
+        scenarioID: null,
+    }
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"});
         this.props.dispatch({type: "GET_SCENARIOS"});
@@ -18,15 +22,21 @@ class Game extends Component{
 
     // will handle all logic for whether an event happens and send updated data to save
     handleNewDay = () => {
-        const scenario = (Math.floor(Math.random() * (7 - 1) ) + 1)===1;    // if the random integer (1-14) returned is 1, an scenario will occur
-        console.log(scenario)
-        if (scenario){ // if the rng function returns true, run a random scenario
+        // if the rng function returns true, run a random scenario
+        const scenarioTrigger = (Math.floor(Math.random() * (7 - 1) ) + 1)===1;    // if the random integer (1-10) returned is 1, an scenario will occur
+        if (scenarioTrigger){     // do if we're in a scenario
             let allScenarioIds = [];
+            // get all scenarioIDs (DB may not have linear IDs)
             this.props.game.scenarios.forEach(scenario => {
                 allScenarioIds.push(scenario.id);
             });
-            console.log("all scenario ids: ",allScenarioIds);
-            console.log( allScenarioIds[Math.floor(Math.random() * allScenarioIds.length)] ); 
+            // get a random id from list of all random ids
+            const id = allScenarioIds[Math.floor(Math.random() * allScenarioIds.length)]-1; 
+            // refresh state with new scenario information      
+            this.setState({
+                scenarioTriggered: scenarioTrigger,
+                scenarioID: id,
+            })
         }
         else{
             const newSave = {
@@ -44,9 +54,14 @@ class Game extends Component{
                 engineer_status: this.props.game.saveData.engineer_status,
                 helm_status: this.props.game.saveData.helm_status,
                 tactical_status: this.props.game.saveData.tactical_status,
-            } 
-            this.updateSave(newSave);
+            }
+            // this.updateSave(newSave);
         }
+    }
+
+    handleOutcome = () => {
+        console.log("doing outcome");
+        
     }
 
     // send newSave to DB and change respective values
@@ -56,85 +71,96 @@ class Game extends Component{
     render(){
         return(
             <>
-            <div id="shipImage">
-                {/* other link to try https://i.imgur.com/U8iGpMC.gif */}
-                {/* http://i.imgur.com/1iuK86O.gif */}
-                {/* dodging bullets http://www.elginpk.com/worsley1415_1/woolley/spaceship2.gif */}
-                {/* chill https://media.giphy.com/media/lUlcicyv8d6G4/giphy.gif */}
-                {/* https://www.google.com/search?biw=960&bih=945&tbm=isch&sxsrf=ACYBGNSqH4MGVs0i7D5YaA8bCAq_8aAl4g%3A1574215455571&sa=1&ei=H5_UXZ7EIszSsAXKwpZI&q=pixel+enterprise+gif&oq=pixel+enterprise+gif&gs_l=img.3...5534.6294..6395...1.0..0.65.300.5......0....1..gws-wiz-img.......0i8i30j0i24.EYlqo412fhU&ved=0ahUKEwjez53I2fflAhVMKawKHUqhBQkQ4dUDCAc&uact=5#imgrc=1XEjFgTvropdAM: */}
-                <img src={shipflying} alt="ship" id="shipGIF" />
-            </div>
-            <br/>
-            <div id="progressBar">
-                <progress value={this.props.game.saveData.distance} max="150"/>
-            </div>
-            <br/>
-            <div id="suppliesGraph">
-                <table>
-                    <caption>Resources</caption>
-                    <thead>
-                        <tr>
-                            <td>Food</td>
-                            <td>Credits</td>
-                            <td>Phaser Energy</td>
-                            <td>Warp Coils</td>
-                            <td>Antimatter Flow Regulators</td>
-                            <td>Magnetic Constrictors</td>
-                            <td>Plasma Injectors</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{this.props.game.saveData.food} lbs</td>
-                            <td>⌬{this.props.game.saveData.money}</td>
-                            <td>{this.props.game.saveData.phaser_energy}</td>
-                            <td>{this.props.game.saveData.warp_coils}</td>
-                            <td>{this.props.game.saveData.antimatter_flow_regulators}</td>
-                            <td>{this.props.game.saveData.magnetic_constrictors}</td>
-                            <td>{this.props.game.saveData.plasma_injectors}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br/>
-            <div id="crewGraph">
-                <table>
-                    <caption>Crew</caption>
-                    <thead>
-                        <tr>
-                            <td>Crew Member</td>
-                            <td>Status</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Captain {this.props.game.saveData.captain}</td>
-                            <td>{this.props.game.saveData.captain_status}</td>
-                        </tr>
-                        <tr>
-                            <td>Chief Medic {this.props.game.saveData.medic}</td>
-                            <td>{this.props.game.saveData.medic_status}</td>
-                        </tr>
-                        <tr>
-                            <td>Chief Engineer {this.props.game.saveData.engineer}</td>
-                            <td>{this.props.game.saveData.engineer_status}</td>
-                        </tr>
-                        <tr>
-                            <td>Helmsman {this.props.game.saveData.helm}</td>
-                            <td>{this.props.game.saveData.helm_status}</td>
-                        </tr>
-                        <tr>
-                            <td>Tactical Officer {this.props.game.saveData.tactical}</td>
-                            <td>{this.props.game.saveData.tactical_status}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br/>
-            <footer id="buttons">
-                <button onClick={this.handleNewDay}> New day</button>
-            </footer>
-            <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span>
+            {/* this is what displays when a scenario is NOT ongoing */}
+            {!this.state.scenarioTriggered ? (
+                <div id="mainGameView">
+                    <div id="shipImage">
+                        {/* other link to try https://i.imgur.com/U8iGpMC.gif */}
+                        {/* http://i.imgur.com/1iuK86O.gif */}
+                        {/* dodging bullets http://www.elginpk.com/worsley1415_1/woolley/spaceship2.gif */}
+                        {/* chill https://media.giphy.com/media/lUlcicyv8d6G4/giphy.gif */}
+                        {/* https://www.google.com/search?biw=960&bih=945&tbm=isch&sxsrf=ACYBGNSqH4MGVs0i7D5YaA8bCAq_8aAl4g%3A1574215455571&sa=1&ei=H5_UXZ7EIszSsAXKwpZI&q=pixel+enterprise+gif&oq=pixel+enterprise+gif&gs_l=img.3...5534.6294..6395...1.0..0.65.300.5......0....1..gws-wiz-img.......0i8i30j0i24.EYlqo412fhU&ved=0ahUKEwjez53I2fflAhVMKawKHUqhBQkQ4dUDCAc&uact=5#imgrc=1XEjFgTvropdAM: */}
+                        <img src={shipflying} alt="ship" id="shipGIF" />
+                    </div>
+                    <br/>
+                    <div id="progressBar">
+                        <progress value={this.props.game.saveData.distance} max="150"/>
+                    </div>
+                    <br/>
+                    <div id="suppliesGraph">
+                        <table>
+                            <caption>Resources</caption>
+                            <thead>
+                                <tr>
+                                    <td>Food</td>
+                                    <td>Credits</td>
+                                    <td>Phaser Energy</td>
+                                    <td>Warp Coils</td>
+                                    <td>Antimatter Flow Regulators</td>
+                                    <td>Magnetic Constrictors</td>
+                                    <td>Plasma Injectors</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{this.props.game.saveData.food} lbs</td>
+                                    <td>⌬{this.props.game.saveData.money}</td>
+                                    <td>{this.props.game.saveData.phaser_energy}</td>
+                                    <td>{this.props.game.saveData.warp_coils}</td>
+                                    <td>{this.props.game.saveData.antimatter_flow_regulators}</td>
+                                    <td>{this.props.game.saveData.magnetic_constrictors}</td>
+                                    <td>{this.props.game.saveData.plasma_injectors}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <div id="crewGraph">
+                        <table>
+                            <caption>Crew</caption>
+                            <thead>
+                                <tr>
+                                    <td>Crew Member</td>
+                                    <td>Status</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Captain {this.props.game.saveData.captain}</td>
+                                    <td>{this.props.game.saveData.captain_status}</td>
+                                </tr>
+                                <tr>
+                                    <td>Chief Medic {this.props.game.saveData.medic}</td>
+                                    <td>{this.props.game.saveData.medic_status}</td>
+                                </tr>
+                                <tr>
+                                    <td>Chief Engineer {this.props.game.saveData.engineer}</td>
+                                    <td>{this.props.game.saveData.engineer_status}</td>
+                                </tr>
+                                <tr>
+                                    <td>Helmsman {this.props.game.saveData.helm}</td>
+                                    <td>{this.props.game.saveData.helm_status}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tactical Officer {this.props.game.saveData.tactical}</td>
+                                    <td>{this.props.game.saveData.tactical_status}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <footer id="buttons">
+                        <button onClick={this.handleNewDay}> New day</button>
+                    </footer>
+                </div>
+            ) : (
+                <div id="scenarioView">
+                    <h3 onClick={this.handleOutcome}>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
+                    <h4 onClick={this.handleOutcome}>{this.props.game.scenarios[this.state.scenarioID].option1}</h4>
+                    <h4 onClick={this.handleOutcome}>{this.props.game.scenarios[this.state.scenarioID].option2}</h4>
+                </div>
+            )}
+            {/* <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span> */}
             </>
         )
     }
