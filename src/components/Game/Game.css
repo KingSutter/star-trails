@@ -62,9 +62,8 @@
     padding-left: 30px;
 }
 
-#progressBar progress[value] {
+#progressBar progress {
     background-color: silver;
-    color: blue;
 }
 
 #crewGraph .title {

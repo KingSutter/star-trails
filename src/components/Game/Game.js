@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 // import ProgressBar from 'react-bootstrap/ProgressBar';
 import './Game.css';
 import shipflying from './shipflying2.gif'
-import { stat } from 'fs';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -17,6 +16,7 @@ class Game extends Component{
         outcomeTriggered: false,
         outcomeText: '',
         outcomeChanges: {},
+        endGame: false,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -38,17 +38,18 @@ class Game extends Component{
             });
             // get a random id from list of all random ids
             const id = allScenarioIds[Math.floor(Math.random() * allScenarioIds.length)]-1; 
-            // refresh state with new scenario information      
+            // refresh state with new scenario information
             this.setState({
                 scenarioTriggered: scenarioTrigger,
                 scenario: this.props.game.scenarios[id],
             })
         }
         else{
+            // default new day
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
                 distance: this.props.game.saveData.distance + 1, // travel +1 lightyear
-                food: this.props.game.saveData.food - 10, // eat 10 food (-10)
+                food: this.checkResource(this.props.game.saveData.food, -10), // eat 10 food (-10)
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
                 phaser_energy: this.props.game.saveData.phaser_energy,
                 warp_coils: this.props.game.saveData.warp_coils,
@@ -62,6 +63,7 @@ class Game extends Component{
                 tactical_status: this.props.game.saveData.tactical_status,
             }
             this.updateSave(newSave);
+            this.checkWinLoss();
         }
     }
 
@@ -82,6 +84,7 @@ class Game extends Component{
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
+        this.checkWinLoss();
     }
     
     // logic behind when option 2 button is pressed.
@@ -101,6 +104,7 @@ class Game extends Component{
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
+        this.checkWinLoss();
     }
 
     handleContinue = () => {
@@ -139,15 +143,15 @@ class Game extends Component{
             }else{index-=1;}
         }
         return {
-            day: this.props.game.saveData.day + outcome.day, // next day
-            distance: this.props.game.saveData.distance + outcome.distance, // travel +1 lightyear
-            food: this.props.game.saveData.food + outcome.food, // eat 10 food (-10)
-            money: this.props.game.saveData.money + outcome.money, // the rest below will remain the same, but need to be here for the update route
-            phaser_energy: this.props.game.saveData.phaser_energy + outcome.phaser_energy,
-            warp_coils: this.props.game.saveData.warp_coils + outcome.warp_coils,
-            antimatter_flow_regulators: this.props.game.saveData.antimatter_flow_regulators + outcome.antimatter_flow_regulators,
-            magnetic_constrictors: this.props.game.saveData.magnetic_constrictors + outcome.magnetic_constrictors,
-            plasma_injectors: this.props.game.saveData.plasma_injectors + outcome.plasma_injectors,
+            day: this.props.game.saveData.day + outcome.day,
+            distance: this.props.game.saveData.distance + outcome.distance,
+            food: this.checkResource(this.props.game.saveData.food, outcome.food),
+            money: this.checkResource(this.props.game.saveData.money + outcome.money),
+            phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy + outcome.phaser_energy),
+            warp_coils: this.checkResource(this.props.game.saveData.warp_coils + outcome.warp_coils),
+            antimatter_flow_regulators: this.checkResource(this.props.game.saveData.antimatter_flow_regulators + outcome.antimatter_flow_regulators),
+            magnetic_constrictors: this.checkResource(this.props.game.saveData.magnetic_constrictors + outcome.magnetic_constrictors),
+            plasma_injectors: this.checkResource(this.props.game.saveData.plasma_injectors + outcome.plasma_injectors),
             captain_status: this.props.game.saveData.captain_status,
             medic_status: this.props.game.saveData.medic_status,
             engineer_status: this.props.game.saveData.engineer_status,
@@ -157,8 +161,29 @@ class Game extends Component{
         } 
     }
 
+    // checks if resource change will go negative, if so, return 0, else return normal change
+    checkResource = (current, change) => {
+        if ((current + change) < 0) return 0;
+        else return current + change;
+    }
+
+    checkWinLoss = () => {
+        if (this.props.game.saveData.distance >= 149){
+            this.setState({endGame: "win"})
+        }
+        else if (
+            this.props.game.saveData.captain_status === "dead" &&
+            this.props.game.saveData.medic_status === "dead" &&
+            this.props.game.saveData.engineer_status === "dead" &&
+            this.props.game.saveData.helm_status === "dead" &&
+            this.props.game.saveData.tactical_status === "dead"
+        ){this.setState({endGame: "lose"})}
+    }
+
     render(){
         return(
+            <>
+            {!this.state.endGame ? (
             <div class="gameView">
             {/* this is what displays when a scenario is NOT ongoing */}
             {!this.state.scenarioTriggered ? (
@@ -265,6 +290,22 @@ class Game extends Component{
             )}
             {/* <span>{JSON.stringify(this.state.scenarios,null,2)}</span> */}
             </div>
+            ):(
+                <div id="gameResultView">
+                    {this.state.endGame==="win"? (
+                        <div id="winView">
+                            <p>You won!</p>
+                            <button>Return to home</button>
+                        </div>
+                    ):(
+                        <div id="lossView">
+                            <p>You lost</p>
+                            <button>Return to home</button>
+                        </div>
+                    )}
+                </div>
+            )}
+            </>
         )
     }
 }
