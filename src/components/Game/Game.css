@@ -43,10 +43,15 @@
 }
 
 #optionButton{
-    font-size: 30px;
+    /* font-size: 30px; */
     background-color: white;
-    width: 30px;
-    height: 30px;
+    width: 60%;
+    color: black;
+    margin: 10px;
+    padding: 10px
+}
+#optionButton:hover{
+    background-color: lightgray;
 }
 
 #optionText{

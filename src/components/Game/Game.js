@@ -156,7 +156,7 @@ class Game extends Component{
             ) : (
                 <div id="scenarioView">
                     <h3>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
-                    <button onClick={this.handleOutcome1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button>
+                    <button onClick={this.handleOutcome1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button><br/>
                     <button onClick={this.handleOutcome2} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option2}</button>
                 </div>
             )}
