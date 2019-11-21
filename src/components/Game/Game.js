@@ -27,7 +27,7 @@ class Game extends Component{
     // will handle all logic for whether an event happens and send updated data to save
     handleNewDay = () => {
         // if the rng function returns true, run a random scenario
-        const scenarioTrigger = (Math.floor(Math.random() * (7 - 1) ) + 1)===1;    // if the random integer (1-10) returned is 1, an scenario will occur
+        const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-10) returned is 1, an scenario will occur
         if (scenarioTrigger){     // do if we're in a scenario
             let allScenarioIds = [];
             // get all scenarioIDs (DB may not have linear IDs)
@@ -82,6 +82,14 @@ class Game extends Component{
         this.props.dispatch({type: "UPDATE_SAVE", payload: saveData})
     }
 
+    calculateOutcome = () => {
+        return this.randomInt(0,1)
+    }
+
+    // gets random integer from min to max
+    randomInt = (min, max) => {
+        return Math.floor(Math.random() * (max - min) ) + min
+    }
 
     render(){
         return(
