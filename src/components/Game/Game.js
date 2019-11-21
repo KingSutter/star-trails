@@ -61,12 +61,12 @@ class Game extends Component{
 
     handleOption1 = () => {
         console.log("doing option1");
-        this.setState({scenarioTriggered: false})        
+        this.setState({scenarioTriggered: false})
     }
 
     handleOption2 = () => {
         console.log("doing option2");
-        this.setState({scenarioTriggered: false})        
+        this.setState({scenarioTriggered: false})
     }
 
     // send newSave to DB and change respective values
@@ -88,6 +88,9 @@ class Game extends Component{
                         <img src={shipflying} alt="ship" id="shipGIF" />
                     </div>
                     <br/>
+                    <div id="date">
+                        Day: {this.props.game.saveData.day}
+                    </div>
                     <div id="progressBar">
                         <progress value={this.props.game.saveData.distance} max="150"/>
                     </div>
@@ -155,7 +158,7 @@ class Game extends Component{
                     </div>
                     <br/>
                     <footer id="buttons">
-                        <button onClick={this.handleNewDay}> New day</button>
+                        <button onClick={this.handleNewDay}>New day</button>
                     </footer>
                 </div>
             ) : (
