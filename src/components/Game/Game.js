@@ -13,6 +13,9 @@ class Game extends Component{
     state = {
         scenarioTriggered: false,
         scenarioID: null,
+        outcomeTriggered: false,
+        outcomeText: 'this is what happened',
+        outcomeChanges: {day: 1, food: -10}
     }
     componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"});
@@ -61,12 +64,16 @@ class Game extends Component{
 
     handleOption1 = () => {
         console.log("doing option1");
-        this.setState({scenarioTriggered: false})
+        this.setState({outcomeTriggered: true})
     }
 
     handleOption2 = () => {
         console.log("doing option2");
-        this.setState({scenarioTriggered: false})
+        this.setState({outcomeTriggered: true})
+    }
+
+    handleContinue = () => {
+        this.setState({scenarioTriggered: false, outcomeTriggered: false});
     }
 
     // send newSave to DB and change respective values
@@ -162,13 +169,22 @@ class Game extends Component{
                     </footer>
                 </div>
             ) : (
-                <div id="scenarioView">
-                    <h3>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
-                    <button onClick={this.handleOption1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button><br/>
-                    <button onClick={this.handleOption2} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option2}</button>
-                </div>
+                <>
+                {!this.state.outcomeTriggered ? (
+                    <div id="scenarioView">
+                        <h3>{this.props.game.scenarios[this.state.scenarioID].prompt}</h3>
+                        <button onClick={this.handleOption1} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option1}</button><br/>
+                        <button onClick={this.handleOption2} id="optionButton">{this.props.game.scenarios[this.state.scenarioID].option2}</button>
+                    </div>
+                ) : (
+                    <div id="outcomeView">
+                        <h3>{this.state.outcomeText}</h3>
+                        <p>{this.outcomeChanges}</p>
+                    </div>
+                )}
+                </>
             )}
-            {/* <span>{JSON.stringify(this.props.game.scenarios,null,2)}</span> */}
+            <span>{JSON.stringify(this.state,null,2)}</span>
             </div>
         )
     }
