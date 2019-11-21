@@ -76,6 +76,8 @@ class Game extends Component{
         });
         // get outcome text
         const text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]
+        // update save based on outcome
+        this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
     }
@@ -93,7 +95,8 @@ class Game extends Component{
         });
         // get outcome text
         const text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]
-        this.addSaves(outcome)
+        // update save based on outcome
+        this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
     }
@@ -133,9 +136,7 @@ class Game extends Component{
                 // consider implementing the name of the person who died
             }else{index-=1;}
         }
-        console.log(changedCrew);
-        
-        const newSave = {
+        return {
             day: this.props.game.saveData.day + outcome.day, // next day
             distance: this.props.game.saveData.distance + outcome.distance, // travel +1 lightyear
             food: this.props.game.saveData.food + outcome.food, // eat 10 food (-10)
@@ -151,9 +152,7 @@ class Game extends Component{
             helm_status: this.props.game.saveData.helm_status,
             tactical_status: this.props.game.saveData.tactical_status,
             ...changedCrew,
-        }
-        console.log(newSave);
-        
+        } 
     }
 
     render(){
