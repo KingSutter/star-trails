@@ -11,12 +11,64 @@
     max-width: 300px;
 }
 
-#crewGraph td, #suppliesGraph td{
+.gameView td{
     padding: 5px;
 }
 
-#suppliesGraph thead td{
+.gameView button {
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+}
+
+.gameView input[type="button"]{
+    background-color: transparent;
+    color: white;
+    border: transparent;
+    height: 20px;
+}
+
+.gameView table {
+    border-collapse: collapse;
+  }
+  
+.gameView td {
+    border: 1px solid white;
+}
+
+#suppliesGraph thead td, #crewGraph thead td{
     width: 100px;
     background-color: rgba(46, 46, 46, .7);
-    /* opacity: 50%; */
+}
+
+#optionButton{
+    /* font-size: 30px; */
+    background-color: white;
+    width: 60%;
+    color: black;
+    margin: 10px;
+    padding: 10px
+}
+#optionButton:hover{
+    background-color: lightgray;
+}
+
+#optionText{
+    font-size: 20px;
+    padding: 20px;
+}
+
+#crewGraph, #suppliesGraph, #progressBar, #date {
+    padding-left: 30px;
+}
+
+#progressBar progress[value] {
+    background-color: silver;
+    color: blue;
+}
+
+#crewGraph .title {
+    white-space: nowrap;
+    padding-right: 10px;
+    padding-left: 10px;
 }

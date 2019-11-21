@@ -27,10 +27,30 @@ function* updateSave(action){
       }
 }
 
+function* getScenarios(){
+  try {
+      const response = yield axios.get('/api/user/scenarios');
+      yield put({ type: 'SET_SCENARIOS', payload: response.data});
+    } catch (error) {
+      console.log('get scenarios route failed', error);
+    }
+}
+
+function* getOutcomes(){
+  try {
+      const response = yield axios.get('/api/user/outcomes');
+      yield put({ type: 'SET_OUTCOMES', payload: response.data});
+    } catch (error) {
+      console.log('get outcomes route failed', error);
+    }
+}
+
 function* gameSaga() {
     yield takeLatest('CREATE_SAVE',createSave);
     yield takeLatest('GET_SAVE',getSave);
     yield takeLatest('UPDATE_SAVE',updateSave);
+    yield takeLatest('GET_SCENARIOS', getScenarios);
+    yield takeLatest('GET_OUTCOMES', getOutcomes);
   }
 
 export default gameSaga;

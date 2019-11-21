@@ -12,9 +12,11 @@ class Admin extends Component {
             good_outcome: '',
             bad_outcome: '',
             neutral_outcome: '',
-            good_outcome_type_id: '',
-            bad_outcome_type_id: '',
-            neutral_outcome_type_id: '',
+            good_outcome_id: '',
+            bad_outcome_id: '',
+            neutral_outcome_id: '',
+            non_neutral_outcome: '',
+            non_neutral_outcome_id: '',
         },
         editingID: 0,
     }
@@ -67,9 +69,11 @@ class Admin extends Component {
                 good_outcome: '',
                 bad_outcome: '',
                 neutral_outcome: '',
-                good_outcome_type_id: '',
-                bad_outcome_type_id: '',
-                neutral_outcome_type_id: '',
+                good_outcome_id: '',
+                bad_outcome_id: '',
+                neutral_outcome_id: '',
+                non_neutral_outcome: '',
+                non_neutral_outcome_id: '',
             }
         })
     }
@@ -82,7 +86,7 @@ class Admin extends Component {
     }  
     render() {
         return (
-            <div>
+            <div class="adminView">
                 {this.state.scenarioListShowing ? (
                     <>
                 <button onClick={this.toggleList}>Show Users List</button><br/>
@@ -97,11 +101,15 @@ class Admin extends Component {
                                 <td>Option1</td>
                                 <td>Option2</td>
                                 <td>Good Outcome</td>
-                                <td>Bad Outcome</td>
-                                <td>Neutral Outcome</td>
                                 <td>Good Outcome ID</td>
+                                <td>Bad Outcome</td>
                                 <td>Bad Outcome ID</td>
+                                <td>Neutral Outcome</td>
                                 <td>Neutral Outcome ID</td>
+                                <td>Non-neutral Outcome</td>
+                                <td>Non-neutral Outcome ID</td>
+                                <td>Outcome 1 IDs</td>
+                                <td>Outcome 2 IDs</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -116,11 +124,15 @@ class Admin extends Component {
                                     <td>{scenario.option1}</td>
                                     <td>{scenario.option2}</td>
                                     <td>{scenario.good_outcome}</td>
+                                    <td>{scenario.good_outcome_id}</td>
                                     <td>{scenario.bad_outcome}</td>
+                                    <td>{scenario.bad_outcome_id}</td>
                                     <td>{scenario.neutral_outcome}</td>
-                                    <td>{scenario.good_outcome_type_id}</td>
-                                    <td>{scenario.bad_outcome_type_id}</td>
-                                    <td>{scenario.neutral_outcome_type_id}</td>
+                                    <td>{scenario.neutral_outcome_id}</td>
+                                    <td>{scenario.non_neutral_outcome}</td>
+                                    <td>{scenario.non_neutral_outcome_id}</td>
+                                    <td>{scenario.option1_outcomes}</td>
+                                    <td>{scenario.option2_outcomes}</td>
                                     <td><button id={scenario.id} onClick={this.handleEditClick}>Edit</button></td>
                                     <td><button id={scenario.id}>Delete</button></td>
                                     </>
@@ -249,7 +261,7 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span>
+        <span>{JSON.stringify(this.props.scenarioList,null,2)}</span>
             </div>
         )
     }

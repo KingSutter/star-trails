@@ -1,21 +1,21 @@
-form {
+.adminView form {
     max-height: 0px;
 }
 
-table {
+.adminView table {
     border-collapse: collapse;
   }
   
-td {
+.adminView td {
     border: 1px solid white;
 }
-button {
+.adminView button {
     background-color: transparent;
     color: white;
     font-size: 16px;
 }
 
-input{
+.adminView input{
     background-color: transparent;
     color: white;
     border: transparent;

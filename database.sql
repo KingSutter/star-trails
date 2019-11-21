@@ -10,27 +10,25 @@ CREATE TABLE "accounts" (
 
 CREATE TABLE "save" (
 	"id" serial PRIMARY KEY,
-	"day" integer NOT NULL,
-	"distance" integer NOT NULL,
+	"day" integer NOT NULL default '0',
+	"distance" integer NOT NULL default '0',
 	"food" integer NOT NULL,
 	"money" integer NOT NULL,
-	"fuel" integer NOT NULL,
-	"resource1" integer NOT NULL,
-	"resource2" integer NOT NULL,
-	"resource3" integer NOT NULL,
-	"resource4" integer NOT NULL,
-	"resource5" integer NOT NULL,
-	"crew1" TEXT NOT NULL,
-	"crew2" TEXT NOT NULL,
-	"crew3" TEXT NOT NULL,
-	"crew4" TEXT NOT NULL,
-	"crew5" TEXT NOT NULL,
-	"crew1_status" BOOLEAN NOT NULL,
-	"crew2_status" BOOLEAN NOT NULL,
-	"crew3_status" BOOLEAN NOT NULL,
-	"crew4_status" BOOLEAN NOT NULL,
-	"crew5_status" BOOLEAN NOT NULL,
-	"crew_compliment" integer NOT NULL
+	"phaser_energy" integer NOT NULL,
+	"warp_coils" integer NOT NULL,
+	"antimatter_flow_regulators" integer NOT NULL,
+	"magnetic_constrictors" integer NOT NULL,
+	"plasma_injectors" integer NOT NULL,
+	"captain" TEXT NOT NULL,
+	"medic" TEXT NOT NULL,
+	"engineer" TEXT NOT NULL,
+	"helm" TEXT NOT NULL,
+	"tactical" TEXT NOT NULL,
+	"captain_status" VARCHAR(20) NOT NULL default 'healthy',
+	"medic_status" VARCHAR(20) NOT NULL default 'healthy',
+	"engineer_status" VARCHAR(20) NOT NULL default 'healthy',
+	"helm_status" VARCHAR(20) NOT NULL default 'healthy',
+	"tactical_status" VARCHAR(20) NOT NULL default 'healthy'
 );
 
 
@@ -41,31 +39,29 @@ CREATE TABLE "scenarios" (
 	"option1" TEXT NOT NULL,
 	"option2" TEXT NOT NULL,
 	"good_outcome" TEXT NOT NULL,
+	"good_outcome_id" integer NOT NULL REFERENCES "outcome_type"(id),
 	"bad_outcome" TEXT NOT NULL,
+	"bad_outcome_id" integer NOT NULL REFERENCES "outcome_type"(id),
 	"neutral_outcome" TEXT NOT NULL,
-	"good_outcome_type_id" integer NOT NULL REFERENCES "outcome_type"(id),
-	"bad_outcome_type_id" integer NOT NULL REFERENCES "outcome_type"(id),
-	"neutral_outcome_type_id" integer NOT NULL REFERENCES "outcome_type"("id")
+	"neutral_outcome_id" integer NOT NULL REFERENCES "outcome_type"(id),
+	"non_neutral_outcome" TEXT NOT NULL,
+	"non_neutral_outcome_id" integer NOT NULL,
+	"option1_outcomes" integer [] NOT NULL,
+	"option2_outcomes" integer [] NOT NULL
 );
 
 
 
-CREATE TABLE "outcome_type" (
+CREATE TABLE "outcomes" (
 	"id" serial PRIMARY KEY,
-	"description" text NOT NULL,
-	"day" integer,
-	"distance" integer,
-	"food" integer,
-	"money" integer,
-	"fuel" integer,
-	"resource1" integer,
-	"resource2" integer,
-	"resource3" integer,
-	"resource4" integer,
-	"resource5" integer,
-	"crew1_status" BOOLEAN,
-	"crew2_status" BOOLEAN,
-	"crew3_status" BOOLEAN,
-	"crew4_status" BOOLEAN,
-	"crew5_status" BOOLEAN
+	"day" integer default '1',
+	"distance" integer default '200',
+	"food" integer default '-10',
+	"money" integer default '0',
+	"phaser_energy" integer default '0',
+	"warp_coils" integer default '0',
+	"antimatter_flow_regulators" integer default '0',
+	"magnetic_constrictors" integer default '0',
+	"plasma_injectors" integer default '0',
+	"crew_lost" integer default '0'
 );
