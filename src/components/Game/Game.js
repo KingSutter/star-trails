@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-// import ProgressBar from 'react-bootstrap/ProgressBar';
+import withRouter from 'react-router-dom/withRouter'
 import './Game.css';
 import shipflying from './shipflying2.gif'
 
@@ -179,6 +179,9 @@ class Game extends Component{
             this.props.game.saveData.tactical_status === "dead"
         ){this.setState({endGame: "lose"});}
     }
+    handleReturnToMenu = () => {
+        this.props.history.push('/home');
+    }
 
     render(){
         return(
@@ -296,12 +299,12 @@ class Game extends Component{
                 {this.state.endGame==="win"? (
                     <div id="winView">
                         <p>You won!</p>
-                        <button>Return to home</button>
+                        <button onClick={this.handleReturnToMenu}>Return to home</button>
                     </div>
                 ):(
                     <div id="lossView">
                         <p>You lost</p>
-                        <button>Return to home</button>
+                        <button onClick={this.handleReturnToMenu}>Return to home</button>
                     </div>
                 )}
             </div>
@@ -317,4 +320,7 @@ const mapReduxStateToProps = (reduxState) => {
     }
 }
 
-export default connect(mapReduxStateToProps)(Game);
+export default withRouter(connect(mapReduxStateToProps)(Game));
+
+// with router is currently only used for pushing back to home
+// after the game ends.
