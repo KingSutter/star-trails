@@ -18,14 +18,24 @@ class UserPage extends Component {
   // componentWillUnmount(){
   //   document.body.style.backgroundImage = "url(static/media/space.c11a4173.jpg)";
   // }
+  handleNewGame = () => {
+    // if user already has a save - confirm with user
+    if (this.props.user.save_id !== null){
+      if(window.confirm("You already have a save file. Are you sure you would like to start a new game?")){
+        this.props.history.push('/setup')
+      }
+    }else{this.props.history.push('/setup')}
+  }
   render(){
     return (
       <div className="containter">
         <h1 id="welcome">
           Welcome, { this.props.user.username }!
         </h1>
-        <button onClick={()=>{this.props.history.push('/setup')}} className="universalButton">New game</button><br/><br/>
+        <button onClick={this.handleNewGame} className="universalButton">New game</button><br/><br/>
+        <button onClick={()=>{this.props.history.push('/game')}} className="universalButton">Continue</button><br/><br/>
         <LogOutButton className="log-in" />
+        <span>{JSON.stringify(this.props.user,null,2)}</span>
       </div>
       )
     }
