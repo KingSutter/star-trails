@@ -35,7 +35,7 @@ class UserPage extends Component {
         <button onClick={this.handleNewGame} className="universalButton">New game</button><br/><br/>
         <button onClick={()=>{this.props.history.push('/game')}} className="universalButton">Continue</button><br/><br/>
         <LogOutButton className="log-in" />
-        <span>{JSON.stringify(this.props.user,null,2)}</span>
+        {/* <span>{JSON.stringify(this.props.user,null,2)}</span> */}
       </div>
       )
     }
