@@ -31,7 +31,7 @@ class Game extends Component{
         this.checkWinLoss();
         // if the rng function returns true, run a random scenario
         const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-7) returned is 1, an scenario will occur
-        if (scenarioTrigger){     // do if we're in a scenario
+        if (scenarioTrigger){
             let allScenarioIds = [];
             // get all scenarioIDs (DB may not have linear IDs)
             this.props.game.scenarios.forEach(scenario => {
@@ -67,14 +67,13 @@ class Game extends Component{
         }
     }
 
-    // logic behind when option 1 button is pressed.
+    // logic behind when option button is pressed.
     // this will alter the save state to whatever the outcome result will be
     handleOption = (option) => {
-        console.log("doing option1");
         const result = this.calculateOutcome();
         let outcomeID = null;
-        if (option === 1){ outcomeID = this.state.scenario.option1_outcomes[result]; }
-        else{ outcomeID = this.state.scenario.option2_outcomes[result]; }
+        if (option === 1){ outcomeID = this.state.scenario.option1_outcomes[result]; } // if option1 was pressed...
+        else{ outcomeID = this.state.scenario.option2_outcomes[result]; } // if option 2 was pressed...
         // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
         let outcome = {}
         this.props.game.outcomes.forEach(OUTCOME => {
@@ -82,8 +81,8 @@ class Game extends Component{
         });
         // get outcome text
         let text = '';
-        if(option === 1){ text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]}
-        else{ text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]}
+        if(option === 1){ text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]} // if option1 was pressed...
+        else{ text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]} // if option2 was pressed...
         // update save based on outcome
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
@@ -103,7 +102,7 @@ class Game extends Component{
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
         // currently the outcome is just a 50/50 chance.
-        // will implement factors that will sway the outcome
+        // will implement factors that will sway the outcome.
         return this.randomInt(0,1);
     }
 

@@ -95,14 +95,15 @@ class Setup extends Component{
                         </ul>
                     </div>
                     {/* Conditionally render Available Credits to highlight when negative */}
-                    {!this.state.exceededLimit ? (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
-                    (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
+                    {!this.state.exceededLimit ? 
+                        (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
+                        (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
                     <div id="totalCredits">Total Credits: ⌬{this.state.money}</div>
-                    <div id="startButton">
-                        <button  type="submit">Start your journey</button>
+                    <div id="startButton" className="universalButton">
+                        <button  className="universalButton" type="submit">Start your journey</button>
                     </div>
                 </div>
-                <span>{JSON.stringify(this.state,null,2)}</span>
+                {/* <span>{JSON.stringify(this.state,null,2)}</span> */}
                 </form>
             </div>
         )

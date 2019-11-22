@@ -22,12 +22,14 @@ body{
     border-radius: 2px;
 }
 
-.loginInput {
+.loginInput, .registerInput {
     margin: 5px;
     margin-bottom: 10px;
+    background-color: transparent;
+    font-size: 14px;
 }
 
-.log-in, .log-out, .register {
+.log-in, .log-out, .register, .universalButton {
     background-color: transparent;
     border-radius: 4px;
     color: #f8f8f8;
@@ -35,12 +37,13 @@ body{
     min-width: 100px;
     outline:0;
     cursor: pointer;
+    font-size: 18px;
 }
 
 #logoutButton {
     background-color: transparent;
 }
-.log-in:hover, .log-out:hover, .register:hover, #logoutButton:hover {
+.log-in:hover, .log-out:hover, .register:hover, #logoutButton:hover, .universalButton:hover {
   background-color: darkgray;
 }
 

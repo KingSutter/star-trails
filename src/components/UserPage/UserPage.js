@@ -13,7 +13,7 @@ const UserPage = (props) => (
     <h1 id="welcome">
       Welcome, { props.user.username }!
     </h1>
-    <button onClick={()=>{props.history.push('/setup')}}>New game</button><br/><br/>
+    <button onClick={()=>{props.history.push('/setup')}} className="universalButton">New game</button><br/><br/>
     <LogOutButton className="log-in" />
   </div>
 );
