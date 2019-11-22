@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import withRouter from 'react-router-dom/withRouter'
+import {withRouter} from 'react-router-dom'
 import './Game.css';
 import shipflying from './shipflying2.gif'
 
@@ -77,7 +77,7 @@ class Game extends Component{
         // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
         let outcome = {}
         this.props.game.outcomes.forEach(OUTCOME => {
-            if(OUTCOME.id == outcomeID){outcome = OUTCOME}
+            if(OUTCOME.id === outcomeID){outcome = OUTCOME}
         });
         // get outcome text
         let text = '';
@@ -170,7 +170,7 @@ class Game extends Component{
         return(
             <>
             {!this.state.endGame ? (
-            <div class="gameView">
+            <div className="gameView">
             {/* this is what displays when a scenario is NOT ongoing */}
             <div id="mainGameView">
                 <div id="shipImage">

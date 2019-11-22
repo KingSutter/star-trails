@@ -27,7 +27,7 @@ class Admin extends Component {
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
         //check if user is an admin
-        if(this.props.userList.length == 0) {
+        if(this.props.userList.length === 0) {
             this.props.history.push('/')
         }
     }
