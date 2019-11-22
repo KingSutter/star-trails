@@ -20,7 +20,7 @@ class Game extends Component{
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
-    componentDidMount(){
+    componentWillMount(){
         this.props.dispatch({type: "GET_SAVE"});
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
@@ -100,7 +100,7 @@ class Game extends Component{
         });
         // get outcome text
         const text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]
-        // update save based on outcome
+        // update save based on outcome        
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
@@ -120,12 +120,12 @@ class Game extends Component{
     calculateOutcome = () => {
         // currently the outcome is just a 50/50 chance.
         // will implement factors that will sway the outcome
-        return this.randomInt(0,1) 
+        return this.randomInt(0,1);
     }
 
     // gets random integer from inlcusive min to inclusive max
     randomInt = (min, max) => {
-        return Math.floor(Math.random() * (max + 1 - min) + min)
+        return Math.floor(Math.random() * (max + 1 - min) + min);
     }
 
     // returns new save data per a scenario outcome dataset
@@ -146,12 +146,12 @@ class Game extends Component{
             day: this.props.game.saveData.day + outcome.day,
             distance: this.props.game.saveData.distance + outcome.distance,
             food: this.checkResource(this.props.game.saveData.food, outcome.food),
-            money: this.checkResource(this.props.game.saveData.money + outcome.money),
-            phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy + outcome.phaser_energy),
-            warp_coils: this.checkResource(this.props.game.saveData.warp_coils + outcome.warp_coils),
-            antimatter_flow_regulators: this.checkResource(this.props.game.saveData.antimatter_flow_regulators + outcome.antimatter_flow_regulators),
-            magnetic_constrictors: this.checkResource(this.props.game.saveData.magnetic_constrictors + outcome.magnetic_constrictors),
-            plasma_injectors: this.checkResource(this.props.game.saveData.plasma_injectors + outcome.plasma_injectors),
+            money: this.checkResource(this.props.game.saveData.money, outcome.money),
+            phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy, outcome.phaser_energy),
+            warp_coils: this.checkResource(this.props.game.saveData.warp_coils, outcome.warp_coils),
+            antimatter_flow_regulators: this.checkResource(this.props.game.saveData.antimatter_flow_regulators, outcome.antimatter_flow_regulators),
+            magnetic_constrictors: this.checkResource(this.props.game.saveData.magnetic_constrictors, outcome.magnetic_constrictors),
+            plasma_injectors: this.checkResource(this.props.game.saveData.plasma_injectors, outcome.plasma_injectors),
             captain_status: this.props.game.saveData.captain_status,
             medic_status: this.props.game.saveData.medic_status,
             engineer_status: this.props.game.saveData.engineer_status,
@@ -169,7 +169,7 @@ class Game extends Component{
 
     checkWinLoss = () => {
         if (this.props.game.saveData.distance >= 149){
-            this.setState({endGame: "win"})
+            this.setState({endGame: "win"});
         }
         else if (
             this.props.game.saveData.captain_status === "dead" &&
@@ -177,7 +177,7 @@ class Game extends Component{
             this.props.game.saveData.engineer_status === "dead" &&
             this.props.game.saveData.helm_status === "dead" &&
             this.props.game.saveData.tactical_status === "dead"
-        ){this.setState({endGame: "lose"})}
+        ){this.setState({endGame: "lose"});}
     }
 
     render(){
@@ -186,125 +186,126 @@ class Game extends Component{
             {!this.state.endGame ? (
             <div class="gameView">
             {/* this is what displays when a scenario is NOT ongoing */}
-            {!this.state.scenarioTriggered ? (
-                <div id="mainGameView">
-                    <div id="shipImage">
-                        {/* other link to try https://i.imgur.com/U8iGpMC.gif */}
-                        {/* http://i.imgur.com/1iuK86O.gif */}
-                        {/* dodging bullets http://www.elginpk.com/worsley1415_1/woolley/spaceship2.gif */}
-                        {/* chill https://media.giphy.com/media/lUlcicyv8d6G4/giphy.gif */}
-                        {/* https://www.google.com/search?biw=960&bih=945&tbm=isch&sxsrf=ACYBGNSqH4MGVs0i7D5YaA8bCAq_8aAl4g%3A1574215455571&sa=1&ei=H5_UXZ7EIszSsAXKwpZI&q=pixel+enterprise+gif&oq=pixel+enterprise+gif&gs_l=img.3...5534.6294..6395...1.0..0.65.300.5......0....1..gws-wiz-img.......0i8i30j0i24.EYlqo412fhU&ved=0ahUKEwjez53I2fflAhVMKawKHUqhBQkQ4dUDCAc&uact=5#imgrc=1XEjFgTvropdAM: */}
-                        <img src={shipflying} alt="ship" id="shipGIF" />
-                    </div>
-                    <br/>
-                    <div id="date">
-                        Day: {this.props.game.saveData.day}<br/>
-                        Distance Travelled: {this.props.game.saveData.distance} light years / 150 light years
-                    </div>
-                    <div id="progressBar">
-                        <progress value={this.props.game.saveData.distance} max="150"/>
-                    </div>
-                    <br/>
-                    <div id="suppliesGraph">
-                        <table>
-                            <caption>Resources</caption>
-                            <thead>
-                                <tr>
-                                    <td>Food</td>
-                                    <td>Credits</td>
-                                    <td>Phaser Energy</td>
-                                    <td>Warp Coils</td>
-                                    <td>Antimatter Flow Regulators</td>
-                                    <td>Magnetic Constrictors</td>
-                                    <td>Plasma Injectors</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{this.props.game.saveData.food} lbs</td>
-                                    <td>⌬{this.props.game.saveData.money}</td>
-                                    <td>{this.props.game.saveData.phaser_energy}</td>
-                                    <td>{this.props.game.saveData.warp_coils}</td>
-                                    <td>{this.props.game.saveData.antimatter_flow_regulators}</td>
-                                    <td>{this.props.game.saveData.magnetic_constrictors}</td>
-                                    <td>{this.props.game.saveData.plasma_injectors}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <br/>
-                    <div id="crewGraph">
-                        <table>
-                            <caption>Crew</caption>
-                            <thead>
-                                <tr>
-                                    <td>Title</td>
-                                    <td>Status</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td className="title">Captain {this.props.game.saveData.captain}</td>
-                                    <td>{this.props.game.saveData.captain_status}</td>
-                                </tr>
-                                <tr>
-                                    <td className="title">Chief Medic {this.props.game.saveData.medic}</td>
-                                    <td>{this.props.game.saveData.medic_status}</td>
-                                </tr>
-                                <tr>
-                                    <td className="title">Chief Engineer {this.props.game.saveData.engineer}</td>
-                                    <td>{this.props.game.saveData.engineer_status}</td>
-                                </tr>
-                                <tr>
-                                    <td className="title">Helmsman {this.props.game.saveData.helm}</td>
-                                    <td>{this.props.game.saveData.helm_status}</td>
-                                </tr>
-                                <tr>
-                                    <td className="title">Tactical Officer {this.props.game.saveData.tactical}</td>
-                                    <td>{this.props.game.saveData.tactical_status}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <br/>
-                    <footer id="buttons">
-                        <button onClick={this.handleNewDay}>New day</button>
-                    </footer>
+            <div id="mainGameView">
+                <div id="shipImage">
+                    {/* other link to try https://i.imgur.com/U8iGpMC.gif */}
+                    {/* http://i.imgur.com/1iuK86O.gif */}
+                    {/* dodging bullets http://www.elginpk.com/worsley1415_1/woolley/spaceship2.gif */}
+                    {/* chill https://media.giphy.com/media/lUlcicyv8d6G4/giphy.gif */}
+                    {/* https://www.google.com/search?biw=960&bih=945&tbm=isch&sxsrf=ACYBGNSqH4MGVs0i7D5YaA8bCAq_8aAl4g%3A1574215455571&sa=1&ei=H5_UXZ7EIszSsAXKwpZI&q=pixel+enterprise+gif&oq=pixel+enterprise+gif&gs_l=img.3...5534.6294..6395...1.0..0.65.300.5......0....1..gws-wiz-img.......0i8i30j0i24.EYlqo412fhU&ved=0ahUKEwjez53I2fflAhVMKawKHUqhBQkQ4dUDCAc&uact=5#imgrc=1XEjFgTvropdAM: */}
+                    <img src={shipflying} alt="ship" id="shipGIF" />
                 </div>
-            ) : (
-                <>
-                {!this.state.outcomeTriggered ? (
-                    <div id="scenarioView">
-                        <h3>{this.state.scenario.prompt}</h3>
-                        <button onClick={this.handleOption1} id="optionButton">{this.state.scenario.option1}</button><br/>
-                        <button onClick={this.handleOption2} id="optionButton">{this.state.scenario.option2}</button>
-                    </div>
+                <br/>
+                <div id="date">
+                    Day: {this.props.game.saveData.day}<br/>
+                    Distance Travelled: {this.props.game.saveData.distance} light years / 150 light years
+                </div>
+                <div id="progressBar">
+                    <progress value={this.props.game.saveData.distance} max="150"/>
+                </div>
+                <br/>
+                <div id="suppliesGraph">
+                    <table>
+                        <caption>Resources</caption>
+                        <thead>
+                            <tr>
+                                <td>Food</td>
+                                <td>Credits</td>
+                                <td>Phaser Energy</td>
+                                <td>Warp Coils</td>
+                                <td>Antimatter Flow Regulators</td>
+                                <td>Magnetic Constrictors</td>
+                                <td>Plasma Injectors</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{this.props.game.saveData.food} lbs</td>
+                                <td>⌬{this.props.game.saveData.money}</td>
+                                <td>{this.props.game.saveData.phaser_energy}</td>
+                                <td>{this.props.game.saveData.warp_coils}</td>
+                                <td>{this.props.game.saveData.antimatter_flow_regulators}</td>
+                                <td>{this.props.game.saveData.magnetic_constrictors}</td>
+                                <td>{this.props.game.saveData.plasma_injectors}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <div id="crewGraph">
+                    <table>
+                        <caption>Crew</caption>
+                        <thead>
+                            <tr>
+                                <td>Title</td>
+                                <td>Status</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="title">Captain {this.props.game.saveData.captain}</td>
+                                <td>{this.props.game.saveData.captain_status}</td>
+                            </tr>
+                            <tr>
+                                <td className="title">Chief Medic {this.props.game.saveData.medic}</td>
+                                <td>{this.props.game.saveData.medic_status}</td>
+                            </tr>
+                            <tr>
+                                <td className="title">Chief Engineer {this.props.game.saveData.engineer}</td>
+                                <td>{this.props.game.saveData.engineer_status}</td>
+                            </tr>
+                            <tr>
+                                <td className="title">Helmsman {this.props.game.saveData.helm}</td>
+                                <td>{this.props.game.saveData.helm_status}</td>
+                            </tr>
+                            <tr>
+                                <td className="title">Tactical Officer {this.props.game.saveData.tactical}</td>
+                                <td>{this.props.game.saveData.tactical_status}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                {!this.state.scenarioTriggered ? (
+                    <div className="buttons">
+                        <button onClick={this.handleNewDay} id="newDayButton">New day</button>
+                    </div> 
                 ) : (
-                    <div id="outcomeView">
-                        <h3>{this.state.outcomeText}</h3>
-                        <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p>
-                        <button onClick={this.handleContinue}>Continue</button>
+                    <div id="scenarioMainView">
+                        {!this.state.outcomeTriggered ? (
+                            <div id="scenarioView">
+                                <h3>{this.state.scenario.prompt}</h3>
+                                <p id="optionButtons">
+                                <button onClick={this.handleOption1} id="optionButton">{this.state.scenario.option1}</button><br/>
+                                <button onClick={this.handleOption2} id="optionButton">{this.state.scenario.option2}</button>
+                                </p>
+                            </div>
+                        ) : (
+                            <div id="outcomeView">
+                                <h3>{this.state.outcomeText}</h3>
+                                {/* <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p> */}
+                                <button onClick={this.handleContinue}>Continue</button>
+                            </div>
+                        )}
                     </div>
                 )}
-                </>
-            )}
-            {/* <span>{JSON.stringify(this.state.scenarios,null,2)}</span> */}
             </div>
-            ):(
-                <div id="gameResultView">
-                    {this.state.endGame==="win"? (
-                        <div id="winView">
-                            <p>You won!</p>
-                            <button>Return to home</button>
-                        </div>
-                    ):(
-                        <div id="lossView">
-                            <p>You lost</p>
-                            <button>Return to home</button>
-                        </div>
-                    )}
-                </div>
-            )}
+        </div>
+        ):(
+            <div id="gameResultView">
+                {this.state.endGame==="win"? (
+                    <div id="winView">
+                        <p>You won!</p>
+                        <button>Return to home</button>
+                    </div>
+                ):(
+                    <div id="lossView">
+                        <p>You lost</p>
+                        <button>Return to home</button>
+                    </div>
+                )}
+            </div>
+        )}
             </>
         )
     }

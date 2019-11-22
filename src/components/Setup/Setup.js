@@ -62,48 +62,50 @@ class Setup extends Component{
 
     render(){
         return(
-            <form onSubmit={this.createSaveAndStart}>
-            <div>
-                <h2>Crew</h2>
-                <ul>
-                    <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autocomplete="off" required /></li>
-                    <li>Chief of Medicine: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="medic" autocomplete="off" required /></li>
-                    <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autocomplete="off" required /></li>
-                    <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autocomplete="off" required /></li>
-                    <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autocomplete="off"  required /></li>
-                </ul>
-                <h2>Food</h2>
-                <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autocomplete="off" required /> Cost: ⌬1 per pound</ul>
-                <h2>Ammunition</h2>
-                <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autocomplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts of energy</ul>
-                <h2>Spare Parts</h2>
-                <ul>
-                <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autocomplete="off" required /> Cost: ⌬40 per warp coil</li>
-                    <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="antimatter_flow_regulators" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per antimatter flow regulator</li>
-                    <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="magnetic_constrictors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per magnetic constrictor</li>
-                    <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="plasma_injectors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per plasma injector</li>
-                </ul>
-                <div id="bill">
-                    <h2>Bill:</h2>
+            <div id="setupView">
+                <form onSubmit={this.createSaveAndStart}>
+                <div>
+                    <h2>Crew</h2>
                     <ul>
-                        <li>Food: ⌬{this.state.food}</li>
-                        <li>Batteries: ⌬{this.state.batteries * 2}</li>
-                        <li>Warp Coils: ⌬{this.state.warp_coils * 40}</li>
-                        <li>Antimatter Flow Regulators: ⌬{this.state.antimatter_flow_regulators * 10}</li>
-                        <li>Magnetic Constrictors: ⌬{this.state.magnetic_constrictors * 10}</li>
-                        <li>Plasma Injectors: ⌬{this.state.plasma_injectors * 10}</li>
+                        <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autocomplete="off" required /></li>
+                        <li>Chief of Medicine: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="medic" autocomplete="off" required /></li>
+                        <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autocomplete="off" required /></li>
+                        <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autocomplete="off" required /></li>
+                        <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autocomplete="off"  required /></li>
                     </ul>
+                    <h2>Food</h2>
+                    <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autocomplete="off" required /> Cost: ⌬1 per pound</ul>
+                    <h2>Ammunition</h2>
+                    <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autocomplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts of energy</ul>
+                    <h2>Spare Parts</h2>
+                    <ul>
+                    <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autocomplete="off" required /> Cost: ⌬40 per warp coil</li>
+                        <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="antimatter_flow_regulators" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per antimatter flow regulator</li>
+                        <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="magnetic_constrictors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per magnetic constrictor</li>
+                        <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="plasma_injectors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per plasma injector</li>
+                    </ul>
+                    <div id="bill">
+                        <h2>Bill:</h2>
+                        <ul>
+                            <li>Food: ⌬{this.state.food}</li>
+                            <li>Batteries: ⌬{this.state.batteries * 2}</li>
+                            <li>Warp Coils: ⌬{this.state.warp_coils * 40}</li>
+                            <li>Antimatter Flow Regulators: ⌬{this.state.antimatter_flow_regulators * 10}</li>
+                            <li>Magnetic Constrictors: ⌬{this.state.magnetic_constrictors * 10}</li>
+                            <li>Plasma Injectors: ⌬{this.state.plasma_injectors * 10}</li>
+                        </ul>
+                    </div>
+                    {/* Conditionally render Available Credits to highlight when negative */}
+                    {!this.state.exceededLimit ? (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
+                    (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
+                    <div id="totalCredits">Total Credits: ⌬{this.state.money}</div>
+                    <div id="startButton">
+                        <button  type="submit">Start your journey</button>
+                    </div>
                 </div>
-                {/* Conditionally render Available Credits to highlight when negative */}
-                {!this.state.exceededLimit ? (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
-                (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
-                <div id="totalCredits">Total Credits: ⌬{this.state.money}</div>
-                <div id="startButton">
-                    <button  type="submit">Start your journey</button>
-                </div>
+                <span>{JSON.stringify(this.state,null,2)}</span>
+                </form>
             </div>
-            <span>{JSON.stringify(this.state,null,2)}</span>
-            </form>
         )
     }
 }
