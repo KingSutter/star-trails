@@ -21,9 +21,9 @@ class Game extends Component{
 
     // get all relevant data from the DB for use throughout the entirety of the game
     componentWillMount(){
+        this.props.dispatch({type: "GET_SAVE"});
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
-        this.props.dispatch({type: "GET_SAVE"});
     }
 
     // will handle all logic for whether an event happens and send updated data to save
@@ -100,7 +100,7 @@ class Game extends Component{
         });
         // get outcome text
         const text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]
-        // update save based on outcome
+        // update save based on outcome        
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
@@ -120,12 +120,12 @@ class Game extends Component{
     calculateOutcome = () => {
         // currently the outcome is just a 50/50 chance.
         // will implement factors that will sway the outcome
-        return this.randomInt(0,1) 
+        return this.randomInt(0,1);
     }
 
     // gets random integer from inlcusive min to inclusive max
     randomInt = (min, max) => {
-        return Math.floor(Math.random() * (max + 1 - min) + min)
+        return Math.floor(Math.random() * (max + 1 - min) + min);
     }
 
     // returns new save data per a scenario outcome dataset
@@ -146,12 +146,12 @@ class Game extends Component{
             day: this.props.game.saveData.day + outcome.day,
             distance: this.props.game.saveData.distance + outcome.distance,
             food: this.checkResource(this.props.game.saveData.food, outcome.food),
-            money: this.checkResource(this.props.game.saveData.money + outcome.money),
-            phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy + outcome.phaser_energy),
-            warp_coils: this.checkResource(this.props.game.saveData.warp_coils + outcome.warp_coils),
-            antimatter_flow_regulators: this.checkResource(this.props.game.saveData.antimatter_flow_regulators + outcome.antimatter_flow_regulators),
-            magnetic_constrictors: this.checkResource(this.props.game.saveData.magnetic_constrictors + outcome.magnetic_constrictors),
-            plasma_injectors: this.checkResource(this.props.game.saveData.plasma_injectors + outcome.plasma_injectors),
+            money: this.checkResource(this.props.game.saveData.money, outcome.money),
+            phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy, outcome.phaser_energy),
+            warp_coils: this.checkResource(this.props.game.saveData.warp_coils, outcome.warp_coils),
+            antimatter_flow_regulators: this.checkResource(this.props.game.saveData.antimatter_flow_regulators, outcome.antimatter_flow_regulators),
+            magnetic_constrictors: this.checkResource(this.props.game.saveData.magnetic_constrictors, outcome.magnetic_constrictors),
+            plasma_injectors: this.checkResource(this.props.game.saveData.plasma_injectors, outcome.plasma_injectors),
             captain_status: this.props.game.saveData.captain_status,
             medic_status: this.props.game.saveData.medic_status,
             engineer_status: this.props.game.saveData.engineer_status,
@@ -169,7 +169,7 @@ class Game extends Component{
 
     checkWinLoss = () => {
         if (this.props.game.saveData.distance >= 149){
-            this.setState({endGame: "win"})
+            this.setState({endGame: "win"});
         }
         else if (
             this.props.game.saveData.captain_status === "dead" &&
@@ -177,7 +177,7 @@ class Game extends Component{
             this.props.game.saveData.engineer_status === "dead" &&
             this.props.game.saveData.helm_status === "dead" &&
             this.props.game.saveData.tactical_status === "dead"
-        ){this.setState({endGame: "lose"})}
+        ){this.setState({endGame: "lose"});}
     }
 
     render(){
@@ -282,13 +282,12 @@ class Game extends Component{
                 ) : (
                     <div id="outcomeView">
                         <h3>{this.state.outcomeText}</h3>
-                        <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p>
+                        {/* <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p> */}
                         <button onClick={this.handleContinue}>Continue</button>
                     </div>
                 )}
                 </>
             )}
-            {/* <span>{JSON.stringify(this.props.game.saveData,null,2)}</span> */}
             </div>
             ):(
                 <div id="gameResultView">

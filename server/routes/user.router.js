@@ -60,32 +60,24 @@ router.get('/users', rejectUnauthenticated, (req,res) => {
 
 // gets all scenarios for editing purposes if admin desires
 router.get('/scenarios', rejectUnauthenticated, (req,res) => {
-  if (!req.user.admin){
-    req.sendStatus(401) // unauthorized error
-  }else{
-    const queryText = `SELECT * FROM "scenarios" ORDER BY "id" ASC;`
-    pool.query(queryText)
-    .then((response) => {
-        res.send(response.rows);
-    }).catch((error)=>{
-        res.sendStatus(500);
-    })
-  }
+  const queryText = `SELECT * FROM "scenarios" ORDER BY "id" ASC;`
+  pool.query(queryText)
+  .then((response) => {
+      res.send(response.rows);
+  }).catch((error)=>{
+      res.sendStatus(500);
+  })
 })
 
 // gets all scenario outcomes and sorts by id
 router.get('/outcomes', rejectUnauthenticated, (req,res) => {
-  if (!req.user.admin){
-    req.sendStatus(401) // unauthorized error
-  }else{
-    const queryText = `SELECT * FROM "outcomes" ORDER BY "id" ASC;`
-    pool.query(queryText)
-    .then((response) => {
-        res.send(response.rows);
-    }).catch((error)=>{
-        res.sendStatus(500);
-    })
-  }
+  const queryText = `SELECT * FROM "outcomes" ORDER BY "id" ASC;`
+  pool.query(queryText)
+  .then((response) => {
+      res.send(response.rows);
+  }).catch((error)=>{
+      res.sendStatus(500);
+  })
 })
 
 // adds a scenario to DB
