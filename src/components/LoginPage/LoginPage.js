@@ -19,7 +19,6 @@ class LoginPage extends Component {
           password: this.state.password,
         },
         history: this.props.history,
-        reload: window.location.reload(),
       });
     } else {
       this.props.dispatch({ type: 'LOGIN_INPUT_ERROR' });
