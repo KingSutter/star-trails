@@ -13,9 +13,9 @@ body{
     margin: 50px;
 }
 
-.loginForm {
+.loginForm, .registerForm {
     background-color: transparent;
-    width: 30%;
+    width: 40%;
     height: 250px;
     margin: 20px auto;
     padding: 25px;
@@ -27,6 +27,7 @@ body{
     margin-bottom: 10px;
     background-color: transparent;
     font-size: 14px;
+    color: white;
 }
 
 .log-in, .log-out, .register, .universalButton {
