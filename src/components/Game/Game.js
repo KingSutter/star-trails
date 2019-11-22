@@ -299,12 +299,12 @@ class Game extends Component{
                 {this.state.endGame==="win"? (
                     <div id="winView">
                         <p>You won!</p>
-                        <button onClick={this.handleReturnToMenu}>Return to home</button>
+                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 ):(
                     <div id="lossView">
                         <p>You lost</p>
-                        <button onClick={this.handleReturnToMenu}>Return to home</button>
+                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 )}
             </div>

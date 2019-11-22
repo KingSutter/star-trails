@@ -4,6 +4,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 function* createSave(action){
     try {
         yield axios.post('/api/user/save', action.payload);
+        yield action.history.push('/game');
       } catch (error) {
         console.log('create save post route failed', error);
       }

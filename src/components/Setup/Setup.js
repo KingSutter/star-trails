@@ -32,8 +32,7 @@ class Setup extends Component{
         }
         // if the user confirms, create a save for the user and push to the main game page
         if(window.confirm("Is everything here okay?")){
-            this.props.dispatch({type: "CREATE_SAVE", payload: this.state})
-            this.props.history.push('/game');
+            this.props.dispatch({type: "CREATE_SAVE", payload: this.state, history: this.props.history})
         }
     }
     
