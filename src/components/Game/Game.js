@@ -38,7 +38,7 @@ class Game extends Component{
                 allScenarioIds.push(scenario.id);
             });
             // get a random id from list of all random ids
-            const id = allScenarioIds[Math.floor(Math.random() * allScenarioIds.length)]-1; 
+            const id = allScenarioIds[Math.floor(Math.random() * (allScenarioIds.length-1))]; 
             // refresh state with new scenario information
             this.setState({
                 scenarioTriggered: scenarioTrigger,
