@@ -28,6 +28,7 @@ class Game extends Component{
 
     // will handle all logic for whether an event happens and send updated data to save
     handleNewDay = () => {
+        this.checkWinLoss();
         // if the rng function returns true, run a random scenario
         const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-7) returned is 1, an scenario will occur
         if (scenarioTrigger){     // do if we're in a scenario
@@ -63,44 +64,27 @@ class Game extends Component{
                 tactical_status: this.props.game.saveData.tactical_status,
             }
             this.updateSave(newSave);
-            this.checkWinLoss();
         }
     }
 
     // logic behind when option 1 button is pressed.
     // this will alter the save state to whatever the outcome result will be
-    handleOption1 = () => {
+    handleOption = (option) => {
         console.log("doing option1");
         const result = this.calculateOutcome();
-        const outcomeID = this.state.scenario.option1_outcomes[result]; 
+        let outcomeID = null;
+        if (option === 1){ outcomeID = this.state.scenario.option1_outcomes[result]; }
+        else{ outcomeID = this.state.scenario.option2_outcomes[result]; }
         // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
         let outcome = {}
         this.props.game.outcomes.forEach(OUTCOME => {
             if(OUTCOME.id == outcomeID){outcome = OUTCOME}
         });
         // get outcome text
-        const text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]
+        let text = '';
+        if(option === 1){ text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]}
+        else{ text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]}
         // update save based on outcome
-        this.updateSave(this.addSaves(outcome))
-        // set state for use by outcome view
-        this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
-        this.checkWinLoss();
-    }
-    
-    // logic behind when option 2 button is pressed.
-    // this will alter the save state to whatever the outcome result will be
-    handleOption2 = () => {
-        console.log("doing option2");
-        const result = this.calculateOutcome();
-        const outcomeID = this.state.scenario.option2_outcomes[result]; 
-        // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
-        let outcome = {}
-        this.props.game.outcomes.forEach(OUTCOME => {
-            if(OUTCOME.id == outcomeID){outcome = OUTCOME}
-        });
-        // get outcome text
-        const text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]
-        // update save based on outcome        
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
@@ -279,8 +263,8 @@ class Game extends Component{
                             <div id="scenarioView">
                                 <h3>{this.state.scenario.prompt}</h3>
                                 <p id="optionButtons">
-                                <button onClick={this.handleOption1} id="optionButton">{this.state.scenario.option1}</button><br/>
-                                <button onClick={this.handleOption2} id="optionButton">{this.state.scenario.option2}</button>
+                                <button onClick={()=>{this.handleOption(1)}} id="optionButton">{this.state.scenario.option1}</button><br/>
+                                <button onClick={()=>{this.handleOption(2)}} id="optionButton">{this.state.scenario.option2}</button>
                                 </p>
                             </div>
                         ) : (
