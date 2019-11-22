@@ -267,25 +267,27 @@ class Game extends Component{
                 </div>
                 <br/>
                 {!this.state.scenarioTriggered ? (
-                    <div id="buttons">
-                        <button onClick={this.handleNewDay}>New day</button>
+                    <div className="buttons">
+                        <button onClick={this.handleNewDay} id="newDayButton">New day</button>
                     </div> 
                 ) : (
-                    <>
-                    {!this.state.outcomeTriggered ? (
-                        <div id="scenarioView">
-                            <h3>{this.state.scenario.prompt}</h3>
-                            <button onClick={this.handleOption1} id="optionButton">{this.state.scenario.option1}</button><br/>
-                            <button onClick={this.handleOption2} id="optionButton">{this.state.scenario.option2}</button>
-                        </div>
-                    ) : (
-                        <div id="outcomeView">
-                            <h3>{this.state.outcomeText}</h3>
-                            {/* <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p> */}
-                            <button onClick={this.handleContinue}>Continue</button>
-                        </div>
-                    )}
-                    </>
+                    <div id="scenarioMainView">
+                        {!this.state.outcomeTriggered ? (
+                            <div id="scenarioView">
+                                <h3>{this.state.scenario.prompt}</h3>
+                                <p id="optionButtons">
+                                <button onClick={this.handleOption1} id="optionButton">{this.state.scenario.option1}</button><br/>
+                                <button onClick={this.handleOption2} id="optionButton">{this.state.scenario.option2}</button>
+                                </p>
+                            </div>
+                        ) : (
+                            <div id="outcomeView">
+                                <h3>{this.state.outcomeText}</h3>
+                                {/* <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p> */}
+                                <button onClick={this.handleContinue}>Continue</button>
+                            </div>
+                        )}
+                    </div>
                 )}
             </div>
         </div>

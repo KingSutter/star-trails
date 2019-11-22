@@ -71,3 +71,20 @@
     padding-right: 10px;
     padding-left: 10px;
 }
+
+.gameView #scenarioMainView, .gameView #crewGraph{
+    float: left;
+}
+
+#scenarioMainView h3 {
+    max-width: 250px;
+}
+
+.gameView #newDayButton {
+    margin-top: 5%;
+    margin-left: 10%;
+}
+
+#scenarioMainView{
+    padding-left: 10%;
+}
