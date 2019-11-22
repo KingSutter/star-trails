@@ -17,6 +17,7 @@ class RegisterPage extends Component {
           username: this.state.username,
           password: this.state.password,
         },
+        reload: window.location.reload(),
       });
     } else {
       this.props.dispatch({type: 'REGISTRATION_INPUT_ERROR'});
@@ -78,7 +79,7 @@ class RegisterPage extends Component {
         <center>
           <button
             type="button"
-            className="link-button"
+            // className="link-button"
             onClick={() => {this.props.dispatch({type: 'SET_TO_LOGIN_MODE'})}}
             className="universalButton"
           >

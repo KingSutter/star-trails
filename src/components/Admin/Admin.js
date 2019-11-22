@@ -27,7 +27,7 @@ class Admin extends Component {
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
         //check if user is an admin
-        if(this.props.userList.length == 0) {
+        if(this.props.userList.length === 0) {
             this.props.history.push('/')
         }
     }
@@ -85,7 +85,7 @@ class Admin extends Component {
     }  
     render() {
         return (
-            <div class="adminView">
+            <div className="adminView">
                 {this.state.scenarioListShowing ? (
                     <>
                 <button onClick={this.toggleList}>Show Users List</button><br/>
@@ -130,8 +130,8 @@ class Admin extends Component {
                                     <td>{scenario.neutral_outcome_id}</td>
                                     <td>{scenario.non_neutral_outcome}</td>
                                     <td>{scenario.non_neutral_outcome_id}</td>
-                                    <td>{scenario.option1_outcomes}</td>
-                                    <td>{scenario.option2_outcomes}</td>
+                                    <td>[ {scenario.option1_outcomes[0]} , {scenario.option1_outcomes[1]} ]</td>
+                                    <td>[ {scenario.option2_outcomes[0]} , {scenario.option2_outcomes[1]} ]</td>
                                     <td><button id={scenario.id} onClick={this.handleEditClick}>Edit</button></td>
                                     <td><button id={scenario.id}>Delete</button></td>
                                     </>
@@ -142,11 +142,13 @@ class Admin extends Component {
                                     <td><input placeholder="option1" value={scenario.option1} /></td>
                                     <td><input placeholder="option2" value={scenario.option2} /></td>
                                     <td><input placeholder="good_outcome" value={scenario.good_outcome} /></td>
+                                    <td><input type="number" min="1" placeholder="good_outcome_id" value={scenario.good_outcome_id} /></td>
                                     <td><input placeholder="bad_outcome" value={scenario.bad_outcome} /></td>
+                                    <td><input type="number" min="1" placeholder="bad_outcome_id" value={scenario.bad_outcome_id} /></td>
                                     <td><input placeholder="neutral_outcome" value={scenario.neutral_outcome} /></td>
-                                    <td><input type="number" min="1" placeholder="good_outcome_type_id" value={scenario.good_outcome_type_id} /></td>
-                                    <td><input type="number" placeholder="bad_outcome_type_id" value={scenario.bad_outcome_type_id} /></td>
-                                    <td><input type="number"placeholder="neutral_outcome_type_id" value={scenario.neutral_outcome_type_id} /></td>
+                                    <td><input type="number" min="1" placeholder="neutral_outcome_id" value={scenario.neutral_outcome_id} /></td>
+                                    <td><input placeholder="non_neutral_outcome" value={scenario.non_neutral_outcome} /></td>
+                                    <td><input type="number" min="1" placeholder="non_neutral_outcome_id" value={scenario.non_neutral_outcome_id} /></td>
                                     <td><button onClick={this.handleEditClick}>Submit</button></td>
                                     </>}
                                 </tr>
@@ -160,11 +162,13 @@ class Admin extends Component {
                                 <td><input onChange={this.handleScenarioInput} placeholder="option1" value={this.state.scenarioAddInput.option1} form="handleAdd"/></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="option2" value={this.state.scenarioAddInput.option2} form="handleAdd" /></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="good_outcome" value={this.state.scenarioAddInput.good_outcome} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome_id" value={this.state.scenarioAddInput.good_outcome_id} form="handleAdd"/></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome" value={this.state.scenarioAddInput.bad_outcome} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="bad_outcome_id" value={this.state.scenarioAddInput.bad_outcome_id} form="handleAdd"/></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome" value={this.state.scenarioAddInput.neutral_outcome} form="handleAdd"/></td>
-                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="good_outcome_type_id" value={this.state.scenarioAddInput.good_outcome_type_id} form="handleAdd"/></td>
-                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="bad_outcome_type_id" value={this.state.scenarioAddInput.bad_outcome_type_id} form="handleAdd"/></td>
-                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="neutral_outcome_type_id" value={this.state.scenarioAddInput.neutral_outcome_type_id} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="neutral_outcome_id" value={this.state.scenarioAddInput.neutral_outcome_id} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="non_neutral_outcome" value={this.state.scenarioAddInput.non_neutral_outcome} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="non_neutral_outcome_id" value={this.state.scenarioAddInput.non_neutral_outcome_id} form="handleAdd"/></td>
                                 <td><button type="submit" form="handleAdd">Add</button></td>
                             </tr>
                         </tfoot>
@@ -183,12 +187,11 @@ class Admin extends Component {
                                 <td>Distance</td>
                                 <td>Food</td>
                                 <td>Money</td>
-                                <td>Fuel</td>
-                                <td>Resource1</td>
-                                <td>Resource2</td>
-                                <td>Resource3</td>
-                                <td>Resource4</td>
-                                <td>Resource5</td>
+                                <td>Phaser Energy</td>
+                                <td>Warp Coils</td>
+                                <td>Antimatter Flow Regulators</td>
+                                <td>Magnetic Constrictors</td>
+                                <td>Plasma Injectors</td>
                                 <td>Crew Lost</td>
                                 <td></td>
                                 <td></td>
@@ -202,12 +205,11 @@ class Admin extends Component {
                                     <td>{outcome.distance}</td>
                                     <td>{outcome.food}</td>
                                     <td>{outcome.money}</td>
-                                    <td>{outcome.fuel}</td>
-                                    <td>{outcome.resource1}</td>
-                                    <td>{outcome.resource2}</td>
-                                    <td>{outcome.resource3}</td>
-                                    <td>{outcome.resource4}</td>
-                                    <td>{outcome.resource5}</td>
+                                    <td>{outcome.phaser_energy}</td>
+                                    <td>{outcome.warp_coils}</td>
+                                    <td>{outcome.antimatter_flow_regulators}</td>
+                                    <td>{outcome.magnetic_constrictors}</td>
+                                    <td>{outcome.plasma_injectors}</td>
                                     <td>{outcome.crew_lost}</td>
                                     <td><button id={outcome.id}>Edit</button></td>
                                     <td><button id={outcome.id}>Delete</button></td>
@@ -221,12 +223,11 @@ class Admin extends Component {
                                 <td><input placeholder="distance"/></td>
                                 <td><input placeholder="food"/></td>
                                 <td><input placeholder="money"/></td>
-                                <td><input placeholder="fuel"/></td>
-                                <td><input placeholder="resource 1"/></td>
-                                <td><input placeholder="resource 2"/></td>
-                                <td><input placeholder="resource 3"/></td>
-                                <td><input placeholder="resource 4"/></td>
-                                <td><input placeholder="resource 5"/></td>
+                                <td><input placeholder="phaser_energy"/></td>
+                                <td><input placeholder="warp_coils"/></td>
+                                <td><input placeholder="antimatter_flow_regulators"/></td>
+                                <td><input placeholder="magnetic_constrictors"/></td>
+                                <td><input placeholder="plasma_injectors"/></td>
                                 <td><input placeholder="crew lost" size="10"/></td>
                                 <td><button>Add</button></td>
                             </tr>
@@ -260,7 +261,7 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        <span>{JSON.stringify(this.props,null,2)}</span>
+        <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span>
             </div>
         )
     }

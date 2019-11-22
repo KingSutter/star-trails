@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom'
 
 class LoginPage extends Component {
   state = {
@@ -17,6 +18,7 @@ class LoginPage extends Component {
           username: this.state.username,
           password: this.state.password,
         },
+        history: this.props.history,
       });
     } else {
       this.props.dispatch({ type: 'LOGIN_INPUT_ERROR' });
@@ -68,11 +70,11 @@ class LoginPage extends Component {
           </div>
           <div>
             <input
-              className="log-in"
+              // className="log-in"
               type="submit"
               name="submit"
               value="Log In"
-              className="loginInput"
+              // className="loginInput"
               className="universalButton"
             />
           </div>
@@ -80,7 +82,7 @@ class LoginPage extends Component {
         <center>
           <button
             type="button"
-            className="link-button"
+            // className="link-button"
             className="universalButton"
             onClick={() => {this.props.dispatch({type: 'SET_TO_REGISTER_MODE'})}}
           >
@@ -99,4 +101,4 @@ const mapStateToProps = state => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps)(LoginPage);
+export default withRouter(connect(mapStateToProps)(LoginPage));
