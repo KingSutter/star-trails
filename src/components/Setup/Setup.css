@@ -26,6 +26,10 @@
     color: white;
 }
 
+#startButton button:hover {
+    background-color: silver;
+}
+
 #setupView .exceeded{
     background-color: red;
 }

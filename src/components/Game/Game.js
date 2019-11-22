@@ -20,10 +20,10 @@ class Game extends Component{
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
-    componentDidMount(){
-        this.props.dispatch({type: "GET_SAVE"});
+    componentWillMount(){
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
+        this.props.dispatch({type: "GET_SAVE"});
     }
 
     // will handle all logic for whether an event happens and send updated data to save
@@ -288,7 +288,7 @@ class Game extends Component{
                 )}
                 </>
             )}
-            {/* <span>{JSON.stringify(this.state.scenarios,null,2)}</span> */}
+            {/* <span>{JSON.stringify(this.props.game.saveData,null,2)}</span> */}
             </div>
             ):(
                 <div id="gameResultView">
