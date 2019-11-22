@@ -4,8 +4,11 @@ body {
     color: white;
 }
 
-body{
+.mainBg{
     background-image: url("../../images/space.jpg");
+}
+.animatedBg{
+    background-image: url("../../images/warpSpeed.gif");
 }
 
 .alert {
@@ -59,3 +62,7 @@ body{
     border-bottom:1px solid #444; 
     cursor: pointer;
 }
+/* .app {
+    background-image: url("../../images/warpSpeed.gif");
+    height: 100vh
+ } */
