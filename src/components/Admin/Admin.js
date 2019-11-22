@@ -22,15 +22,14 @@ class Admin extends Component {
     }
 
     // fetch all lists for admin to edit from DB
-    componentDidMount(){
-        // check if user is an admin
-        // if(!admin) {
-        //     this.props.history.push('/')
-        // }
-        // 
+    componentWillMount(){
         this.props.dispatch({type: "GET_USERS"});
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
+        //check if user is an admin
+        if(this.props.userList.length == 0) {
+            this.props.history.push('/')
+        }
     }
     // will toggleScenarioList
     toggleList = () => {
@@ -261,7 +260,7 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        <span>{JSON.stringify(this.props.scenarioList,null,2)}</span>
+        <span>{JSON.stringify(this.props,null,2)}</span>
             </div>
         )
     }
