@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import withRouter from 'react-router-dom/withRouter'
 
 class LoginPage extends Component {
   state = {
@@ -17,6 +18,7 @@ class LoginPage extends Component {
           username: this.state.username,
           password: this.state.password,
         },
+        history: this.props.history,
       });
     } else {
       this.props.dispatch({ type: 'LOGIN_INPUT_ERROR' });
@@ -99,4 +101,4 @@ const mapStateToProps = state => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps)(LoginPage);
+export default withRouter(connect(mapStateToProps)(LoginPage));
