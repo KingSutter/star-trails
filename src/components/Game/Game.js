@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-// import ProgressBar from 'react-bootstrap/ProgressBar';
+import withRouter from 'react-router-dom/withRouter'
 import './Game.css';
 import shipflying from './shipflying2.gif'
 
@@ -28,9 +28,10 @@ class Game extends Component{
 
     // will handle all logic for whether an event happens and send updated data to save
     handleNewDay = () => {
+        this.checkWinLoss();
         // if the rng function returns true, run a random scenario
         const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-7) returned is 1, an scenario will occur
-        if (scenarioTrigger){     // do if we're in a scenario
+        if (scenarioTrigger){
             let allScenarioIds = [];
             // get all scenarioIDs (DB may not have linear IDs)
             this.props.game.scenarios.forEach(scenario => {
@@ -63,44 +64,26 @@ class Game extends Component{
                 tactical_status: this.props.game.saveData.tactical_status,
             }
             this.updateSave(newSave);
-            this.checkWinLoss();
         }
     }
 
-    // logic behind when option 1 button is pressed.
+    // logic behind when option button is pressed.
     // this will alter the save state to whatever the outcome result will be
-    handleOption1 = () => {
-        console.log("doing option1");
+    handleOption = (option) => {
         const result = this.calculateOutcome();
-        const outcomeID = this.state.scenario.option1_outcomes[result]; 
+        let outcomeID = null;
+        if (option === 1){ outcomeID = this.state.scenario.option1_outcomes[result]; } // if option1 was pressed...
+        else{ outcomeID = this.state.scenario.option2_outcomes[result]; } // if option 2 was pressed...
         // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
         let outcome = {}
         this.props.game.outcomes.forEach(OUTCOME => {
             if(OUTCOME.id == outcomeID){outcome = OUTCOME}
         });
         // get outcome text
-        const text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]
+        let text = '';
+        if(option === 1){ text = [this.state.scenario.good_outcome, this.state.scenario.bad_outcome][result]} // if option1 was pressed...
+        else{ text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]} // if option2 was pressed...
         // update save based on outcome
-        this.updateSave(this.addSaves(outcome))
-        // set state for use by outcome view
-        this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
-        this.checkWinLoss();
-    }
-    
-    // logic behind when option 2 button is pressed.
-    // this will alter the save state to whatever the outcome result will be
-    handleOption2 = () => {
-        console.log("doing option2");
-        const result = this.calculateOutcome();
-        const outcomeID = this.state.scenario.option2_outcomes[result]; 
-        // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
-        let outcome = {}
-        this.props.game.outcomes.forEach(OUTCOME => {
-            if(OUTCOME.id == outcomeID){outcome = OUTCOME}
-        });
-        // get outcome text
-        const text = [this.state.scenario.neutral_outcome, this.state.scenario.non_neutral_outcome][result]
-        // update save based on outcome        
         this.updateSave(this.addSaves(outcome))
         // set state for use by outcome view
         this.setState({outcomeTriggered: true, outcomeText: text, outcomeChanges: outcome})
@@ -119,7 +102,7 @@ class Game extends Component{
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
         // currently the outcome is just a 50/50 chance.
-        // will implement factors that will sway the outcome
+        // will implement factors that will sway the outcome.
         return this.randomInt(0,1);
     }
 
@@ -178,6 +161,9 @@ class Game extends Component{
             this.props.game.saveData.helm_status === "dead" &&
             this.props.game.saveData.tactical_status === "dead"
         ){this.setState({endGame: "lose"});}
+    }
+    handleReturnToMenu = () => {
+        this.props.history.push('/home');
     }
 
     render(){
@@ -276,8 +262,8 @@ class Game extends Component{
                             <div id="scenarioView">
                                 <h3>{this.state.scenario.prompt}</h3>
                                 <p id="optionButtons">
-                                <button onClick={this.handleOption1} id="optionButton">{this.state.scenario.option1}</button><br/>
-                                <button onClick={this.handleOption2} id="optionButton">{this.state.scenario.option2}</button>
+                                <button onClick={()=>{this.handleOption(1)}} id="optionButton">{this.state.scenario.option1}</button><br/>
+                                <button onClick={()=>{this.handleOption(2)}} id="optionButton">{this.state.scenario.option2}</button>
                                 </p>
                             </div>
                         ) : (
@@ -296,12 +282,12 @@ class Game extends Component{
                 {this.state.endGame==="win"? (
                     <div id="winView">
                         <p>You won!</p>
-                        <button>Return to home</button>
+                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 ):(
                     <div id="lossView">
                         <p>You lost</p>
-                        <button>Return to home</button>
+                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 )}
             </div>
@@ -317,4 +303,7 @@ const mapReduxStateToProps = (reduxState) => {
     }
 }
 
-export default connect(mapReduxStateToProps)(Game);
+export default withRouter(connect(mapReduxStateToProps)(Game));
+
+// with router is currently only used for pushing back to home
+// after the game ends.

@@ -4,8 +4,11 @@ body {
     color: white;
 }
 
-body{
+.mainBg{
     background-image: url("../../images/space.jpg");
+}
+.animatedBg{
+    background-image: url("../../images/warpSpeed.gif");
 }
 
 .alert {
@@ -13,21 +16,24 @@ body{
     margin: 50px;
 }
 
-.loginForm {
+.loginForm, .registerForm {
     background-color: transparent;
-    width: 30%;
+    width: 40%;
     height: 250px;
     margin: 20px auto;
     padding: 25px;
     border-radius: 2px;
 }
 
-.loginInput {
+.loginInput, .registerInput {
     margin: 5px;
     margin-bottom: 10px;
+    background-color: transparent;
+    font-size: 14px;
+    color: white;
 }
 
-.log-in, .log-out, .register {
+.log-in, .log-out, .register, .universalButton {
     background-color: transparent;
     border-radius: 4px;
     color: #f8f8f8;
@@ -35,12 +41,13 @@ body{
     min-width: 100px;
     outline:0;
     cursor: pointer;
+    font-size: 18px;
 }
 
 #logoutButton {
     background-color: transparent;
 }
-.log-in:hover, .log-out:hover, .register:hover, #logoutButton:hover {
+.log-in:hover, .log-out:hover, .register:hover, #logoutButton:hover, .universalButton:hover {
   background-color: darkgray;
 }
 
@@ -55,3 +62,7 @@ body{
     border-bottom:1px solid #444; 
     cursor: pointer;
 }
+/* .app {
+    background-image: url("../../images/warpSpeed.gif");
+    height: 100vh
+ } */

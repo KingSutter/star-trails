@@ -73,6 +73,7 @@ class LoginPage extends Component {
               name="submit"
               value="Log In"
               className="loginInput"
+              className="universalButton"
             />
           </div>
         </form>
@@ -80,6 +81,7 @@ class LoginPage extends Component {
           <button
             type="button"
             className="link-button"
+            className="universalButton"
             onClick={() => {this.props.dispatch({type: 'SET_TO_REGISTER_MODE'})}}
           >
             Register

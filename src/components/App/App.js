@@ -19,19 +19,19 @@ import InfoPage from '../InfoPage/InfoPage';
 import Admin from '../Admin/Admin';
 import Setup from '../Setup/Setup';
 import Game from '../Game/Game';
-
 import './App.css';
 
 
 class App extends Component {
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'})
+    document.body.style.backgroundImage = "url(static/media/space.c11a4173.jpg)";
   }
 
   render() {
     return (
       <Router>
-        <div id="app">
+        <div className="app">
           <Nav />
           <Switch>
             {/* Visiting localhost:3000 will redirect to localhost:3000/home */}

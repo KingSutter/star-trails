@@ -32,8 +32,7 @@ class Setup extends Component{
         }
         // if the user confirms, create a save for the user and push to the main game page
         if(window.confirm("Is everything here okay?")){
-            this.props.dispatch({type: "CREATE_SAVE", payload: this.state})
-            this.props.history.push('/game');
+            this.props.dispatch({type: "CREATE_SAVE", payload: this.state, history: this.props.history})
         }
     }
     
@@ -96,22 +95,19 @@ class Setup extends Component{
                         </ul>
                     </div>
                     {/* Conditionally render Available Credits to highlight when negative */}
-                    {!this.state.exceededLimit ? (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
-                    (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
+                    {!this.state.exceededLimit ? 
+                        (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
+                        (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
                     <div id="totalCredits">Total Credits: ⌬{this.state.money}</div>
-                    <div id="startButton">
-                        <button  type="submit">Start your journey</button>
+                    <div id="startButton" className="universalButton">
+                        <button  className="universalButton" type="submit">Start your journey</button>
                     </div>
                 </div>
-                <span>{JSON.stringify(this.state,null,2)}</span>
+                {/* <span>{JSON.stringify(this.state,null,2)}</span> */}
                 </form>
             </div>
         )
     }
 }
-
-// const mapReduxStateToProps = (reduxState) => {
-//     return reduxState;
-// }
 
 export default withRouter(connect()(Setup));

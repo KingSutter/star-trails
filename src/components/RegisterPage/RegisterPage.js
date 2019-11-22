@@ -40,7 +40,7 @@ class RegisterPage extends Component {
             {this.props.errors.registrationMessage}
           </h2>
         )}
-        <form onSubmit={this.registerUser}>
+        <form onSubmit={this.registerUser} className="registerForm">
           <h1>Register User</h1>
           <div>
             <label htmlFor="username">
@@ -50,6 +50,7 @@ class RegisterPage extends Component {
                 name="username"
                 value={this.state.username}
                 onChange={this.handleInputChangeFor('username')}
+                className="registerInput"
               />
             </label>
           </div>
@@ -61,6 +62,7 @@ class RegisterPage extends Component {
                 name="password"
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
+                className="registerInput"
               />
             </label>
           </div>
@@ -78,6 +80,7 @@ class RegisterPage extends Component {
             type="button"
             className="link-button"
             onClick={() => {this.props.dispatch({type: 'SET_TO_LOGIN_MODE'})}}
+            className="universalButton"
           >
             Login
           </button>

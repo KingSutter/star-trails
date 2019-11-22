@@ -1,5 +1,9 @@
-/* body{
-    background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/ef/StarfieldSimulation004.gif);
-    background-repeat: no-repeat;
-    background-size: fill;
-} */
+.containter {
+    position: relative;
+}
+
+.containter img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
