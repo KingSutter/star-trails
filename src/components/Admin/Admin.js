@@ -162,11 +162,13 @@ class Admin extends Component {
                                 <td><input onChange={this.handleScenarioInput} placeholder="option1" value={this.state.scenarioAddInput.option1} form="handleAdd"/></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="option2" value={this.state.scenarioAddInput.option2} form="handleAdd" /></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="good_outcome" value={this.state.scenarioAddInput.good_outcome} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="good_outcome_id" value={this.state.scenarioAddInput.good_outcome_id} form="handleAdd"/></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="bad_outcome" value={this.state.scenarioAddInput.bad_outcome} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="bad_outcome_id" value={this.state.scenarioAddInput.bad_outcome_id} form="handleAdd"/></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="neutral_outcome" value={this.state.scenarioAddInput.neutral_outcome} form="handleAdd"/></td>
-                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="good_outcome_type_id" value={this.state.scenarioAddInput.good_outcome_type_id} form="handleAdd"/></td>
-                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="bad_outcome_type_id" value={this.state.scenarioAddInput.bad_outcome_type_id} form="handleAdd"/></td>
-                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="neutral_outcome_type_id" value={this.state.scenarioAddInput.neutral_outcome_type_id} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="neutral_outcome_id" value={this.state.scenarioAddInput.neutral_outcome_id} form="handleAdd"/></td>
+                                <td><input onChange={this.handleScenarioInput} placeholder="non_neutral_outcome" value={this.state.scenarioAddInput.non_neutral_outcome} form="handleAdd"/></td>
+                                <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="non_neutral_outcome_id" value={this.state.scenarioAddInput.non_neutral_outcome_id} form="handleAdd"/></td>
                                 <td><button type="submit" form="handleAdd">Add</button></td>
                             </tr>
                         </tfoot>
@@ -259,7 +261,7 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        <span>{JSON.stringify(this.props,null,2)}</span>
+        <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span>
             </div>
         )
     }
