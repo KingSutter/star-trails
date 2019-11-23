@@ -86,10 +86,10 @@ router.post('/scenario', rejectUnauthenticated, (req,res) => {
     req.sendStatus(401) // unauthorized error
   }else{
     const queryText = `
-    INSERT INTO "scenarios" ("prompt","option1","option2","good_outcome","bad_outcome","neutral_outcome","good_outcome_id","bad_outcome_id","neutral_outcome_id")
-    VALUES ('${req.body.prompt}','${req.body.option1}','${req.body.option2}','${req.body.good_outcome}','${req.body.bad_outcome}','${req.body.neutral_outcome}','${Number(req.body.good_outcome_id)}','${Number(req.body.bad_outcome_id)}','${Number(req.body.neutral_outcome_id)}');
+    INSERT INTO "scenarios" ("prompt","option1","option2","good_outcome","good_outcome_id","bad_outcome","bad_outcome_id","neutral_outcome","neutral_outcome_id","non_neutral_outcome","non_neutral_outcome_id","option1_outcomes","option2_outcomes")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);
     `
-    pool.query(queryText)
+    pool.query(queryText, [req.body.prompt, req.body.option1, req.body.option2, req.body.good_outcome, req.body.good_outcome_id, req.body.bad_outcome, req.body.bad_outcome_id, req.body.neutral_outcome, req.body.neutral_outcome_id, req.body.non_neutral_outcome, req.body.non_neutral_outcome_id, req.body.option1_outcomes, req.body.option2_outcomes])
     .then((response) => {
         res.send(response.rows);
     }).catch((error)=>{

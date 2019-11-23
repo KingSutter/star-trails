@@ -58,7 +58,11 @@ class Admin extends Component {
             }
         }
         // adds input to DB
-        this.props.dispatch({type: "ADD_SCENARIO", payload: this.state.scenarioAddInput})
+        this.props.dispatch({
+            type: "ADD_SCENARIO", 
+            payload: {...this.state.scenarioAddInput, 
+                option1_outcomes: `{${this.state.scenarioAddInput.good_outcome_id},${this.state.scenarioAddInput.bad_outcome_id}}`, 
+                option2_outcomes: `{${this.state.scenarioAddInput.neutral_outcome_id}, ${this.state.scenarioAddInput.non_neutral_outcome_id}}`}})
         // effectively reset inputs to default values
         this.setState({
             scenarioAddInput: {
@@ -79,6 +83,7 @@ class Admin extends Component {
 
     // user can edit entire row when called
     handleEditClick = (e) => {
+        e.preventDefaut();
         this.setState({
             editingID: e.target.id,
         })
@@ -149,6 +154,8 @@ class Admin extends Component {
                                     <td><input type="number" min="1" placeholder="neutral_outcome_id" value={scenario.neutral_outcome_id} /></td>
                                     <td><input placeholder="non_neutral_outcome" value={scenario.non_neutral_outcome} /></td>
                                     <td><input type="number" min="1" placeholder="non_neutral_outcome_id" value={scenario.non_neutral_outcome_id} /></td>
+                                    <td>[{this.state.scenarioAddInput.good_outcome_id}, {this.state.scenarioAddInput.bad_outcome_id}]</td>
+                                    <td>[{this.state.scenarioAddInput.neutral_outcome_id}, {this.state.scenarioAddInput.non_neutral_outcome_id}]</td>
                                     <td><button onClick={this.handleEditClick}>Submit</button></td>
                                     </>}
                                 </tr>
@@ -169,6 +176,8 @@ class Admin extends Component {
                                 <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="neutral_outcome_id" value={this.state.scenarioAddInput.neutral_outcome_id} form="handleAdd"/></td>
                                 <td><input onChange={this.handleScenarioInput} placeholder="non_neutral_outcome" value={this.state.scenarioAddInput.non_neutral_outcome} form="handleAdd"/></td>
                                 <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="non_neutral_outcome_id" value={this.state.scenarioAddInput.non_neutral_outcome_id} form="handleAdd"/></td>
+                                <td>[{this.state.scenarioAddInput.good_outcome_id}, {this.state.scenarioAddInput.bad_outcome_id}]</td>
+                                    <td>[{this.state.scenarioAddInput.neutral_outcome_id}, {this.state.scenarioAddInput.non_neutral_outcome_id}]</td>
                                 <td><button type="submit" form="handleAdd">Add</button></td>
                             </tr>
                         </tfoot>
