@@ -47,9 +47,7 @@ class Admin extends Component {
         })
     }
 
-    handleAddScenario = () => {
-        console.log('handle scenario called');
-        
+    handleAddScenario = () => {        
         //check for empty input
         for (const key in this.state.scenarioAddInput) {
             if (this.state.scenarioAddInput[key] === ''){
@@ -81,13 +79,18 @@ class Admin extends Component {
         })
     }
 
+    // handle removes scenario clicked on
+    handleRemoveScenario = (e) => {
+        this.props.dispatch({type: "REMOVE_SCENARIO", payload: e.target.name})
+    }
+
     // user can edit entire row when called
     handleEditClick = (e) => {
         e.preventDefaut();
         this.setState({
             editingID: e.target.id,
         })
-    }  
+    }
     render() {
         return (
             <div className="adminView">
@@ -137,8 +140,8 @@ class Admin extends Component {
                                     <td>{scenario.non_neutral_outcome_id}</td>
                                     <td>[ {scenario.option1_outcomes[0]} , {scenario.option1_outcomes[1]} ]</td>
                                     <td>[ {scenario.option2_outcomes[0]} , {scenario.option2_outcomes[1]} ]</td>
-                                    <td><button id={scenario.id} onClick={this.handleEditClick}>Edit</button></td>
-                                    <td><button id={scenario.id}>Delete</button></td>
+                                    <td><button name={scenario.id} onClick={this.handleEditClick}>Edit</button></td>
+                                    <td><button onClick={this.handleRemoveScenario} name={scenario.id}>Delete</button></td>
                                     </>
                                     ) : 
                                     <>
@@ -177,7 +180,7 @@ class Admin extends Component {
                                 <td><input onChange={this.handleScenarioInput} placeholder="non_neutral_outcome" value={this.state.scenarioAddInput.non_neutral_outcome} form="handleAdd"/></td>
                                 <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="non_neutral_outcome_id" value={this.state.scenarioAddInput.non_neutral_outcome_id} form="handleAdd"/></td>
                                 <td>[{this.state.scenarioAddInput.good_outcome_id}, {this.state.scenarioAddInput.bad_outcome_id}]</td>
-                                    <td>[{this.state.scenarioAddInput.neutral_outcome_id}, {this.state.scenarioAddInput.non_neutral_outcome_id}]</td>
+                                <td>[{this.state.scenarioAddInput.neutral_outcome_id}, {this.state.scenarioAddInput.non_neutral_outcome_id}]</td>
                                 <td><button type="submit" form="handleAdd">Add</button></td>
                             </tr>
                         </tfoot>

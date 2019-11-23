@@ -100,6 +100,25 @@ router.post('/scenario', rejectUnauthenticated, (req,res) => {
   }
 })
 
+// deletes a scenario by id
+router.delete('/scenario', rejectUnauthenticated, (req,res) => {
+  if (!req.user.admin){
+    req.sendStatus(401) // unauthorized error
+  }else{
+    const queryText = `
+    DELETE FROM "scenarios"
+    WHERE id=$1;
+    `
+    pool.query(queryText, [req.body.id])
+    .then((response) => {
+        res.send(response.rows);
+    }).catch((error)=>{
+        console.log(error);
+        res.sendStatus(500);
+    })
+  }
+})
+
 // --- game-related routes -- 
 
 // adds a save to DB and sets that save to the user who created the save
