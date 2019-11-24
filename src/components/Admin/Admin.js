@@ -81,7 +81,7 @@ class Admin extends Component {
 
     // handle removes scenario clicked on
     handleRemoveScenario = (e) => {
-        this.props.dispatch({type: "REMOVE_SCENARIO", payload: e.target.name})
+        this.props.dispatch({type: "DELETE_SCENARIO", payload: {id: Number(e.target.name)}})
     }
 
     // user can edit entire row when called

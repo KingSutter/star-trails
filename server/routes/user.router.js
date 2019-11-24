@@ -101,17 +101,19 @@ router.post('/scenario', rejectUnauthenticated, (req,res) => {
 })
 
 // deletes a scenario by id
-router.delete('/scenario', rejectUnauthenticated, (req,res) => {
+router.delete('/scenario/:id', rejectUnauthenticated, (req,res) => {
   if (!req.user.admin){
     req.sendStatus(401) // unauthorized error
   }else{
     const queryText = `
     DELETE FROM "scenarios"
-    WHERE id=$1;
+    WHERE id = $1;
     `
-    pool.query(queryText, [req.body.id])
-    .then((response) => {
-        res.send(response.rows);
+    console.log(req.params);
+    
+    pool.query(queryText, [req.params.id])
+    .then(() => {
+        res.sendStatus(200);
     }).catch((error)=>{
         console.log(error);
         res.sendStatus(500);
