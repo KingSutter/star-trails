@@ -18,7 +18,7 @@ class Admin extends Component {
             non_neutral_outcome: '',
             non_neutral_outcome_id: '',
         },
-        editingID: 0,
+        id: 0,
     }
 
     // fetch all lists for admin to edit from DB
@@ -86,9 +86,9 @@ class Admin extends Component {
 
     // user can edit entire row when called
     handleEditClick = (e) => {
-        e.preventDefaut();
+        // e.preventDefaut();
         this.setState({
-            editingID: e.target.id,
+            id: e.target.name,
         })
     }
     render() {
@@ -124,7 +124,7 @@ class Admin extends Component {
                         <tbody>
                             {this.props.scenarioList.map((scenario)=>(
                                 <tr key={scenario.id}>
-                                    {String(this.state.editingID) !== String(scenario.id) ? (
+                                    {String(this.state.id) !== String(scenario.id) ? (
                                     <>
                                     <td>{scenario.id}</td>
                                     <td>{scenario.prompt}</td>
@@ -146,16 +146,16 @@ class Admin extends Component {
                                     ) : 
                                     <>
                                     <td></td>
-                                    <td><input placeholder="prompt" value={scenario.prompt} /></td>
-                                    <td><input placeholder="option1" value={scenario.option1} /></td>
-                                    <td><input placeholder="option2" value={scenario.option2} /></td>
-                                    <td><input placeholder="good_outcome" value={scenario.good_outcome} /></td>
+                                    <td><textarea placeholder="prompt" value={scenario.prompt} /></td>
+                                    <td><textarea placeholder="option1" value={scenario.option1} /></td>
+                                    <td><textarea placeholder="option2" value={scenario.option2} /></td>
+                                    <td><textarea placeholder="good_outcome" value={scenario.good_outcome} /></td>
                                     <td><input type="number" min="1" placeholder="good_outcome_id" value={scenario.good_outcome_id} /></td>
-                                    <td><input placeholder="bad_outcome" value={scenario.bad_outcome} /></td>
+                                    <td><textarea placeholder="bad_outcome" value={scenario.bad_outcome} /></td>
                                     <td><input type="number" min="1" placeholder="bad_outcome_id" value={scenario.bad_outcome_id} /></td>
-                                    <td><input placeholder="neutral_outcome" value={scenario.neutral_outcome} /></td>
+                                    <td><textarea placeholder="neutral_outcome" value={scenario.neutral_outcome} /></td>
                                     <td><input type="number" min="1" placeholder="neutral_outcome_id" value={scenario.neutral_outcome_id} /></td>
-                                    <td><input placeholder="non_neutral_outcome" value={scenario.non_neutral_outcome} /></td>
+                                    <td><textarea placeholder="non_neutral_outcome" value={scenario.non_neutral_outcome} /></td>
                                     <td><input type="number" min="1" placeholder="non_neutral_outcome_id" value={scenario.non_neutral_outcome_id} /></td>
                                     <td>[{this.state.scenarioAddInput.good_outcome_id}, {this.state.scenarioAddInput.bad_outcome_id}]</td>
                                     <td>[{this.state.scenarioAddInput.neutral_outcome_id}, {this.state.scenarioAddInput.non_neutral_outcome_id}]</td>

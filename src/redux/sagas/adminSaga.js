@@ -38,13 +38,21 @@ function* addScenario(action) {
 }
 
 function* deleteScenario(action){
-  try {
-    console.log('deleting scenario', action.payload);
-    
+  try {    
     yield axios.delete(`/api/user/scenario/${action.payload.id}`);
     yield put({ type: 'GET_SCENARIOS'});
   } catch (error) {
     console.log('admin delete scenario failed', error);
+  }
+}
+
+
+function* editScenario(action){
+  try {    
+    yield axios.put(`/api/user/scenario`, action.payload);
+    yield put({ type: 'GET_SCENARIOS'});
+  } catch (error) {
+    console.log('admin edit scenario failed', error);
   }
 }
 
@@ -53,6 +61,7 @@ function* adminSaga() {
   yield takeLatest('GET_SCENARIOS', getScenarios);
   yield takeLatest('GET_OUTCOMES', getOutcomes);
   yield takeLatest('ADD_SCENARIO', addScenario);
+  yield takeLatest('EDIT_SCENARIO', editScenario);
   yield takeLatest('DELETE_SCENARIO', deleteScenario);
 }
 
