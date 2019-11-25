@@ -122,7 +122,7 @@ class Admin extends Component {
 
     // handle removes scenario clicked on
     handleRemoveScenario = (e) => {
-        if (window.confirm(`Are you sure you wish to delete scenario ${e.target.name}?`)){
+        if (window.confirm(`Are you sure you wish to delete scenario ${e.target.name}? This cannot be undone.`)){
             this.props.dispatch({type: "DELETE_SCENARIO", payload: {id: Number(e.target.name)}})
         }
     }
@@ -226,7 +226,7 @@ class Admin extends Component {
 
     // removes outcome clicked on
     handleRemoveOutcome = (e) => {
-        if (window.confirm(`Are you sure you wish to delete outcome ${e.target.name}?`)){
+        if (window.confirm(`Are you sure you wish to delete outcome ${e.target.name}? This cannot be undone.`)){
             this.props.dispatch({type: "DELETE_OUTCOME", payload: {id: Number(e.target.name)}})
         }
     }
@@ -253,7 +253,6 @@ class Admin extends Component {
     }
 
     handleEditOutcomeInput = (e) => {
-        console.log(e.target.placeholder)
         this.setState({
             outcomeEditInput: {
                 ...this.state.outcomeEditInput,
@@ -284,6 +283,12 @@ class Admin extends Component {
                 crew_lost: '',
             },
         });
+    }
+
+    handleDeleteUser = (e) => {
+        if (window.confirm(`Are you sure you wish to delete user ${e.target.name}? This cannot be undone.`)){
+            this.props.dispatch({type: "DELETE_USER", payload: {id: Number(e.target.id)}})
+        }
     }
 
     render() {
@@ -480,7 +485,7 @@ class Admin extends Component {
                                         <td>{user.username}</td>
                                         <td>{String(user.save_id)}</td>
                                         <td>{String(user.admin)}</td>
-                                        <td>{!user.admin? <button>Delete</button>:<></>}</td>
+                                        <td>{!user.admin? <button onClick={this.handleDeleteUser} name={user.username} id={user.id}>Delete</button>:<></>}</td>
                                     </tr>
                                 ))}
                             </tbody>

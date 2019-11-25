@@ -38,7 +38,7 @@ function* addScenario(action) {
 }
 
 function* deleteScenario(action){
-  try {    
+  try {
     yield axios.delete(`/api/user/scenario/${action.payload.id}`);
     yield put({ type: 'GET_SCENARIOS'});
   } catch (error) {
@@ -48,7 +48,7 @@ function* deleteScenario(action){
 
 
 function* editScenario(action){
-  try {        
+  try {   
     yield axios.put(`/api/user/scenario`, action.payload);
     yield put({ type: 'GET_SCENARIOS'});
   } catch (error) {
@@ -57,9 +57,7 @@ function* editScenario(action){
 }
 
 function* addOutcome(action) {
-  try {
-    console.log(action.payload);
-    
+  try {    
     yield axios.post('/api/user/outcome', action.payload);
     yield put({ type: 'GET_OUTCOMES'});
   } catch (error) {
@@ -68,7 +66,7 @@ function* addOutcome(action) {
 }
 
 function* deleteOutcome(action){
-  try {    
+  try {
     yield axios.delete(`/api/user/outcome/${action.payload.id}`);
     yield put({ type: 'GET_OUTCOMES'});
   } catch (error) {
@@ -78,11 +76,20 @@ function* deleteOutcome(action){
 
 
 function* editOutcome(action){
-  try {        
+  try {
     yield axios.put(`/api/user/outcome`, action.payload);
     yield put({ type: 'GET_OUTCOMES'});
   } catch (error) {
     console.log('admin edit outcome failed', error);
+  }
+}
+
+function* deleteUser(action){
+  try {
+    yield axios.delete(`/api/user/user/${action.payload.id}`);
+    yield put({ type: 'GET_USERS'});
+  } catch (error) {
+    console.log('admin delete user failed', error);
   }
 }
 
@@ -96,6 +103,8 @@ function* adminSaga() {
   yield takeLatest('ADD_OUTCOME', addOutcome);
   yield takeLatest('EDIT_OUTCOME', editOutcome);
   yield takeLatest('DELETE_OUTCOME', deleteOutcome);
+  yield takeLatest('DELETE_USER', deleteUser);
+
 }
 
 export default adminSaga;
