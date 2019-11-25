@@ -120,7 +120,7 @@ router.delete('/scenario/:id', rejectUnauthenticated, (req,res) => {
   }
 })
 
-// adds a scenario to DB
+// edits a scenario on the DB by id
 router.put('/scenario', rejectUnauthenticated, (req,res) => {
   if (!req.user.admin){
     req.sendStatus(401) // unauthorized error
@@ -159,7 +159,27 @@ router.post('/outcome', rejectUnauthenticated, (req,res) => {
   }
 })
 
-// deletes a scenario by id
+// edits an outcome on the DB by id
+router.put('/scenario', rejectUnauthenticated, (req,res) => {
+  if (!req.user.admin){
+    req.sendStatus(401) // unauthorized error
+  }else{
+    const queryText = `
+    UPDATE "outcomes" 
+    SET "day" = $1,"distance" = $2,"food" = $3,"money" = $4,"phaser_energy" = $5,"warp_coils" = $6,"antimatter_flow_regulators" = $7,"magnetic_constrictors" = $8,"plasma_injectors" = $9,"crew_lost" = $10
+    WHERE id = $11;
+    `
+    pool.query(queryText, [req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.plasma_injectors, req.body.crew_lost, req.body.id])
+    .then((response) => {
+        res.send(response.rows);
+    }).catch((error)=>{
+        console.log(error);
+        res.sendStatus(500);
+    })
+  }
+})
+
+// deletes an outcome by id
 router.delete('/outcome/:id', rejectUnauthenticated, (req,res) => {
   if (!req.user.admin){
     req.sendStatus(401) // unauthorized error

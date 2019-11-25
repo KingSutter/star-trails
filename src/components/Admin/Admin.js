@@ -320,13 +320,13 @@ class Admin extends Component {
                                 <td><input type="number" min="1" onChange={this.handleScenarioInput} placeholder="non_neutral_outcome_id" value={this.state.scenarioAddInput.non_neutral_outcome_id} form="handleAdd"/></td>
                                 <td>[{this.state.scenarioAddInput.good_outcome_id}, {this.state.scenarioAddInput.bad_outcome_id}]</td>
                                 <td>[{this.state.scenarioAddInput.neutral_outcome_id}, {this.state.scenarioAddInput.non_neutral_outcome_id}]</td>
-                                <td><button type="submit" form="handleAdd">Add</button></td>
+                                <td><button type="submit" form="handleAddScenario">Add</button></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
                 <br/>
-                <form onSubmit={this.handleAddScenario} id="handleAdd"></form>
+                <form onSubmit={this.handleAddScenario} id="handleAddScenario"/>
                 {/*  displays all of the outcome types from the DB */}
                 <div id="outcome-types">
                     Outcomes: <br/><br/>
@@ -370,20 +370,21 @@ class Admin extends Component {
                         <tfoot>
                             <tr>
                                 <td></td>
-                                <td><input placeholder="day"/></td>
-                                <td><input placeholder="distance"/></td>
-                                <td><input placeholder="food"/></td>
-                                <td><input placeholder="money"/></td>
-                                <td><input placeholder="phaser_energy"/></td>
-                                <td><input placeholder="warp_coils"/></td>
-                                <td><input placeholder="antimatter_flow_regulators"/></td>
-                                <td><input placeholder="magnetic_constrictors"/></td>
-                                <td><input placeholder="plasma_injectors"/></td>
-                                <td><input placeholder="crew lost" size="10"/></td>
-                                <td><button>Add</button></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="day" type="number" value={this.state.outcomeAddInput.day}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="distance" type="number" value={this.state.outcomeAddInput.distance}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="food" type="number" value={this.state.outcomeAddInput.food}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="money" type="number" value={this.state.outcomeAddInput.money}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="phaser_energy" type="number" value={this.state.outcomeAddInput.phaser_energy}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="warp_coils" type="number" value={this.state.outcomeAddInput.warp_coils}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="antimatter_flow_regulators" type="number" value={this.state.outcomeAddInput.antimatter_flow_regulators}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="magnetic_constrictors" type="number" value={this.state.outcomeAddInput.magnetic_constrictors}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="plasma_injectors" type="number" value={this.state.outcomeAddInput.plasma_injectors}/></td>
+                                <td><input onChange={this.handleOutcomeInput} placeholder="crew_lost" size="10" type="number" min="0" value={this.state.outcomeAddInput.crew_lost}/></td>
+                                <td><button type="submit" form="handleAddOutcome">Add</button></td>
                             </tr>
                         </tfoot>
                     </table>
+                    <form onSubmit={this.handleAddOutcome} id="handleAddOutcome"/>
                 </div></>) : (
                     <div id="usersTable">
                         <button onClick={this.toggleList}>Show Scenarios</button>
@@ -412,7 +413,7 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        <span>{JSON.stringify(this.state.scenarioAddInput,null,2)}</span>
+        <span>{JSON.stringify(this.state.outcomeAddInput,null,2)}</span>
             </div>
         )
     }
