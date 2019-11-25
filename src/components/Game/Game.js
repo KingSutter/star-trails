@@ -62,8 +62,10 @@ class Game extends Component{
                 engineer_status: this.props.game.saveData.engineer_status,
                 helm_status: this.props.game.saveData.helm_status,
                 tactical_status: this.props.game.saveData.tactical_status,
+                ...this.FoodModifier(),
             }
             this.updateSave(newSave);
+            this.calculateCrewHealth();
         }
     }
 
@@ -101,9 +103,12 @@ class Game extends Component{
 
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
-        // currently the outcome is just a 50/50 chance.
-        // will implement factors that will sway the outcome.
-        return this.randomInt(0,1);
+        const num = this.randomInt(0,100);
+        console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15)
+        console.log("num", num);
+        console.log("num < rating", ((num < this.calculateCrewHealth() * 100) + 15));
+        // currently the odds are 25% min (only one crew member alive) and 65% max (everyone is healthy) 
+        return (num < (this.calculateCrewHealth() * 100) + 15) ? 0 : 1;
     }
 
     // gets random integer from inlcusive min to inclusive max
@@ -150,6 +155,7 @@ class Game extends Component{
         else return current + change;
     }
 
+    // checks if the user has won or lost the game
     checkWinLoss = () => {
         if (this.props.game.saveData.distance >= 149){
             this.setState({endGame: "win"});
@@ -162,8 +168,50 @@ class Game extends Component{
             this.props.game.saveData.tactical_status === "dead"
         ){this.setState({endGame: "lose"});}
     }
+
+    // returns user to the main menu
     handleReturnToMenu = () => {
         this.props.history.push('/home');
+    }
+
+    // calculates crew's overall health rating
+    calculateCrewHealth = () => {
+        let healthRating = 15;
+        const crewStatus = {
+            captain: this.props.game.saveData.captain_status,
+            medic: this.props.game.saveData.medic_status,
+            engineer: this.props.game.saveData.engineer_status,
+            helm: this.props.game.saveData.helm_status,
+            tactical: this.props.game.saveData.tactical_status,
+        }
+        for (const key in crewStatus) {
+            // if (crewStatus[key] === "healthy") rating = 2;
+            if (crewStatus[key] === "tired") healthRating-=1;
+            else if (crewStatus[key] === "sick" || crewStatus[key]==="starving") healthRating-=2;
+            else if (crewStatus[key] === "dead") healthRating-=3;
+        }
+        return (healthRating/30); // this gets a ratio from 1 - 15 and scales the ratio to less than 0.5
+    }
+
+    FoodModifier = () => {
+        if (this.props.game.saveData.food === 0){
+            let crew = [["captain_status", this.props.game.saveData.captain_status], ["medic_status", this.props.game.saveData.medic_status], ["engineer_status", this.props.game.saveData.engineer_status], ["helm_status", this.props.game.saveData.helm_status], ["tactical_status", this.props.game.saveData.tactical_status]]
+            if (this.randomInt(0,10) < 8){ // 80% chance a random crew member becomes hungry
+                let changedCrew = {}
+                let indexToChange = this.randomInt(0,4);
+                // if that person is not already hungry, make it so
+                if (crew[indexToChange][1] !== "hungry" && crew[indexToChange][1] !== "dead"){
+                    changedCrew[crew[indexToChange][0]] = "hungry";
+                }
+                return changedCrew;
+            }
+            else return crew;
+        }
+    }
+
+    DistanceModifier = () => {
+        console.log("distance modifier");
+        
     }
 
     render(){
