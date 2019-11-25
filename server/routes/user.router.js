@@ -160,7 +160,7 @@ router.post('/outcome', rejectUnauthenticated, (req,res) => {
 })
 
 // edits an outcome on the DB by id
-router.put('/scenario', rejectUnauthenticated, (req,res) => {
+router.put('/outcome', rejectUnauthenticated, (req,res) => {
   if (!req.user.admin){
     req.sendStatus(401) // unauthorized error
   }else{

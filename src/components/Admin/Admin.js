@@ -45,6 +45,7 @@ class Admin extends Component {
             crew_lost: '',
         },
         outcomeEditInput: {
+            id: 0,
             day: '',
             distance: '',
             food: '',
@@ -127,7 +128,7 @@ class Admin extends Component {
     }
 
     // user can edit entire row when called
-    handleEditClick = (scenario, e) => {
+    handleEditScenarioClick = (scenario, e) => {
         this.setState({
             scenarioEditInput: {
                 prompt: scenario.prompt,
@@ -155,7 +156,7 @@ class Admin extends Component {
         })
     }
 
-    handleSubmitEdit = (e) => {
+    handleSubmitEditScenario = (e) => {
         this.props.dispatch({
             type: "EDIT_SCENARIO", 
             payload: {...this.state.scenarioEditInput, 
@@ -220,14 +221,69 @@ class Admin extends Component {
                 plasma_injectors: '',
                 crew_lost: '',
             },
-        })
+        });
     }
 
-    // handle removes outcome clicked on
+    // removes outcome clicked on
     handleRemoveOutcome = (e) => {
         if (window.confirm(`Are you sure you wish to delete outcome ${e.target.name}?`)){
             this.props.dispatch({type: "DELETE_OUTCOME", payload: {id: Number(e.target.name)}})
         }
+    }
+
+    // user can edit entire row when called
+    handleEditOutcomeClick = (outcome, e) => {
+        console.log("edit outcome click called", outcome);
+        
+        this.setState({
+            outcomeEditInput: {
+                id: e.target.name,
+                day: outcome.day,
+                distance: outcome.distance,
+                food: outcome.food,
+                money: outcome.money,
+                phaser_energy: outcome.phaser_energy,
+                warp_coils: outcome.warp_coils,
+                antimatter_flow_regulators: outcome.antimatter_flow_regulators,
+                magnetic_constrictors: outcome.magnetic_constrictors,
+                plasma_injectors: outcome.plasma_injectors,
+                crew_lost: outcome.crew_lost,
+            }
+        })
+    }
+
+    handleEditOutcomeInput = (e) => {
+        console.log(e.target.placeholder)
+        this.setState({
+            outcomeEditInput: {
+                ...this.state.outcomeEditInput,
+                [e.target.placeholder]: e.target.value,
+            }
+        })
+    }
+
+    // submits edited input for outcomes
+    handleSubmitEditOutcome = (e) => {
+        this.props.dispatch({
+            type: "EDIT_OUTCOME", 
+            payload: this.state.outcomeEditInput,
+        });
+        // effectively reset inputs to default values
+        this.setState({
+            outcomeEditInput: {
+                id: 0,
+                day: '',
+                distance: '',
+                food: '',
+                money: '',
+                phaser_energy: '',
+                warp_coils: '',
+                antimatter_flow_regulators: '',
+                magnetic_constrictors: '',
+                plasma_injectors: '',
+                crew_lost: '',
+            },
+        });
     }
 
     render() {
@@ -279,7 +335,7 @@ class Admin extends Component {
                                     <td>{scenario.non_neutral_outcome_id}</td>
                                     <td>[ {scenario.option1_outcomes[0]} , {scenario.option1_outcomes[1]} ]</td>
                                     <td>[ {scenario.option2_outcomes[0]} , {scenario.option2_outcomes[1]} ]</td>
-                                    <td><button name={scenario.id} onClick={(e)=>this.handleEditClick(scenario, e)}>Edit</button></td>
+                                    <td><button name={scenario.id} onClick={(e)=>this.handleEditScenarioClick(scenario, e)}>Edit</button></td>
                                     <td><button onClick={this.handleRemoveScenario} name={scenario.id}>Delete</button></td>
                                     </>
                                     ) : 
@@ -298,7 +354,7 @@ class Admin extends Component {
                                     <td><input onChange={this.handleEditScenarioInput} type="number" min="1" value={this.state.scenarioEditInput.non_neutral_outcome_id} name="non_neutral_outcome_id" /></td>
                                     <td>[{this.state.scenarioEditInput.good_outcome_id}, {this.state.scenarioEditInput.bad_outcome_id}]</td>
                                     <td>[{this.state.scenarioEditInput.neutral_outcome_id}, {this.state.scenarioEditInput.non_neutral_outcome_id}]</td>
-                                    <td><button onClick={this.handleSubmitEdit}>Submit</button></td>
+                                    <td><button onClick={this.handleSubmitEditScenario}>Submit</button></td>
                                     </>}
                                 </tr>
                             ))}
@@ -351,6 +407,8 @@ class Admin extends Component {
                         <tbody>
                             {this.props.outcomeList.map((outcome)=>(
                                 <tr key={outcome.id}>
+                                    {String(this.state.outcomeEditInput.id) !== String(outcome.id) ? (
+                                    <>
                                     <td>{outcome.id}</td>
                                     <td>{outcome.day}</td>
                                     <td>{outcome.distance}</td>
@@ -362,8 +420,24 @@ class Admin extends Component {
                                     <td>{outcome.magnetic_constrictors}</td>
                                     <td>{outcome.plasma_injectors}</td>
                                     <td>{outcome.crew_lost}</td>
-                                    <td><button name={outcome.id}>Edit</button></td>
+                                    <td><button onClick={(e)=>this.handleEditOutcomeClick(outcome, e)} name={outcome.id}>Edit</button></td>
                                     <td><button onClick={this.handleRemoveOutcome} name={outcome.id}>Delete</button></td>
+                                    </>
+                                    ) : ( 
+                                    <>
+                                    <td></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="day" type="number" value={this.state.outcomeEditInput.day}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="distance" type="number" value={this.state.outcomeEditInput.distance}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="food" type="number" value={this.state.outcomeEditInput.food}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="money" type="number" value={this.state.outcomeEditInput.money}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="phaser_energy" type="number" value={this.state.outcomeEditInput.phaser_energy}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="warp_coils" type="number" value={this.state.outcomeEditInput.warp_coils}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="antimatter_flow_regulators" type="number" value={this.state.outcomeEditInput.antimatter_flow_regulators}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="magnetic_constrictors" type="number" value={this.state.outcomeEditInput.magnetic_constrictors}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="plasma_injectors" type="number" value={this.state.outcomeEditInput.plasma_injectors}/></td>
+                                    <td><input onChange={this.handleEditOutcomeInput} placeholder="crew_lost" size="10" type="number" min="0" value={this.state.outcomeEditInput.crew_lost}/></td>
+                                    <td><button onClick={this.handleSubmitEditOutcome}>Submit</button></td>
+                                    </>)}
                                 </tr>
                             ))}
                         </tbody>
@@ -413,7 +487,7 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        <span>{JSON.stringify(this.state.outcomeAddInput,null,2)}</span>
+        <span>{JSON.stringify(this.state.outcomeEditInput,null,2)}</span>
             </div>
         )
     }
