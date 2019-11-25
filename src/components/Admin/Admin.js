@@ -32,7 +32,30 @@ class Admin extends Component {
             non_neutral_outcome: '',
             non_neutral_outcome_id: '',
         },
-        editing: false,
+        outcomeAddInput: {
+            day: '',
+            distance: '',
+            food: '',
+            money: '',
+            phaser_energy: '',
+            warp_coils: '',
+            antimatter_flow_regulators: '',
+            magnetic_constrictors: '',
+            plasma_injectors: '',
+            crew_lost: '',
+        },
+        outcomeEditInput: {
+            day: '',
+            distance: '',
+            food: '',
+            money: '',
+            phaser_energy: '',
+            warp_coils: '',
+            antimatter_flow_regulators: '',
+            magnetic_constrictors: '',
+            plasma_injectors: '',
+            crew_lost: '',
+        },
     }
 
     // fetch all lists for admin to edit from the database
@@ -159,6 +182,52 @@ class Admin extends Component {
                 option2_outcomes: `[ , ]`,
             },
         })
+    }
+
+    handleOutcomeInput = (e) => {
+        this.setState({
+            outcomeAddInput: {
+                ...this.state.outcomeAddInput,
+                [e.target.placeholder]: e.target.value,
+            }
+        })
+    }
+
+    // adds input from outcome table footer to the database
+    handleAddOutcome = () => {        
+        //check for empty input
+        for (const key in this.state.outcomeAddInput) {
+            if (this.state.outcomeAddInput[key] === ''){
+                alert("All input fields must have text")
+                return 0;
+            }
+        }
+        // adds input to DB
+        this.props.dispatch({
+            type: "ADD_OUTCOME", 
+            payload: this.state.outcomeAddInput});
+        // effectively reset inputs to default values
+        this.setState({
+            outcomeAddInput: {
+                day: '',
+                distance: '',
+                food: '',
+                money: '',
+                phaser_energy: '',
+                warp_coils: '',
+                antimatter_flow_regulators: '',
+                magnetic_constrictors: '',
+                plasma_injectors: '',
+                crew_lost: '',
+            },
+        })
+    }
+
+    // handle removes outcome clicked on
+    handleRemoveOutcome = (e) => {
+        if (window.confirm(`Are you sure you wish to delete outcome ${e.target.name}?`)){
+            this.props.dispatch({type: "DELETE_OUTCOME", payload: {id: Number(e.target.name)}})
+        }
     }
 
     render() {

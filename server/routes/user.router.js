@@ -94,7 +94,6 @@ router.post('/scenario', rejectUnauthenticated, (req,res) => {
         res.send(response.rows);
     }).catch((error)=>{
         console.log(error);
-        
         res.sendStatus(500);
     })
   }
@@ -134,6 +133,46 @@ router.put('/scenario', rejectUnauthenticated, (req,res) => {
     pool.query(queryText, [req.body.prompt, req.body.option1, req.body.option2, req.body.good_outcome, req.body.good_outcome_id, req.body.bad_outcome, req.body.bad_outcome_id, req.body.neutral_outcome, req.body.neutral_outcome_id, req.body.non_neutral_outcome, req.body.non_neutral_outcome_id, req.body.option1_outcomes, req.body.option2_outcomes, req.body.id])
     .then((response) => {
         res.send(response.rows);
+    }).catch((error)=>{
+        console.log(error);
+        res.sendStatus(500);
+    })
+  }
+})
+
+// adds an outcome to DB
+router.post('/outcome', rejectUnauthenticated, (req,res) => {
+  if (!req.user.admin){
+    req.sendStatus(401) // unauthorized error
+  }else{
+    const queryText = `
+    INSERT INTO "outcomes" ("day","distance","food","money","phaser_energy","warp_coils","antimatter_flow_regulators","magnetic_constrictors","plasma_injectors","crew_lost")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
+    `
+    pool.query(queryText, [req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.plasma_injectors, req.body.crew_lost])
+    .then((response) => {
+        res.send(response.rows);
+    }).catch((error)=>{
+        console.log(error);
+        res.sendStatus(500);
+    })
+  }
+})
+
+// deletes a scenario by id
+router.delete('/outcome/:id', rejectUnauthenticated, (req,res) => {
+  if (!req.user.admin){
+    req.sendStatus(401) // unauthorized error
+  }else{
+    const queryText = `
+    DELETE FROM "outcomes"
+    WHERE id = $1;
+    `
+    console.log(req.params);
+    
+    pool.query(queryText, [req.params.id])
+    .then(() => {
+        res.sendStatus(200);
     }).catch((error)=>{
         console.log(error);
         res.sendStatus(500);
