@@ -149,7 +149,7 @@ router.post('/outcome', rejectUnauthenticated, (req,res) => {
     INSERT INTO "outcomes" ("day","distance","food","money","phaser_energy","warp_coils","antimatter_flow_regulators","magnetic_constrictors","plasma_injectors","crew_lost")
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);
     `
-    pool.query(queryText, [req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.plasma_injectors, req.body.crew_lost])
+    pool.query(queryText, [req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.crew_lost])
     .then((response) => {
         res.send(response.rows);
     }).catch((error)=>{
