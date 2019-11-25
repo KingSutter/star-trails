@@ -362,8 +362,8 @@ class Admin extends Component {
                                     <td>{outcome.magnetic_constrictors}</td>
                                     <td>{outcome.plasma_injectors}</td>
                                     <td>{outcome.crew_lost}</td>
-                                    <td><button id={outcome.id}>Edit</button></td>
-                                    <td><button id={outcome.id}>Delete</button></td>
+                                    <td><button name={outcome.id}>Edit</button></td>
+                                    <td><button onClick={this.handleRemoveOutcome} name={outcome.id}>Delete</button></td>
                                 </tr>
                             ))}
                         </tbody>

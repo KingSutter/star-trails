@@ -169,7 +169,7 @@ router.put('/scenario', rejectUnauthenticated, (req,res) => {
     SET "day" = $1,"distance" = $2,"food" = $3,"money" = $4,"phaser_energy" = $5,"warp_coils" = $6,"antimatter_flow_regulators" = $7,"magnetic_constrictors" = $8,"plasma_injectors" = $9,"crew_lost" = $10
     WHERE id = $11;
     `
-    pool.query(queryText, [req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.plasma_injectors, req.body.crew_lost, req.body.id])
+    pool.query(queryText, [req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.crew_lost, req.body.id])
     .then((response) => {
         res.send(response.rows);
     }).catch((error)=>{
