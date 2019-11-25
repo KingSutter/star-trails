@@ -108,7 +108,6 @@ router.delete('/scenario/:id', rejectUnauthenticated, (req,res) => {
     DELETE FROM "scenarios"
     WHERE id = $1;
     `
-    console.log(req.params);
     
     pool.query(queryText, [req.params.id])
     .then(() => {
@@ -188,7 +187,26 @@ router.delete('/outcome/:id', rejectUnauthenticated, (req,res) => {
     DELETE FROM "outcomes"
     WHERE id = $1;
     `
-    console.log(req.params);
+    
+    pool.query(queryText, [req.params.id])
+    .then(() => {
+        res.sendStatus(200);
+    }).catch((error)=>{
+        console.log(error);
+        res.sendStatus(500);
+    })
+  }
+})
+
+// deletes a user by id
+router.delete('/user/:id', rejectUnauthenticated, (req,res) => {
+  if (!req.user.admin){
+    req.sendStatus(401) // unauthorized error
+  }else{
+    const queryText = `
+    DELETE FROM "accounts"
+    WHERE id = $1;
+    `
     
     pool.query(queryText, [req.params.id])
     .then(() => {
@@ -204,32 +222,51 @@ router.delete('/outcome/:id', rejectUnauthenticated, (req,res) => {
 
 // adds a save to DB and sets that save to the user who created the save
 router.post('/save', rejectUnauthenticated, (req,res) => {
-  // creates a new save
-  const saveQueryText = `
-  INSERT INTO "save" ("food","money","phaser_energy","warp_coils","antimatter_flow_regulators","magnetic_constrictors","plasma_injectors","captain","medic","engineer","helm","tactical")
-  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
-  RETURNING "id";
-  `
-  pool.query(saveQueryText, [req.body.food, req.body.available, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, req.body.medic, req.body.engineer, req.body.helm, req.body.tactical])
-  .then((response) => {
-      const newSaveID = response.rows[0].id
-      // set that new save to the user who created it
-      const userQueryText = `
-      UPDATE "accounts"
-      SET "save_id" = $1
-      WHERE "id" = $2;
-      `;
-      pool.query(userQueryText, [newSaveID,req.user.id])
-      .then(() => {
-          res.sendStatus(200);
-      }).catch((error)=>{
-          console.log(error);
-          res.sendStatus(500);
-      });
-  }).catch((error)=>{
+  // checks if the user already has a save
+  if (req.user.save_id === null){
+    // creates a new save
+    const saveQueryText = `
+    INSERT INTO "save" ("food","money","phaser_energy","warp_coils","antimatter_flow_regulators","magnetic_constrictors","plasma_injectors","captain","medic","engineer","helm","tactical")
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+    RETURNING "id";
+    `
+    pool.query(saveQueryText, [req.body.food, req.body.available, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, req.body.medic, req.body.engineer, req.body.helm, req.body.tactical])
+    .then((response) => {
+        const newSaveID = response.rows[0].id
+        // set that new save to the user who created it
+        const userQueryText = `
+        UPDATE "accounts"
+        SET "save_id" = $1
+        WHERE "id" = $2;
+        `;
+        pool.query(userQueryText, [newSaveID,req.user.id])
+        .then(() => {
+            res.sendStatus(200);
+        }).catch((error)=>{
+            console.log(error);
+            res.sendStatus(500);
+        });
+    }).catch((error)=>{
+        console.log(error);
+        res.sendStatus(500);
+    })
+  }else{
+    // will edit the current save
+    const queryText = `
+    UPDATE "save"
+    SET "day"=$1, "distance"=$2, "food"=$3, "money"=$4, "phaser_energy"=$5, "warp_coils"=$6, "antimatter_flow_regulators"=$7, "magnetic_constrictors"=$8, "plasma_injectors"=$9, "captain"=$10, "captain_status"=$11, "medic"=$12, "medic_status"=$13, "engineer"=$14, "engineer_status"=$15, "helm"=$16, "helm_status"=$17, "tactical"=$18, "tactical_status"=$19
+    FROM "accounts"
+    WHERE "accounts".save_id = "save".id
+    AND "accounts".id = $20;`
+    console.log(req.body)
+    pool.query(queryText,[0, 0, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, "healthy", req.body.medic, "healthy", req.body.engineer, "healthy", req.body.helm, "healthy", req.body.tactical, "healthy", req.user.id])
+    .then(() => {
+      res.sendStatus(200);
+    }).catch((error)=>{
       console.log(error);
       res.sendStatus(500);
-  })
+    })
+  }
 })
 
 // gets save data by user ID

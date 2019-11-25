@@ -3,6 +3,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 function* createSave(action){
     try {
+        console.log(action.payload)
         yield axios.post('/api/user/save', action.payload);
         yield action.history.push('/game');
       } catch (error) {
