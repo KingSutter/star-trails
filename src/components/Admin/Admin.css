@@ -15,7 +15,7 @@
     font-size: 16px;
 }
 
-.adminView input{
+.adminView input, .adminView textarea{
     background-color: transparent;
     color: white;
     border: transparent;
