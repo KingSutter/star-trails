@@ -18,10 +18,24 @@ class Admin extends Component {
             non_neutral_outcome: '',
             non_neutral_outcome_id: '',
         },
-        id: 0,
+        scenarioEditInput: {
+            id: 0,
+            prompt: '',
+            option1: '',
+            option2: '',
+            good_outcome: '',
+            bad_outcome: '',
+            neutral_outcome: '',
+            good_outcome_id: '',
+            bad_outcome_id: '',
+            neutral_outcome_id: '',
+            non_neutral_outcome: '',
+            non_neutral_outcome_id: '',
+        },
+        editing: false,
     }
 
-    // fetch all lists for admin to edit from DB
+    // fetch all lists for admin to edit from the database
     componentWillMount(){
         this.props.dispatch({type: "GET_USERS"});
         this.props.dispatch({type: "GET_SCENARIOS"});
@@ -47,6 +61,7 @@ class Admin extends Component {
         })
     }
 
+    // adds input from scenario table footer to the database
     handleAddScenario = () => {        
         //check for empty input
         for (const key in this.state.scenarioAddInput) {
@@ -75,22 +90,77 @@ class Admin extends Component {
                 neutral_outcome_id: '',
                 non_neutral_outcome: '',
                 non_neutral_outcome_id: '',
-            }
+                option1_outcomes: `[ , ]`, 
+                option2_outcomes: `[ , ]`,
+            },
         })
     }
 
     // handle removes scenario clicked on
     handleRemoveScenario = (e) => {
-        this.props.dispatch({type: "DELETE_SCENARIO", payload: {id: Number(e.target.name)}})
+        if (window.confirm(`Are you sure you wish to delete scenario ${e.target.name}?`)){
+            this.props.dispatch({type: "DELETE_SCENARIO", payload: {id: Number(e.target.name)}})
+        }
     }
 
     // user can edit entire row when called
-    handleEditClick = (e) => {
-        // e.preventDefaut();
+    handleEditClick = (scenario, e) => {
         this.setState({
-            id: e.target.name,
+            scenarioEditInput: {
+                prompt: scenario.prompt,
+                option1: scenario.option1,
+                option2: scenario.option2,
+                good_outcome: scenario.good_outcome,
+                good_outcome_id: scenario.good_outcome_id,
+                bad_outcome: scenario.bad_outcome,
+                bad_outcome_id: scenario.bad_outcome_id,
+                neutral_outcome: scenario.neutral_outcome,
+                neutral_outcome_id: scenario.neutral_outcome_id,
+                non_neutral_outcome: scenario.non_neutral_outcome,
+                non_neutral_outcome_id: scenario.non_neutral_outcome_id,
+                id: e.target.name
+            }
         })
     }
+    
+    handleEditScenarioInput = (e) => {
+        this.setState({
+            scenarioEditInput: {
+                ...this.state.scenarioEditInput,
+                [e.target.name]: e.target.value,
+            }
+        })
+    }
+
+    handleSubmitEdit = (e) => {
+        this.props.dispatch({
+            type: "EDIT_SCENARIO", 
+            payload: {...this.state.scenarioEditInput, 
+                option1_outcomes: `{${this.state.scenarioEditInput.good_outcome_id},${this.state.scenarioEditInput.bad_outcome_id}}`, 
+                option2_outcomes: `{${this.state.scenarioEditInput.neutral_outcome_id}, ${this.state.scenarioEditInput.non_neutral_outcome_id}}`
+            }
+        });
+        // effectively reset inputs to default values
+        this.setState({
+            scenarioEditInput: {
+                id: 0,
+                prompt: '',
+                option1: '',
+                option2: '',
+                good_outcome: '',
+                bad_outcome: '',
+                neutral_outcome: '',
+                good_outcome_id: '',
+                bad_outcome_id: '',
+                neutral_outcome_id: '',
+                non_neutral_outcome: '',
+                non_neutral_outcome_id: '',
+                option1_outcomes: `[ , ]`, 
+                option2_outcomes: `[ , ]`,
+            },
+        })
+    }
+
     render() {
         return (
             <div className="adminView">
@@ -124,7 +194,7 @@ class Admin extends Component {
                         <tbody>
                             {this.props.scenarioList.map((scenario)=>(
                                 <tr key={scenario.id}>
-                                    {String(this.state.id) !== String(scenario.id) ? (
+                                    {String(this.state.scenarioEditInput.id) !== String(scenario.id) ? (
                                     <>
                                     <td>{scenario.id}</td>
                                     <td>{scenario.prompt}</td>
@@ -140,26 +210,26 @@ class Admin extends Component {
                                     <td>{scenario.non_neutral_outcome_id}</td>
                                     <td>[ {scenario.option1_outcomes[0]} , {scenario.option1_outcomes[1]} ]</td>
                                     <td>[ {scenario.option2_outcomes[0]} , {scenario.option2_outcomes[1]} ]</td>
-                                    <td><button name={scenario.id} onClick={this.handleEditClick}>Edit</button></td>
+                                    <td><button name={scenario.id} onClick={(e)=>this.handleEditClick(scenario, e)}>Edit</button></td>
                                     <td><button onClick={this.handleRemoveScenario} name={scenario.id}>Delete</button></td>
                                     </>
                                     ) : 
                                     <>
                                     <td></td>
-                                    <td><textarea placeholder="prompt" value={scenario.prompt} /></td>
-                                    <td><textarea placeholder="option1" value={scenario.option1} /></td>
-                                    <td><textarea placeholder="option2" value={scenario.option2} /></td>
-                                    <td><textarea placeholder="good_outcome" value={scenario.good_outcome} /></td>
-                                    <td><input type="number" min="1" placeholder="good_outcome_id" value={scenario.good_outcome_id} /></td>
-                                    <td><textarea placeholder="bad_outcome" value={scenario.bad_outcome} /></td>
-                                    <td><input type="number" min="1" placeholder="bad_outcome_id" value={scenario.bad_outcome_id} /></td>
-                                    <td><textarea placeholder="neutral_outcome" value={scenario.neutral_outcome} /></td>
-                                    <td><input type="number" min="1" placeholder="neutral_outcome_id" value={scenario.neutral_outcome_id} /></td>
-                                    <td><textarea placeholder="non_neutral_outcome" value={scenario.non_neutral_outcome} /></td>
-                                    <td><input type="number" min="1" placeholder="non_neutral_outcome_id" value={scenario.non_neutral_outcome_id} /></td>
-                                    <td>[{this.state.scenarioAddInput.good_outcome_id}, {this.state.scenarioAddInput.bad_outcome_id}]</td>
-                                    <td>[{this.state.scenarioAddInput.neutral_outcome_id}, {this.state.scenarioAddInput.non_neutral_outcome_id}]</td>
-                                    <td><button onClick={this.handleEditClick}>Submit</button></td>
+                                    <td><textarea onChange={this.handleEditScenarioInput} value={this.state.scenarioEditInput.prompt} name="prompt" /></td>
+                                    <td><textarea onChange={this.handleEditScenarioInput} value={this.state.scenarioEditInput.option1} name="option1" /></td>
+                                    <td><textarea onChange={this.handleEditScenarioInput} value={this.state.scenarioEditInput.option2} name="option2" /></td>
+                                    <td><textarea onChange={this.handleEditScenarioInput} value={this.state.scenarioEditInput.good_outcome} name="good_outcome" /></td>
+                                    <td><input onChange={this.handleEditScenarioInput} type="number" min="1" value={this.state.scenarioEditInput.good_outcome_id} name="good_outcome_id" /></td>
+                                    <td><textarea onChange={this.handleEditScenarioInput} value={this.state.scenarioEditInput.bad_outcome} name="bad_outcome" /></td>
+                                    <td><input onChange={this.handleEditScenarioInput} type="number" min="1" value={this.state.scenarioEditInput.bad_outcome_id} name="bad_outcome_id" /></td>
+                                    <td><textarea onChange={this.handleEditScenarioInput} value={this.state.scenarioEditInput.neutral_outcome} name="neutral_outcome" /></td>
+                                    <td><input onChange={this.handleEditScenarioInput} type="number" min="1" value={this.state.scenarioEditInput.neutral_outcome_id} name="neutral_outcome_id" /></td>
+                                    <td><textarea onChange={this.handleEditScenarioInput} value={this.state.scenarioEditInput.non_neutral_outcome} name="non_neutral_outcome" /></td>
+                                    <td><input onChange={this.handleEditScenarioInput} type="number" min="1" value={this.state.scenarioEditInput.non_neutral_outcome_id} name="non_neutral_outcome_id" /></td>
+                                    <td>[{this.state.scenarioEditInput.good_outcome_id}, {this.state.scenarioEditInput.bad_outcome_id}]</td>
+                                    <td>[{this.state.scenarioEditInput.neutral_outcome_id}, {this.state.scenarioEditInput.non_neutral_outcome_id}]</td>
+                                    <td><button onClick={this.handleSubmitEdit}>Submit</button></td>
                                     </>}
                                 </tr>
                             ))}

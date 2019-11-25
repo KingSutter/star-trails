@@ -48,7 +48,7 @@ function* deleteScenario(action){
 
 
 function* editScenario(action){
-  try {    
+  try {        
     yield axios.put(`/api/user/scenario`, action.payload);
     yield put({ type: 'GET_SCENARIOS'});
   } catch (error) {

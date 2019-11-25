@@ -127,7 +127,8 @@ router.put('/scenario', rejectUnauthenticated, (req,res) => {
     req.sendStatus(401) // unauthorized error
   }else{
     const queryText = `
-    UPDATE "scenarios" ("prompt" = $1, "option1" = $2, "option2" = $3, "good_outcome" = $4, "good_outcome_id" = $5, "bad_outcome" = $6, "bad_outcome_id" = $7, "neutral_outcome" = $8, "neutral_outcome_id" = $9, "non_neutral_outcome" = $10, "non_neutral_outcome_id" = $11, "option1_outcomes" = $12, "option2_outcomes" = $13)
+    UPDATE "scenarios" 
+    SET "prompt" = $1, "option1" = $2, "option2" = $3, "good_outcome" = $4, "good_outcome_id" = $5, "bad_outcome" = $6, "bad_outcome_id" = $7, "neutral_outcome" = $8, "neutral_outcome_id" = $9, "non_neutral_outcome" = $10, "non_neutral_outcome_id" = $11, "option1_outcomes" = $12, "option2_outcomes" = $13
     WHERE id = $14;
     `
     pool.query(queryText, [req.body.prompt, req.body.option1, req.body.option2, req.body.good_outcome, req.body.good_outcome_id, req.body.bad_outcome, req.body.bad_outcome_id, req.body.neutral_outcome, req.body.neutral_outcome_id, req.body.non_neutral_outcome, req.body.non_neutral_outcome_id, req.body.option1_outcomes, req.body.option2_outcomes, req.body.id])
