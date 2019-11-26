@@ -60,7 +60,7 @@ class Admin extends Component {
     }
 
     // fetch all lists for admin to edit from the database
-    componentWillMount(){
+    componentDidMount(){
         this.props.dispatch({type: "GET_USERS"});
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});

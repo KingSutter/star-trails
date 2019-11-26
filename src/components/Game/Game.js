@@ -20,7 +20,7 @@ class Game extends Component{
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
-    componentWillMount(){
+    componentDidMount(){
         this.props.dispatch({type: "GET_SAVE"});
         this.props.dispatch({type: "GET_SCENARIOS"});
         this.props.dispatch({type: "GET_OUTCOMES"});
@@ -47,9 +47,11 @@ class Game extends Component{
         }
         else{
             // default new day
+            console.log(this.props.game.saveData.distance + this.DistanceModifier());
+            
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
-                distance: this.props.game.saveData.distance + 1, // travel +1 lightyear
+                distance: this.props.game.saveData.distance + this.DistanceModifier(), // travel +distance based on modifier
                 food: this.checkResource(this.props.game.saveData.food, -10), // eat 10 food (-10)
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
                 phaser_energy: this.props.game.saveData.phaser_energy,
@@ -104,9 +106,9 @@ class Game extends Component{
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
         const num = this.randomInt(0,100);
+        console.log("random num", num);
         console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15)
-        console.log("num", num);
-        console.log("num < rating", ((num < this.calculateCrewHealth() * 100) + 15));
+        console.log("num < rating", (num < (this.calculateCrewHealth() * 100) + 15));
         // currently the odds are 25% min (only one crew member alive) and 65% max (everyone is healthy) 
         return (num < (this.calculateCrewHealth() * 100) + 15) ? 0 : 1;
     }
@@ -132,7 +134,7 @@ class Game extends Component{
         }
         return {
             day: this.props.game.saveData.day + outcome.day,
-            distance: this.props.game.saveData.distance + outcome.distance,
+            distance: this.props.game.saveData.distance + outcome.distance + this.DistanceModifier(),
             food: this.checkResource(this.props.game.saveData.food, outcome.food),
             money: this.checkResource(this.props.game.saveData.money, outcome.money),
             phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy, outcome.phaser_energy),
@@ -193,15 +195,16 @@ class Game extends Component{
         return (healthRating/30); // this gets a ratio from 1 - 15 and scales the ratio to less than 0.5
     }
 
+    // adjusts the crew's hunger status based on amount of food
     FoodModifier = () => {
         if (this.props.game.saveData.food === 0){
             let crew = [["captain_status", this.props.game.saveData.captain_status], ["medic_status", this.props.game.saveData.medic_status], ["engineer_status", this.props.game.saveData.engineer_status], ["helm_status", this.props.game.saveData.helm_status], ["tactical_status", this.props.game.saveData.tactical_status]]
-            if (this.randomInt(0,10) < 8){ // 80% chance a random crew member becomes hungry
+            if (this.randomInt(0,10) < 9){ // 80% chance a random crew member becomes hungry
                 let changedCrew = {}
                 let indexToChange = this.randomInt(0,4);
                 // if that person is not already hungry, make it so
-                if (crew[indexToChange][1] !== "hungry" && crew[indexToChange][1] !== "dead"){
-                    changedCrew[crew[indexToChange][0]] = "hungry";
+                if (crew[indexToChange][1] !== "starving" && crew[indexToChange][1] !== "dead"){
+                    changedCrew[crew[indexToChange][0]] = "starving";
                 }
                 return changedCrew;
             }
@@ -209,9 +212,16 @@ class Game extends Component{
         }
     }
 
+    // adjusts the ship's speed based on spare materials
     DistanceModifier = () => {
-        console.log("distance modifier");
+        let modifier = 1
+        if (this.props.game.saveData.warp_coils === 0) modifier -= .75;
+        if (this.props.game.saveData.antimatter_flow_regulators === 0) modifier -= .1;
+        if (this.props.game.saveData.magnetic_constrictors === 0) modifier -= .1;
+        if (this.props.game.saveData.plasma_injectors === 0) modifier -= .1
+        if(modifier < 0 ) modifier = 0;
         
+        return modifier;
     }
 
     render(){

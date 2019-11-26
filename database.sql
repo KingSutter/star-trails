@@ -11,7 +11,7 @@ CREATE TABLE "accounts" (
 CREATE TABLE "save" (
 	"id" serial PRIMARY KEY,
 	"day" integer NOT NULL default '0',
-	"distance" integer NOT NULL default '0',
+	"distance" real NOT NULL default '0',
 	"food" integer NOT NULL,
 	"money" integer NOT NULL,
 	"phaser_energy" integer NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE "scenarios" (
 CREATE TABLE "outcomes" (
 	"id" serial PRIMARY KEY,
 	"day" integer default '1',
-	"distance" integer default '200',
+	"distance" real default '200',
 	"food" integer default '-10',
 	"money" integer default '0',
 	"phaser_energy" integer default '0',

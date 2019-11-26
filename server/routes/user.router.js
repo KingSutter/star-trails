@@ -56,7 +56,7 @@ router.get('/users', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // gets all scenarios for editing purposes if admin desires
 router.get('/scenarios', rejectUnauthenticated, (req,res) => {
@@ -67,7 +67,7 @@ router.get('/scenarios', rejectUnauthenticated, (req,res) => {
   }).catch((error)=>{
       res.sendStatus(500);
   })
-})
+});
 
 // gets all scenario outcomes and sorts by id
 router.get('/outcomes', rejectUnauthenticated, (req,res) => {
@@ -78,7 +78,7 @@ router.get('/outcomes', rejectUnauthenticated, (req,res) => {
   }).catch((error)=>{
       res.sendStatus(500);
   })
-})
+});
 
 // adds a scenario to DB
 router.post('/scenario', rejectUnauthenticated, (req,res) => {
@@ -97,7 +97,7 @@ router.post('/scenario', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // deletes a scenario by id
 router.delete('/scenario/:id', rejectUnauthenticated, (req,res) => {
@@ -117,7 +117,7 @@ router.delete('/scenario/:id', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // edits a scenario on the DB by id
 router.put('/scenario', rejectUnauthenticated, (req,res) => {
@@ -137,7 +137,7 @@ router.put('/scenario', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // adds an outcome to DB
 router.post('/outcome', rejectUnauthenticated, (req,res) => {
@@ -156,7 +156,7 @@ router.post('/outcome', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // edits an outcome on the DB by id
 router.put('/outcome', rejectUnauthenticated, (req,res) => {
@@ -176,7 +176,7 @@ router.put('/outcome', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // deletes an outcome by id
 router.delete('/outcome/:id', rejectUnauthenticated, (req,res) => {
@@ -196,7 +196,7 @@ router.delete('/outcome/:id', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // deletes a user by id
 router.delete('/user/:id', rejectUnauthenticated, (req,res) => {
@@ -216,7 +216,7 @@ router.delete('/user/:id', rejectUnauthenticated, (req,res) => {
         res.sendStatus(500);
     })
   }
-})
+});
 
 // --- game-related routes -- 
 
@@ -267,7 +267,7 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
       res.sendStatus(500);
     })
   }
-})
+});
 
 // gets save data by user ID
 router.get('/save', rejectUnauthenticated, (req,res) => {
@@ -284,7 +284,7 @@ router.get('/save', rejectUnauthenticated, (req,res) => {
     console.log(error);
     res.sendStatus(500);
   })
-})
+});
 
 // change save data by user ID
 router.put('/save', rejectUnauthenticated, (req,res) => {
@@ -303,7 +303,7 @@ router.put('/save', rejectUnauthenticated, (req,res) => {
     console.log(error);
     res.sendStatus(500);
   })
-})
+});
 
 // gets all scenario data
 router.get('/scenarios', rejectUnauthenticated, (req,res) => {
@@ -316,7 +316,7 @@ router.get('/scenarios', rejectUnauthenticated, (req,res) => {
     console.log(error);
     res.sendStatus(500);
   })
-})
+});
 
 // gets all outcomes. Only needs to be called once for the duration of the game
 // because these never change.
@@ -329,6 +329,6 @@ router.get('/outcomes', rejectUnauthenticated, (req,res) => {
     console.log(error);
     res.sendStatus(500);
   })
-})
+});
 
 module.exports = router;
