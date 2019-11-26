@@ -29,6 +29,11 @@ class HuntingGame extends Component {
             {
                 image: "👾",
                 position: [2,5],
+                behavior: "up"
+            },
+            {
+                image: "👾",
+                position: [4,0],
                 behavior: "down"
             },
         ],
@@ -80,10 +85,19 @@ class HuntingGame extends Component {
         
     }
     mapObjectsToGrid = () => {
-        let newGrid = [[]];
-        // copy state without referencing state
-        for (var i = 0; i < this.state.grid.length; i++)
-            newGrid[i] = this.state.grid[i].slice();
+        let newGrid = [
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", ""],
+        ];
+        
         // map hunter
         newGrid[this.state.hunter.position[0]][this.state.hunter.position[1]] = this.state.hunter.image;
         // map animals
@@ -143,3 +157,9 @@ class HuntingGame extends Component {
 }
 
 export default HuntingGame;
+
+// might need this later ...
+
+// // copy state without referencing state
+//     for (var i = 0; i < this.state.grid.length; i++)
+//     newGrid[i] = this.state.grid[i].slice();
