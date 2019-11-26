@@ -64,16 +64,40 @@ class HuntingGame extends Component {
 handleKeyPress = (e) => {
         // event listeners for key presses
         if (e.code === "ArrowUp") {
-            console.log("look up")
+            this.setState({
+                hunter: {
+                    ...this.state.hunter,
+                    image: "⇡"
+                }
+            });
+            this.mapObjectsToGrid();
         }
         if (e.code === "ArrowLeft"){
-            console.log("look left");
+            this.setState({
+                hunter: {
+                    ...this.state.hunter,
+                    image: "⇠"
+                }
+            });
+            this.mapObjectsToGrid();
         }
         if (e.code === "ArrowRight"){
-            console.log("look right");
+            this.setState({
+                hunter: {
+                    ...this.state.hunter,
+                    image: "⇢"
+                }
+            });
+            this.mapObjectsToGrid();
         }
         if (e.code === "ArrowDown"){
-            console.log("look down");
+            this.setState({
+                hunter: {
+                    ...this.state.hunter,
+                    image: "⇣"
+                }
+            });
+            this.mapObjectsToGrid();
         }
         if (e.code === "KeyW" && this.state.hunter.position[0] != 0){
             this.setState({
@@ -163,7 +187,7 @@ handleKeyPress = (e) => {
                     if (animal.position[1] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
                     else animal.position[1] += 1;
                 }
-        }
+            }
         });
         this.setState({animals: updatedAnimals})
         this.mapObjectsToGrid();
