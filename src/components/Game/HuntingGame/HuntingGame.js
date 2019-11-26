@@ -97,15 +97,17 @@ class HuntingGame extends Component {
         console.log(updatedAnimals);
         
         // move and map animals
-        updatedAnimals.forEach(animal => {
+        updatedAnimals.forEach((animal, index) => {
             if (animal.behavior === "up") {
                 if (animal.position[0] === 0) animal.image = '';
                 else animal.position[0] -= 1;
             }
             if (animal.behavior === "down") {
-                if (animal.position[1] === this.state.grid.length - 2) animal.image = '';
+                if (animal.position[0] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
                 else animal.position[0] += 1;
             }
+            console.log(animal);
+            
         console.log(updatedAnimals);
         
             // if (animal.behavior === "left") {
