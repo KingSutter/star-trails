@@ -5,7 +5,7 @@ body {
 }
 
 .mainBg{
-    background-image: url("../../images/space.jpg");
+    background-image: black url("../../images/space.jpg");
 }
 .animatedBg{
     background-image: url("../../images/warpSpeed.gif");
