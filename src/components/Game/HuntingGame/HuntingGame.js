@@ -34,13 +34,12 @@ class HuntingGame extends Component {
             {
                 image: "👾",
                 position: [4,0],
-                behavior: "down"
+                behavior: "up"
             },
         ],
     }
     componentDidMount(){
-        // event listeners for key presses
-        this.secondsCounter = setInterval(this.handleSeconds, 250);
+        this.secondsCounter = setInterval(this.handleSeconds, 300); // every .25 seconds
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
     }
@@ -49,11 +48,12 @@ class HuntingGame extends Component {
     }
     handleSeconds = () => {
         this.seconds += 1;
-        console.log(this.seconds);
+        // console.log(this.seconds);
         
         this.updateGrid();
     }
     handleKeyPress = (e) => {
+        // event listeners for key presses
         if (e.code === "ArrowUp") {
             console.log("look up");
         }
@@ -66,7 +66,7 @@ class HuntingGame extends Component {
         if (e.code === "ArrowDown"){
             console.log("look down");
         }
-        if (e.code === "KeyW"){
+        if (e.code === "KeyW" && this.state.hunter.position[0] != 0){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -75,7 +75,7 @@ class HuntingGame extends Component {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "KeyA"){
+        if (e.code === "KeyA" && this.state.hunter.position[1] != 0){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -84,7 +84,7 @@ class HuntingGame extends Component {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "KeyS"){
+        if (e.code === "KeyS" && this.state.hunter.position[0] != this.state.grid.length-1){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -93,7 +93,7 @@ class HuntingGame extends Component {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "KeyD"){
+        if (e.code === "KeyD" && this.state.hunter.position[1] != this.state.grid.length-1){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -132,7 +132,7 @@ class HuntingGame extends Component {
     }
     updateGrid = () => {
         let updatedAnimals = this.state.animals.slice();
-        console.log(updatedAnimals);
+        // console.log(updatedAnimals);
         
         // move and map animals
         updatedAnimals.forEach((animal, index) => {
@@ -144,9 +144,9 @@ class HuntingGame extends Component {
                 if (animal.position[0] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
                 else animal.position[0] += 1;
             }
-            console.log(animal);
+            // console.log(animal);
             
-        console.log(updatedAnimals);
+        // console.log(updatedAnimals);
         
             // if (animal.behavior === "left") {
             //     if (animal.position[1] === 0) animal.image = '';
