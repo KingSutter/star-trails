@@ -9,7 +9,7 @@ class HuntingGame extends Component {
 
     state = {
         grid: [
-            ["", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", "",],
             ["", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", ""],
@@ -36,6 +36,16 @@ class HuntingGame extends Component {
                 position: [4,0],
                 behavior: "up"
             },
+            {
+                image: "👾",
+                position: [6,9],
+                behavior: "left"
+            },
+            {
+                image: "👾",
+                position: [1,2],
+                behavior: "right"
+            },
         ],
     }
     componentDidMount(){
@@ -49,13 +59,12 @@ class HuntingGame extends Component {
     handleSeconds = () => {
         this.seconds += 1;
         // console.log(this.seconds);
-        
         this.updateGrid();
     }
-    handleKeyPress = (e) => {
+handleKeyPress = (e) => {
         // event listeners for key presses
         if (e.code === "ArrowUp") {
-            console.log("look up");
+            console.log("look up")
         }
         if (e.code === "ArrowLeft"){
             console.log("look left");
@@ -130,32 +139,31 @@ class HuntingGame extends Component {
         });
         this.setState({grid: newGrid})
     }
+    // moves animals
     updateGrid = () => {
         let updatedAnimals = this.state.animals.slice();
         // console.log(updatedAnimals);
         
         // move and map animals
         updatedAnimals.forEach((animal, index) => {
-            if (animal.behavior === "up") {
-                if (animal.position[0] === 0) animal.image = '';
-                else animal.position[0] -= 1;
-            }
-            if (animal.behavior === "down") {
-                if (animal.position[0] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
-                else animal.position[0] += 1;
-            }
-            // console.log(animal);
-            
-        // console.log(updatedAnimals);
-        
-            // if (animal.behavior === "left") {
-            //     if (animal.position[1] === 0) animal.image = '';
-            //     newGrid[animal.position[0]][animal.position[1]-1] = animal.image;
-            // }
-            // if (animal.behavior === "right") {
-            //     if (animal.position[1] === newGrid[0].length - 1) animal.image = '';
-            //     newGrid[animal.position[0]][animal.position[1]+1] = animal.image;
-            // }
+            if(this.props.randomInt(0,1)){
+                if (animal.behavior === "up") {
+                    if (animal.position[0] === 0) updatedAnimals.splice(index, 1);
+                    else animal.position[0] -= 1;
+                }
+                if (animal.behavior === "down") {
+                    if (animal.position[0] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
+                    else animal.position[0] += 1;
+                }
+                if (animal.behavior === "left") {
+                    if (animal.position[1] === 0) updatedAnimals.splice(index, 1);
+                    else animal.position[1] -= 1;
+                }
+                if (animal.behavior === "right") {
+                    if (animal.position[1] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
+                    else animal.position[1] += 1;
+                }
+        }
         });
         this.setState({animals: updatedAnimals})
         this.mapObjectsToGrid();
