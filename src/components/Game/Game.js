@@ -341,10 +341,10 @@ class Game extends Component{
                 <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
             </div>
             ): (
-            <>
+            <div id="huntingView">
             <HuntingGame/>
             <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
-            </> )}
+            </div> )}
         </div>
         ):(
             <div id="gameResultView">

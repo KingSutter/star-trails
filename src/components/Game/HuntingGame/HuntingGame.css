@@ -1,0 +1,11 @@
+#huntingGrid td{
+    width: 30px;
+    height: 30px;
+}
+
+#huntingBoard table{
+    margin-top: 25%;
+    margin-left: 25%;
+    background-color: black;
+    text-align: center;
+}
