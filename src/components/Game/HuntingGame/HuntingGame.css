@@ -5,8 +5,9 @@
 }
 
 #huntingBoard table{
-    margin-top: 25%;
-    margin-left: 25%;
-    background-color: black;
+    background-image: url("../../../images/grass.png");
     text-align: center;
+    color: black;
+    margin-left:auto; 
+    margin-right:auto;
 }
