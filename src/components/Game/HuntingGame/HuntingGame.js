@@ -67,7 +67,8 @@ handleKeyPress = (e) => {
             this.setState({
                 hunter: {
                     ...this.state.hunter,
-                    image: "⇡"
+                    image: "⇡",
+                    direction: "up",
                 }
             });
             this.mapObjectsToGrid();
@@ -76,7 +77,8 @@ handleKeyPress = (e) => {
             this.setState({
                 hunter: {
                     ...this.state.hunter,
-                    image: "⇠"
+                    image: "⇠",
+                    direction: "left",
                 }
             });
             this.mapObjectsToGrid();
@@ -85,7 +87,8 @@ handleKeyPress = (e) => {
             this.setState({
                 hunter: {
                     ...this.state.hunter,
-                    image: "⇢"
+                    image: "⇢",
+                    direction: "right",
                 }
             });
             this.mapObjectsToGrid();
@@ -94,12 +97,13 @@ handleKeyPress = (e) => {
             this.setState({
                 hunter: {
                     ...this.state.hunter,
-                    image: "⇣"
+                    image: "⇣",
+                    direction: "down",
                 }
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "KeyW" && this.state.hunter.position[0] != 0){
+        if (e.code === "KeyW" && this.state.hunter.position[0] !== 0){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -108,7 +112,7 @@ handleKeyPress = (e) => {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "KeyA" && this.state.hunter.position[1] != 0){
+        if (e.code === "KeyA" && this.state.hunter.position[1] !== 0){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -117,7 +121,7 @@ handleKeyPress = (e) => {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "KeyS" && this.state.hunter.position[0] != this.state.grid.length-1){
+        if (e.code === "KeyS" && this.state.hunter.position[0] !== this.state.grid.length-1){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -126,7 +130,7 @@ handleKeyPress = (e) => {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "KeyD" && this.state.hunter.position[1] != this.state.grid.length-1){
+        if (e.code === "KeyD" && this.state.hunter.position[1] !== this.state.grid.length-1){
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -136,12 +140,12 @@ handleKeyPress = (e) => {
             this.mapObjectsToGrid();
         }
         if (e.code === "Space"){
-            console.log("fire!");
+            this.mapObjectsToGrid(this.state.hunter.position);
         }
         // console.log(e.code);
         
     }
-    mapObjectsToGrid = (hunterPosition = [this.state.hunter.position[0], this.state.hunter.position[1]]) => {
+    mapObjectsToGrid = (laserCoords = null, hunterPosition = [this.state.hunter.position[0], this.state.hunter.position[1]]) => {
         let newGrid = [
             ["", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", ""],
@@ -161,13 +165,49 @@ handleKeyPress = (e) => {
         this.state.animals.forEach(animal => {
             newGrid[animal.position[0]][animal.position[1]] = animal.image;
         });
+        // draw laser if there are coords inputted
+        if (laserCoords !== null){
+            console.log("laser fired!");
+            const columnLine = laserCoords[1];
+            const rowLine = laserCoords[0];
+            switch (this.state.hunter.direction){
+                case "up":
+                    console.log("up");
+                    for (let row = laserCoords[0]-1; row >= 0; row--) {
+                        newGrid[row][columnLine] = "🟥";
+                        console.log(row,columnLine);
+                    }
+                    break;
+                case "down":
+                    console.log("down");
+                    for (let row = laserCoords[0]+1; row < newGrid.length; row++) {
+                        newGrid[row][columnLine] = "🟥";
+                        console.log(row,columnLine);
+                    }
+                    break;
+                case "left":
+                    console.log("left");
+                    for (let column = laserCoords[1]-1; column >= 0; column--) {
+                        newGrid[rowLine][column] = "🟥";
+                        console.log(rowLine,column);
+                    }
+                    break;
+                case "right":
+                    console.log("right");
+                    for (let column = laserCoords[1]+1; column < newGrid.length; column++) {
+                        newGrid[rowLine][column] = "🟥";
+                        console.log(rowLine,column);
+                    }
+                    break;
+            }
+        }
+        
         this.setState({grid: newGrid})
     }
-    // moves animals
+    // moves animals based on animal behavior settings
     updateGrid = () => {
-        let updatedAnimals = this.state.animals.slice();
-        // console.log(updatedAnimals);
-        
+        // copy of animals in state
+        let updatedAnimals = this.state.animals.slice();        
         // move and map animals
         updatedAnimals.forEach((animal, index) => {
             if(this.props.randomInt(0,1)){
@@ -199,9 +239,9 @@ handleKeyPress = (e) => {
             <div id="huntingBoard">
                 <table id="huntingGrid">
                     <tbody>
-                    {this.state.grid.map((x, xIndex)=>(
-                    <tr key={xIndex}>{x.map((y, yIndex)=>(
-                        <td key={xIndex, yIndex}>{y}</td>
+                    {this.state.grid.map((row, rowIndex)=>(
+                    <tr key={rowIndex}>{row.map((column, columnIndex)=>(
+                        <td key={`${rowIndex}, ${columnIndex}`}>{column}</td>
                     ))}</tr>
                 ))}
                 </tbody>
