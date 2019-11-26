@@ -4,6 +4,9 @@ import {withRouter} from 'react-router-dom'
 import './Game.css';
 import shipflying from './shipflying2.gif'
 
+// import components
+import HuntingGame from './HuntingGame/HuntingGame'
+
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
 // view the supply manifest, view crew status, view overall game progress,
@@ -17,6 +20,7 @@ class Game extends Component{
         outcomeText: '',
         outcomeChanges: {},
         endGame: false,
+        hunting: false,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -229,8 +233,9 @@ class Game extends Component{
             <>
             {!this.state.endGame ? (
             <div className="gameView">
+            {!this.state.hunting ? (
+            <div id="mainGameView"> 
             {/* this is what displays when a scenario is NOT ongoing */}
-            <div id="mainGameView">
                 <div id="shipImage">
                     {/* other link to try https://i.imgur.com/U8iGpMC.gif */}
                     {/* http://i.imgur.com/1iuK86O.gif */}
@@ -333,7 +338,13 @@ class Game extends Component{
                         )}
                     </div>
                 )}
+                <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
             </div>
+            ): (
+            <>
+            <HuntingGame/>
+            <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
+            </> )}
         </div>
         ):(
             <div id="gameResultView">
