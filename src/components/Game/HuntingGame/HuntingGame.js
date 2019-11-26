@@ -93,17 +93,21 @@ class HuntingGame extends Component {
         this.setState({grid: newGrid})
     }
     updateGrid = () => {
-        let updatedAnimals = [...this.state.animals]
+        let updatedAnimals = this.state.animals.slice();
+        console.log(updatedAnimals);
+        
         // move and map animals
-        this.state.animals.forEach(animal => {
+        updatedAnimals.forEach(animal => {
             if (animal.behavior === "up") {
                 if (animal.position[0] === 0) animal.image = '';
                 else animal.position[0] -= 1;
             }
             if (animal.behavior === "down") {
-                if (animal.position[1] === this.state.grid.length - 1) animal.image = '';
+                if (animal.position[1] === this.state.grid.length - 2) animal.image = '';
                 else animal.position[0] += 1;
             }
+        console.log(updatedAnimals);
+        
             // if (animal.behavior === "left") {
             //     if (animal.position[1] === 0) animal.image = '';
             //     newGrid[animal.position[0]][animal.position[1]-1] = animal.image;
@@ -113,7 +117,7 @@ class HuntingGame extends Component {
             //     newGrid[animal.position[0]][animal.position[1]+1] = animal.image;
             // }
         });
-        this.setState({updatedAnimals})
+        this.setState({animals: updatedAnimals})
         this.mapObjectsToGrid();
     }
 
@@ -123,9 +127,9 @@ class HuntingGame extends Component {
             <div id="huntingBoard">
                 <table id="huntingGrid">
                     <tbody>
-                    {this.state.grid.map((x)=>(
-                    <tr>{x.map((y)=>(
-                        <td>{y}</td>
+                    {this.state.grid.map((x, xIndex)=>(
+                    <tr key={xIndex}>{x.map((y, yIndex)=>(
+                        <td key={xIndex, yIndex}>{y}</td>
                     ))}</tr>
                 ))}
                 </tbody>
