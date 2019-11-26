@@ -179,35 +179,27 @@ class HuntingGame extends Component {
             const rowLine = hunterCoords[0];
             switch (this.state.hunter.direction){
                 case "up":
-                    console.log("up");
                     for (let row = hunterCoords[0]-1; row >= 0; row--) {
                         newGrid[row][columnLine] = "🟥";
                         this.checkForHit([row,columnLine]);
-                        console.log(row,columnLine);
                     }
                     break;
                 case "down":
-                    console.log("down");
                     for (let row = hunterCoords[0]+1; row < newGrid.length; row++) {
                         newGrid[row][columnLine] = "🟥";
                         this.checkForHit([row,columnLine]);
-                        console.log(row,columnLine);
                     }
                     break;
                 case "left":
-                    console.log("left");
                     for (let column = hunterCoords[1]-1; column >= 0; column--) {
                         newGrid[rowLine][column] = "🟥";
                         this.checkForHit([rowLine,column]);
-                        console.log(rowLine,column);
                     }
                     break;
                 case "right":
-                    console.log("right");
                     for (let column = hunterCoords[1]+1; column < newGrid.length; column++) {
                         newGrid[rowLine][column] = "🟥";
                         this.checkForHit([rowLine,column]);
-                        console.log(rowLine,column);
                     }
                     break;
             }
@@ -247,12 +239,14 @@ class HuntingGame extends Component {
 
     // checks if any of the coordinates match an animal's coordinates
     checkForHit = (laserCoords) => {
-        this.state.animals.forEach((animal)=> {
-            // console.log("laser", laserCoords, "animal", animal.position)
+        let updatedAnimals = JSON.parse(JSON.stringify(this.state.animals)) // creates a copy of animals in state
+        updatedAnimals.forEach((animal)=> {
             if (animal.isAlive && animal.position[0] === laserCoords[0] && animal.position[1] === laserCoords[1]){
+                animal.isAlive = false;
                 console.log("animal hit!", animal)
             }
         });
+        this.setState({animals: updatedAnimals});
     }
 
     render(){

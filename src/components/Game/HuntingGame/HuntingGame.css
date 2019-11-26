@@ -1,6 +1,7 @@
 #huntingGrid td{
     width: 30px;
     height: 30px;
+    border: transparent;
 }
 
 #huntingBoard table{
