@@ -114,6 +114,7 @@ class HuntingGame extends Component {
     handleKeyPress = (e) => {
         // event listeners for key presses
         if (e.code === "ArrowUp") {
+            e.preventDefault();
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -124,6 +125,7 @@ class HuntingGame extends Component {
             this.mapObjectsToGrid();
         }
         if (e.code === "ArrowLeft"){
+            e.preventDefault();
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -134,6 +136,7 @@ class HuntingGame extends Component {
             this.mapObjectsToGrid();
         }
         if (e.code === "ArrowRight"){
+            e.preventDefault();
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -144,6 +147,7 @@ class HuntingGame extends Component {
             this.mapObjectsToGrid();
         }
         if (e.code === "ArrowDown"){
+            e.preventDefault();
             this.setState({
                 hunter: {
                     ...this.state.hunter,
@@ -190,6 +194,7 @@ class HuntingGame extends Component {
             this.mapObjectsToGrid();
         }
         if (e.code === "Space" ){
+            e.preventDefault();
             if (this.phaser_energy > 0){
                 this.phaser_energy -= 1
                 this.mapObjectsToGrid(this.state.hunter.position);
