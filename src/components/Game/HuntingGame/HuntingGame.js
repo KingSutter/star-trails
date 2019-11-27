@@ -4,7 +4,8 @@ import './HuntingGame.css'
 
 class HuntingGame extends Component {
 
-    secondsCounter = '';
+    movementTimer = '';
+    animalSpawnTimer = '';
     seconds= 0;
     foodGathered = 0;
 
@@ -15,46 +16,83 @@ class HuntingGame extends Component {
             position: [5,5],
             direction: "right",
         },
-        animals: [
-            {
-                image: "👾",
-                position: [2,5],
-                behavior: "down",
-                isAlive: true,
-            },
-            {
-                image: "👾",
-                position: [4,0],
-                behavior: "up",
-                isAlive: true,
-            },
-            {
-                image: "👾",
-                position: [6,9],
-                behavior: "left",
-                isAlive: true,
-            },
-            {
-                image: "👾",
-                position: [1,2],
-                behavior: "right",
-                isAlive: true,
-            },
-        ],
+        animals: [],
     }
     componentDidMount(){
-        this.secondsCounter = setInterval(this.handleSeconds, 200); // every .2 seconds
+        this.movementTimer = setInterval(this.moveAnimals, 200); // every .2 seconds
+        this.animalSpawnTimer = setInterval(this.spawnAnimal, 4000)
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
     }
     componentWillUnmount(){
         clearInterval(this.secondsCounter);
     }
-    handleSeconds = () => {
-        this.seconds += 1;
-        // console.log(this.seconds);
+
+    moveAnimals = () => {
         this.updateGrid();
     }
+
+    randomInt = (min, max) => {
+        return Math.floor(Math.random() * (max + 1 - min) + min);
+    }
+
+    spawnAnimal = () => {
+        switch (this.randomInt(0,3)){
+            case 0:
+                this.setState({
+                    animals: [
+                        ...this.state.animals,
+                        {
+                            image: "👾",
+                            position: [this.randomInt(0,this.state.grid.length-1), this.state.grid.length-1],
+                            behavior: "up",
+                            isAlive: true,
+                        },
+                    ]
+                });
+                break;
+            case 1:
+                this.setState({
+                    animals: [
+                        ...this.state.animals,
+                        {
+                            image: "👾",
+                            position: [0, this.randomInt(0,this.state.grid.length-1)],
+                            behavior: "down",
+                            isAlive: true,
+                        },
+                    ]
+                });
+                break;
+            case 2:
+                this.setState({
+                    animals: [
+                        ...this.state.animals,
+                        {
+                            image: "👾",
+                            position: [this.randomInt(0,this.state.grid.length-1), this.state.grid.length-1],
+                            behavior: "left",
+                            isAlive: true,
+                        },
+                    ]
+                });
+                break;
+            case 3:
+                this.setState({
+                    animals: [
+                        ...this.state.animals,
+                        {
+                            image: "👾",
+                            position: [this.randomInt(0,this.state.grid.length-1), 0],
+                            behavior: "right",
+                            isAlive: true,
+                        },
+                    ]
+                });
+                break;
+        }
+    }
+    
     handleKeyPress = (e) => {
         // event listeners for key presses
         if (e.code === "ArrowUp") {
@@ -145,7 +183,7 @@ class HuntingGame extends Component {
         let newGrid = [
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", "", "", "🟤", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -170,6 +208,7 @@ class HuntingGame extends Component {
         if (hunterCoords !== null){
             const columnLine = hunterCoords[1];
             const rowLine = hunterCoords[0];
+            // will draw a laser from the hunter's position by direction to where an animal is (if any)
             switch (this.state.hunter.direction){
                 case "up":
                     for (let row = hunterCoords[0]-1; row >= 0; row--) {
@@ -207,7 +246,7 @@ class HuntingGame extends Component {
         let updatedAnimals = this.state.animals.slice();        
         // move and map animals
         updatedAnimals.forEach((animal, index) => {
-            if(animal.isAlive && this.props.randomInt(0,1)){
+            if(animal.isAlive && this.randomInt(0,1)){
                 if (animal.behavior === "up") {
                     if (animal.position[0] === 0) updatedAnimals.splice(index, 1);
                     else animal.position[0] -= 1;
