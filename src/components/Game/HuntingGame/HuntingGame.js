@@ -19,8 +19,8 @@ class HuntingGame extends Component {
         animals: [],
     }
     componentDidMount(){
-        this.movementTimer = setInterval(this.moveAnimals, 200); // every .2 seconds
-        this.animalSpawnTimer = setInterval(this.spawnAnimal, 4000)
+        this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
+        this.animalSpawnTimer = setInterval(this.spawnAnimal, 1000)
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
     }
@@ -37,14 +37,14 @@ class HuntingGame extends Component {
     }
 
     spawnAnimal = () => {
-        switch (this.randomInt(0,3)){
+        switch (this.randomInt(0,7)){
             case 0:
                 this.setState({
                     animals: [
                         ...this.state.animals,
                         {
                             image: "👾",
-                            position: [this.randomInt(0,this.state.grid.length-1), this.state.grid.length-1],
+                            position: [this.state.grid.length-1, this.randomInt(0,this.state.grid.length-1)],
                             behavior: "up",
                             isAlive: true,
                         },
