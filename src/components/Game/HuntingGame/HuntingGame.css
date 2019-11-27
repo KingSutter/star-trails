@@ -12,3 +12,7 @@
     margin-left:auto;
     margin-right:auto;
 }
+
+#huntingBoard #energy {
+    background-color: red;
+}

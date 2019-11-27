@@ -51,14 +51,12 @@ class Game extends Component{
         }
         else{
             // default new day
-            console.log(this.props.game.saveData.distance + this.DistanceModifier());
-            
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
                 distance: this.props.game.saveData.distance + this.DistanceModifier(), // travel +distance based on modifier
                 food: this.checkResource(this.props.game.saveData.food, -10), // eat 10 food (-10)
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
-                phaser_energy: this.props.game.saveData.phaser_energy,
+                phaser_energy: this.props.game.hunting.phaser_energy || this.props.game.saveData.phaser_energy,
                 warp_coils: this.props.game.saveData.warp_coils,
                 antimatter_flow_regulators: this.props.game.saveData.antimatter_flow_regulators,
                 magnetic_constrictors: this.props.game.saveData.magnetic_constrictors,

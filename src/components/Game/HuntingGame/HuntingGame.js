@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import './HuntingGame.css'
 
 
@@ -22,15 +23,19 @@ class HuntingGame extends Component {
     }
     componentDidMount(){
         this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
-        this.animalSpawnTimer = setInterval(this.spawnAnimal, 1000)
+        this.animalSpawnTimer = setInterval(this.spawnAnimal, 3000) // 50% chance an animal spawns every 3 seconds
         this.timePlayedTimer = setInterval(()=>{this.seconds+=1}, 1000)
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
+        this.phaser_energy = this.props.phaser_energy
     }
     componentWillUnmount(){
         clearInterval(this.moveAnimals);
         clearInterval(this.spawnAnimal);
         clearInterval(this.timePlayedTimer);
+        this.props.dispatch({type: "SET_HUNTING_RESULTS", payload: {phaser_energy: this.phaser_energy, food: this.foodGathered}});
+        this.phaser_energy = 1;
+        this.foodGathered = 0;
     }
 
     moveAnimals = () => {
@@ -95,6 +100,8 @@ class HuntingGame extends Component {
                     ]
                 });
                 break;
+            default: break;
+
         }
     }
     
@@ -176,12 +183,14 @@ class HuntingGame extends Component {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "Space" && this.phaser_energy > 0){
-            this.phaser_energy -= 1
-            this.mapObjectsToGrid(this.state.hunter.position);
-        }
-        // console.log(e.code);
-        
+        if (e.code === "Space" ){
+            if (this.phaser_energy > 0){
+                this.phaser_energy -= 1
+                this.mapObjectsToGrid(this.state.hunter.position);
+            }else{
+                alert("You're out of energy!");  
+            }
+        }        
     }
 
     // updates grid and draws a laser if inputted
@@ -240,6 +249,7 @@ class HuntingGame extends Component {
                         else newGrid[rowLine][column] = "🟥";
                     }
                     break;
+                default: break;
             }
         }
         
@@ -304,14 +314,17 @@ class HuntingGame extends Component {
                 </tbody>
                 </table>
                 <p>Time Elapsed: {this.seconds}</p>
-                <p>Phaser Energy: {this.phaser_energy}</p>
+                {this.phaser_energy > 5? 
+                    (<p>Phaser Energy: {this.phaser_energy}</p>) :
+                    (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
+                }
             </div>
             </>
         )
     }
 }
 
-export default HuntingGame;
+export default connect()(HuntingGame);
 
 // might need this later ...
 

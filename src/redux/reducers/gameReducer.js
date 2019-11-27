@@ -24,10 +24,19 @@ const outcomes = (state = [], action) => {
     else return state;
 }
 
+const hunting = (state = null, action) => {
+    if (action.type === 'SET_HUNTING_RESULTS'){
+        return action.payload;
+    }
+    else return state;
+
+}
+
 // game-related data will be on the redux state at:
 // state.game
 export default combineReducers({
     saveData,
     scenarios,
     outcomes,
+    hunting,
   });
