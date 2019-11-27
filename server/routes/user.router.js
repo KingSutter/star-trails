@@ -331,4 +331,56 @@ router.get('/outcomes', rejectUnauthenticated, (req,res) => {
   })
 });
 
+// change save data by user ID
+router.put('/save', rejectUnauthenticated, (req,res) => {
+  const queryText = `
+  UPDATE "save"
+  SET "day"=$1, "distance"=$2, "food"=$3, "money"=$4, "phaser_energy"=$5, "warp_coils"=$6, "antimatter_flow_regulators"=$7, "magnetic_constrictors"=$8, "plasma_injectors"=$9, "captain_status"=$10, "medic_status"=$11, "engineer_status"=$12, "helm_status"=$13, "tactical_status"=$14
+  FROM "accounts"
+  WHERE "accounts".save_id = "save".id
+  AND "accounts".id = $15
+  RETURNING "save".*;`;
+
+  pool.query(queryText,[req.body.day, req.body.distance, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain_status, req.body.medic_status, req.body.engineer_status, req.body.helm_status, req.body.tactical_status, req.user.id])
+  .then((response) => {
+    res.send(response.rows[0]);
+  }).catch((error)=>{
+    console.log(error);
+    res.sendStatus(500);
+  })
+});
+
+// gets all scenario data
+router.get('/scenarios', rejectUnauthenticated, (req,res) => {
+  const queryText = `SELECT * FROM "scenarios";`;
+
+  pool.query(queryText)
+  .then((response) => {
+    res.send(response.rows);
+  }).catch((error)=>{
+    console.log(error);
+    res.sendStatus(500);
+  })
+});
+
+// update save state from hunting
+router.put('/save/hunting', rejectUnauthenticated, (req,res) => {
+  const queryText = `
+  UPDATE "save"
+  SET "food"=$1, phaser_energy=$2
+  FROM "accounts"
+  WHERE "accounts".save_id = "save".id
+  AND "accounts".id = $3
+  RETURNING "save".*;`;
+
+  pool.query(queryText,[req.body.food, req.body.phaser_energy, req.user.id])
+  .then((response) => {
+    res.send(response.rows[0]);
+  }).catch((error)=>{
+    console.log(error);
+    res.sendStatus(500);
+  })
+});
+
+
 module.exports = router;

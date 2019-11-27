@@ -34,7 +34,13 @@ class HuntingGame extends Component {
         clearInterval(this.moveAnimals);
         clearInterval(this.spawnAnimal);
         clearInterval(this.timePlayedTimer);
-        this.props.dispatch({type: "UPLOAD_HUNTING_RESULTS", payload: {phaser_energy: this.phaser_energy, food: this.state.foodGathered}});
+        this.props.dispatch({
+            type: "UPLOAD_HUNTING_RESULTS", 
+            payload: {
+                phaser_energy: this.phaser_energy, 
+                food: (this.props.food + this.state.foodGathered),
+            }
+        });
         this.phaser_energy = 1;
     }
 
