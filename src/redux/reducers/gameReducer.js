@@ -24,6 +24,7 @@ const outcomes = (state = [], action) => {
     else return state;
 }
 
+
 // game-related data will be on the redux state at:
 // state.game
 export default combineReducers({
