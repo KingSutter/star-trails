@@ -145,7 +145,7 @@ class HuntingGame extends Component {
         let newGrid = [
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", "", "🟤", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -168,32 +168,31 @@ class HuntingGame extends Component {
         });
         // draw laser if there are coords inputted
         if (hunterCoords !== null){
-            console.log("laser fired!");
             const columnLine = hunterCoords[1];
             const rowLine = hunterCoords[0];
             switch (this.state.hunter.direction){
                 case "up":
                     for (let row = hunterCoords[0]-1; row >= 0; row--) {
-                        newGrid[row][columnLine] = "🟥";
-                        this.checkForHit([row,columnLine]);
+                        if (this.checkForHit([row,columnLine])) break;
+                        else newGrid[row][columnLine] = "🟥";
                     }
                     break;
                 case "down":
                     for (let row = hunterCoords[0]+1; row < newGrid.length; row++) {
-                        newGrid[row][columnLine] = "🟥";
-                        this.checkForHit([row,columnLine]);
+                        if (this.checkForHit([row,columnLine])) break;
+                        else newGrid[row][columnLine] = "🟥";
                     }
                     break;
                 case "left":
                     for (let column = hunterCoords[1]-1; column >= 0; column--) {
-                        newGrid[rowLine][column] = "🟥";
-                        this.checkForHit([rowLine,column]);
+                        if (this.checkForHit([rowLine,column])) break;
+                        else newGrid[rowLine][column] = "🟥";
                     }
                     break;
                 case "right":
                     for (let column = hunterCoords[1]+1; column < newGrid.length; column++) {
-                        newGrid[rowLine][column] = "🟥";
-                        this.checkForHit([rowLine,column]);
+                        if (this.checkForHit([rowLine,column])) break;
+                        else newGrid[rowLine][column] = "🟥";
                     }
                     break;
             }
@@ -234,14 +233,15 @@ class HuntingGame extends Component {
     // checks if any of the coordinates match an animal's coordinates
     checkForHit = (laserCoords) => {
         let updatedAnimals = JSON.parse(JSON.stringify(this.state.animals)) // creates a copy of animals in state
-        updatedAnimals.forEach((animal)=> {
+        for (const animal of updatedAnimals){
             if (animal.isAlive && animal.position[0] === laserCoords[0] && animal.position[1] === laserCoords[1]){
-                animal.isAlive = false;
                 animal.image = "🥩";
-                console.log("animal hit!", animal)
+                animal.isAlive = false;
+                this.setState({animals: updatedAnimals});
+                return true;
             }
-        });
-        this.setState({animals: updatedAnimals});
+        };
+        return false;
     }
 
     render(){
