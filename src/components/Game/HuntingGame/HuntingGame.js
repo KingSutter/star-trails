@@ -6,8 +6,10 @@ class HuntingGame extends Component {
 
     movementTimer = '';
     animalSpawnTimer = '';
-    seconds= 0;
+    timePlayedTimer = '';
     foodGathered = 0;
+    seconds= 0; // dont neccessarily need a state update to count seconds elapsed. Just a semi-accurate counter.
+    phaser_energy = this.props.phaser_energy; // same goes for energy.
 
     state = {
         grid: [[]],
@@ -21,11 +23,14 @@ class HuntingGame extends Component {
     componentDidMount(){
         this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
         this.animalSpawnTimer = setInterval(this.spawnAnimal, 1000)
+        this.timePlayedTimer = setInterval(()=>{this.seconds+=1}, 1000)
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
     }
     componentWillUnmount(){
-        clearInterval(this.secondsCounter);
+        clearInterval(this.moveAnimals);
+        clearInterval(this.spawnAnimal);
+        clearInterval(this.timePlayedTimer);
     }
 
     moveAnimals = () => {
@@ -171,7 +176,8 @@ class HuntingGame extends Component {
             });
             this.mapObjectsToGrid();
         }
-        if (e.code === "Space"){
+        if (e.code === "Space" && this.phaser_energy > 0){
+            this.phaser_energy -= 1
             this.mapObjectsToGrid(this.state.hunter.position);
         }
         // console.log(e.code);
@@ -243,25 +249,26 @@ class HuntingGame extends Component {
     // moves animals based on animal's behavior settings
     updateGrid = () => {
         // copy of animals in state
-        let updatedAnimals = this.state.animals.slice();        
+        let updatedAnimals = this.state.animals.slice();
+        const directions = ["up", "down", "left", "right"];
         // move and map animals
         updatedAnimals.forEach((animal, index) => {
             if(animal.isAlive && this.randomInt(0,1)){
                 if (animal.behavior === "up") {
                     if (animal.position[0] === 0) updatedAnimals.splice(index, 1);
-                    else animal.position[0] -= 1;
+                    else {animal.position[0] -= 1; if(this.randomInt(0,1)) animal.behavior=directions[this.randomInt(0,3)];}
                 }
                 if (animal.behavior === "down") {
                     if (animal.position[0] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
-                    else animal.position[0] += 1;
+                    else {animal.position[0] += 1; if(this.randomInt(0,1)) animal.behavior=directions[this.randomInt(0,3)];}
                 }
                 if (animal.behavior === "left") {
                     if (animal.position[1] === 0) updatedAnimals.splice(index, 1);
-                    else animal.position[1] -= 1;
+                    else {animal.position[1] -= 1; if(this.randomInt(0,1)) animal.behavior=directions[this.randomInt(0,3)];}
                 }
                 if (animal.behavior === "right") {
                     if (animal.position[1] === this.state.grid.length - 1) updatedAnimals.splice(index, 1);
-                    else animal.position[1] += 1;
+                    else {animal.position[1] += 1;  if(this.randomInt(0,1)) animal.behavior=directions[this.randomInt(0,3)];}
                 }
             }
         });
@@ -296,6 +303,8 @@ class HuntingGame extends Component {
                 ))}
                 </tbody>
                 </table>
+                <p>Time Elapsed: {this.seconds}</p>
+                <p>Phaser Energy: {this.phaser_energy}</p>
             </div>
             </>
         )

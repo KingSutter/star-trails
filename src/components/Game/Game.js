@@ -347,7 +347,7 @@ class Game extends Component{
             </div>
             ): (
             <div id="huntingView">
-                <HuntingGame randomInt={this.randomInt}/>
+                <HuntingGame phaser_energy={this.props.game.saveData.phaser_energy}/>
                 <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
             </div> )}
         </div>
