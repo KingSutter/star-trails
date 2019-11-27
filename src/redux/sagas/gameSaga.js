@@ -47,12 +47,22 @@ function* getOutcomes(){
     }
 }
 
+function* uploadHuntingResults(action){
+  try {
+      const response = yield axios.put('/api/user/save/hunting', action.payload);
+      yield put({ type: 'SET_SAVE_DATA', payload: response.data});
+    } catch (error) {
+      console.log('updated save from hunting route failed', error);
+    }
+}
+
 function* gameSaga() {
-    yield takeLatest('CREATE_SAVE',createSave);
-    yield takeLatest('GET_SAVE',getSave);
+    yield takeLatest('CREATE_SAVE', createSave);
+    yield takeLatest('GET_SAVE', getSave);
     yield takeLatest('UPDATE_SAVE',updateSave);
     yield takeLatest('GET_SCENARIOS', getScenarios);
     yield takeLatest('GET_OUTCOMES', getOutcomes);
+    yield takeLatest('UPLOAD_HUNTING_RESULTS', uploadHuntingResults)
   }
 
 export default gameSaga;

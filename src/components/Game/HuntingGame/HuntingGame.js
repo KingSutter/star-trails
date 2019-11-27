@@ -8,7 +8,6 @@ class HuntingGame extends Component {
     movementTimer = '';
     animalSpawnTimer = '';
     timePlayedTimer = '';
-    foodGathered = 0;
     seconds= 0; // dont neccessarily need a state update to count seconds elapsed. Just a semi-accurate counter.
     phaser_energy = this.props.phaser_energy; // same goes for energy.
 
@@ -20,6 +19,8 @@ class HuntingGame extends Component {
             direction: "right",
         },
         animals: [],
+        foodGathered: 0,
+
     }
     componentDidMount(){
         this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
@@ -33,9 +34,8 @@ class HuntingGame extends Component {
         clearInterval(this.moveAnimals);
         clearInterval(this.spawnAnimal);
         clearInterval(this.timePlayedTimer);
-        this.props.dispatch({type: "SET_HUNTING_RESULTS", payload: {phaser_energy: this.phaser_energy, food: this.foodGathered}});
+        this.props.dispatch({type: "UPLOAD_HUNTING_RESULTS", payload: {phaser_energy: this.phaser_energy, food: this.state.foodGathered}});
         this.phaser_energy = 1;
-        this.foodGathered = 0;
     }
 
     moveAnimals = () => {
@@ -293,7 +293,10 @@ class HuntingGame extends Component {
             if (animal.isAlive && animal.position[0] === laserCoords[0] && animal.position[1] === laserCoords[1]){
                 animal.image = "🥩";
                 animal.isAlive = false;
-                this.setState({animals: updatedAnimals});
+                this.setState({
+                    animals: updatedAnimals,
+                    foodGathered: this.state.foodGathered + this.randomInt(10, 15) // hitting an animal gives you 10-15 pounds of food
+                });
                 return true;
             }
         };
@@ -318,6 +321,7 @@ class HuntingGame extends Component {
                     (<p>Phaser Energy: {this.phaser_energy}</p>) :
                     (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
                 }
+                <p>{this.state.foodGathered}</p>
             </div>
             </>
         )

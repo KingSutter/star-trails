@@ -226,11 +226,6 @@ class Game extends Component{
         return modifier;
     }
 
-    usePhaserEnergy = () => {
-        console.log("phaser");
-        
-    }
-
     render(){
         return(
             <>
