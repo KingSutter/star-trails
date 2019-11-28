@@ -10,6 +10,7 @@ class HuntingGame extends Component {
     timePlayedTimer = '';
     seconds= 0; // dont neccessarily need a state update to count seconds elapsed. Just a semi-accurate counter.
     phaser_energy = this.props.phaser_energy; // same goes for energy.
+    phaserEnergyUsed = 0;
 
     state = {
         grid: [[]],
@@ -20,8 +21,9 @@ class HuntingGame extends Component {
         },
         animals: [],
         foodGathered: 0,
-
+        showingResults: false,
     }
+
     componentDidMount(){
         this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
         this.animalSpawnTimer = setInterval(this.spawnAnimal, 2000); // 50% chance an animal spawns every 3 seconds
@@ -207,7 +209,8 @@ class HuntingGame extends Component {
             case "Space":
                 e.preventDefault();
                 if (this.phaser_energy > 0){
-                    this.phaser_energy -= 1
+                    this.phaser_energy -= 1;
+                    this.phaserEnergyUsed += 1;
                     this.mapObjectsToGrid(this.state.hunter.position); // this effectively will fire a laser
                 } // else don't do anything. Don't fire a laser
                 break;
@@ -308,8 +311,8 @@ class HuntingGame extends Component {
     }
 
     watchTime = () => {
-        if (this.seconds >= 60) this.props.toggleHunting();
-        else this.seconds += 1;
+        if (this.seconds >= 30) this.setState({showingResults: true});  // if game has been running for 30 seconds...
+        else this.seconds += 1; // else add 1 seconds to timer 
     }
 
     // checks if any of the coordinates match an animal's coordinates
@@ -332,32 +335,43 @@ class HuntingGame extends Component {
     render(){
         return(
             <div id="huntingGameView">
-                <table>
-                    <thead>
-                        <td>
-                            <div id="huntingBoard">
-                                <table id="huntingGrid">
-                                    <tbody>
-                                    {this.state.grid.map((row, rowIndex)=>(
-                                    <tr key={rowIndex}>{row.map((column, columnIndex)=>(
-                                        <td key={`${rowIndex}, ${columnIndex}`}>{column}</td>
+                {!this.state.showingResults ? (
+                <div id="huntingGame">
+                    <table>
+                        <thead>
+                            <td>
+                                <div id="huntingBoard">
+                                    <table id="huntingGrid">
+                                        <tbody>
+                                        {this.state.grid.map((row, rowIndex)=>(
+                                        <tr key={rowIndex}>{row.map((column, columnIndex)=>(
+                                            <td key={`${rowIndex}, ${columnIndex}`}>{column}</td>
+                                            ))}
+                                        </tr>
                                         ))}
-                                    </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                        <td id="huntingInformation">
-                            <p>Time: {this.seconds}</p>
-                            {this.phaser_energy > 5 ? 
-                                (<p>Phaser Energy: {this.phaser_energy}</p>) :
-                                (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
-                            }
-                            <p>Food Gathered: {this.state.foodGathered} lbs</p>
-                            <button onClick={this.props.toggleHunting}>Exit</button></td>
-                    </thead>
-                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                            <td id="huntingInformation">
+                                <p>Time: {this.seconds}</p>
+                                {this.phaser_energy > 5 ? 
+                                    (<p>Phaser Energy: {this.phaser_energy}</p>) :
+                                    (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
+                                }
+                                <p>Food Gathered: {this.state.foodGathered} lbs</p>
+                                <button onClick={this.props.toggleHunting}>Exit</button></td>
+                        </thead>
+                    </table>
+                </div> 
+                ) : (
+                <div id="huntingResults">
+                    <h2>Time's up!</h2>
+                    <h3>You gathered {this.state.foodGathered} pounds of food.</h3>
+                    <h3>You used {this.phaserEnergyUsed} phaser energy.</h3>
+                    <button onClick={()=>{this.setState({showingResults: false}); this.props.toggleHunting();}}>Continue</button>
+                </div>
+                )}
             </div>
         )
     }

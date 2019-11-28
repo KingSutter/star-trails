@@ -26,4 +26,8 @@
 
 #huntingInformation {
     width: 200px
-} 
+}
+
+#huntingResults {
+    text-align: center;
+}

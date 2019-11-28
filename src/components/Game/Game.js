@@ -235,13 +235,15 @@ class Game extends Component{
             this.setState({
                 hunting: false, 
                 scenarioTriggered: false, 
-                class_M_planet: false});
+                class_M_planet: false,
+            });
         }
         else {
             this.setState({
                 hunting: true, 
                 scenarioTriggered: false, 
-                class_M_planet: false});
+                class_M_planet: false
+            });
         }
     }
 
