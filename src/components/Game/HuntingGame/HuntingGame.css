@@ -2,11 +2,11 @@
     width: 30px;
     height: 30px;
     border: transparent;
+    font-weight: bold;
 }
 
 #huntingBoard table{
     background-image: url("../../../images/grass.jpg");
-    /* background-color: green; */
     text-align: center;
     color: black;
     margin-left:auto;

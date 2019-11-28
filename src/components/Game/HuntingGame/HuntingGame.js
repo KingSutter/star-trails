@@ -318,7 +318,7 @@ class HuntingGame extends Component {
                 animal.isAlive = false;
                 this.setState({
                     animals: updatedAnimals,
-                    foodGathered: this.state.foodGathered + this.randomInt(10, 15) // hitting an animal gives you 10-15 pounds of food
+                    foodGathered: this.state.foodGathered + this.randomInt(15, 25) // hitting an animal gives you 10-15 pounds of food
                 });
                 return true;
             }
