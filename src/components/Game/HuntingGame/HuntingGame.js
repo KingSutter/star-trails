@@ -24,8 +24,8 @@ class HuntingGame extends Component {
     }
     componentDidMount(){
         this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
-        this.animalSpawnTimer = setInterval(this.spawnAnimal, 2000) // 50% chance an animal spawns every 3 seconds
-        this.timePlayedTimer = setInterval(()=>{this.seconds+=1}, 1000)
+        this.animalSpawnTimer = setInterval(this.spawnAnimal, 2000); // 50% chance an animal spawns every 3 seconds
+        this.timePlayedTimer = setInterval(this.watchTime, 1000);
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
         this.phaser_energy = this.props.phaser_energy
