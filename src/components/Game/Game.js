@@ -6,6 +6,7 @@ import shipflying from './shipflying2.gif'
 
 // import components
 import HuntingGame from './HuntingGame/HuntingGame'
+import { tsExpressionWithTypeArguments, tsMethodSignature } from '@babel/types';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -21,6 +22,7 @@ class Game extends Component{
         outcomeChanges: {},
         endGame: false,
         hunting: false,
+        class_M_planet: false,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -34,8 +36,11 @@ class Game extends Component{
     handleNewDay = () => {
         this.checkWinLoss();
         // if the rng function returns true, run a random scenario
-        const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-7) returned is 1, an scenario will occur
-        if (scenarioTrigger){
+        const scenarioTrigger = this.randomInt(1,8);    // if the random integer (1-8) returned is 1, an scenario will occur
+        if (scenarioTrigger === 8) {  // 1 in 8 chance you will run into a class M planet to hunt
+            this.setState({scenarioTriggered: true, class_M_planet: true});
+        }
+        else if (scenarioTrigger === 1){
             let allScenarioIds = [];
             // get all scenarioIDs (DB may not have linear IDs)
             this.props.game.scenarios.forEach(scenario => {
@@ -56,7 +61,7 @@ class Game extends Component{
                 distance: this.props.game.saveData.distance + this.DistanceModifier(), // travel +distance based on modifier
                 food: this.checkResource(this.props.game.saveData.food, -10), // eat 10 food (-10)
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
-                phaser_energy: this.props.game.hunting.phaser_energy || this.props.game.saveData.phaser_energy,
+                phaser_energy: this.props.game.saveData.phaser_energy,
                 warp_coils: this.props.game.saveData.warp_coils,
                 antimatter_flow_regulators: this.props.game.saveData.antimatter_flow_regulators,
                 magnetic_constrictors: this.props.game.saveData.magnetic_constrictors,
@@ -226,6 +231,21 @@ class Game extends Component{
         return modifier;
     }
 
+    toggleHunting = () => {
+        if (this.state.hunting){
+            this.setState({
+                hunting: false, 
+                scenarioTriggered: false, 
+                class_M_planet: false});
+        }
+        else {
+            this.setState({
+                hunting: true, 
+                scenarioTriggered: false, 
+                class_M_planet: false});
+        }
+    }
+
     render(){
         return(
             <>
@@ -320,17 +340,28 @@ class Game extends Component{
                 ) : (
                     <div id="scenarioMainView">
                         {!this.state.outcomeTriggered ? (
-                            <div id="scenarioView">
-                                <h3>{this.state.scenario.prompt}</h3>
-                                <p id="optionButtons">
-                                <button onClick={()=>{this.handleOption(1)}} id="optionButton">{this.state.scenario.option1}</button><br/>
-                                <button onClick={()=>{this.handleOption(2)}} id="optionButton">{this.state.scenario.option2}</button>
-                                </p>
-                            </div>
+                            <>
+                            {!this.state.class_M_planet ? (
+                                <div id="scenarioView">
+                                    <h3>{this.state.scenario.prompt}</h3>
+                                    <p id="optionButtons">
+                                    <button onClick={()=>{this.handleOption(1)}} id="optionButton">{this.state.scenario.option1}</button><br/>
+                                    <button onClick={()=>{this.handleOption(2)}} id="optionButton">{this.state.scenario.option2}</button>
+                                    </p>
+                                </div>
+                            ) : (
+                                <div id="huntingScenarioView">
+                                    <h3>You find a class M planet with animals indigenous to it. Would you like to stop to go hunting?</h3>
+                                    <p id="optionButtons">
+                                    <button onClick={this.toggleHunting} id="optionButton">Yes</button><br/>
+                                    <button onClick={()=>{this.setState({scenarioTriggered: false, class_M_planet: false})}} id="optionButton">No</button>
+                                    </p>
+                                </div>
+                            )}
+                            </>
                         ) : (
                             <div id="outcomeView">
                                 <h3>{this.state.outcomeText}</h3>
-                                {/* <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p> */}
                                 <button onClick={this.handleContinue}>Continue</button>
                             </div>
                         )}
@@ -340,7 +371,7 @@ class Game extends Component{
             </div>
             ): (
             <div id="huntingView">
-                <HuntingGame food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy}/>
+                <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy}/>
                 <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
             </div> )}
         </div>
@@ -359,6 +390,7 @@ class Game extends Component{
                 )}
             </div>
         )}
+    <span>{JSON.stringify(this.state,null,2)}</span>
             </>
         )
     }

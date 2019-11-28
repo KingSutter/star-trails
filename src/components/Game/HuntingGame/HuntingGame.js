@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import './HuntingGame.css'
+import { bigIntLiteral } from '@babel/types';
 
 
 class HuntingGame extends Component {
@@ -24,7 +25,7 @@ class HuntingGame extends Component {
     }
     componentDidMount(){
         this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
-        this.animalSpawnTimer = setInterval(this.spawnAnimal, 3000) // 50% chance an animal spawns every 3 seconds
+        this.animalSpawnTimer = setInterval(this.spawnAnimal, 2000) // 50% chance an animal spawns every 3 seconds
         this.timePlayedTimer = setInterval(()=>{this.seconds+=1}, 1000)
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
@@ -113,95 +114,105 @@ class HuntingGame extends Component {
     
     handleKeyPress = (e) => {
         // event listeners for key presses
-        if (e.code === "ArrowUp") {
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇡",
-                    direction: "up",
+        switch (e.code){
+            case "ArrowUp": 
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇡",
+                        direction: "up",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "ArrowLeft":
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇠",
+                        direction: "left",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "ArrowRight":
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇢",
+                        direction: "right",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "ArrowDown":
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇣",
+                        direction: "down",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "KeyW":
+                if(this.state.hunter.position[0] !== 0){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0]-1,this.state.hunter.position[1]]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "ArrowLeft"){
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇠",
-                    direction: "left",
+                break;
+            case "KeyA":
+                if(this.state.hunter.position[1] !== 0){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0],this.state.hunter.position[1]-1]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "ArrowRight"){
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇢",
-                    direction: "right",
+                break;
+            case "KeyS": 
+                if (this.state.hunter.position[0] !== this.state.grid.length-1){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0]+1,this.state.hunter.position[1]]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "ArrowDown"){
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇣",
-                    direction: "down",
+                break;
+            case "KeyD": 
+                if(this.state.hunter.position[1] !== this.state.grid.length-1){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0],this.state.hunter.position[1]+1]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "KeyW" && this.state.hunter.position[0] !== 0){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0]-1,this.state.hunter.position[1]]
+                break;
+            case "Space":
+                e.preventDefault();
+                if (this.phaser_energy > 0){
+                    this.phaser_energy -= 1
+                    this.mapObjectsToGrid(this.state.hunter.position);
+                }else{
+                    alert("You're out of energy!");  
                 }
-            });
-            this.mapObjectsToGrid();
+                break;
         }
-        if (e.code === "KeyA" && this.state.hunter.position[1] !== 0){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0],this.state.hunter.position[1]-1]
-                }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "KeyS" && this.state.hunter.position[0] !== this.state.grid.length-1){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0]+1,this.state.hunter.position[1]]
-                }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "KeyD" && this.state.hunter.position[1] !== this.state.grid.length-1){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0],this.state.hunter.position[1]+1]
-                }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "Space" ){
-            e.preventDefault();
-            if (this.phaser_energy > 0){
-                this.phaser_energy -= 1
-                this.mapObjectsToGrid(this.state.hunter.position);
-            }else{
-                alert("You're out of energy!");  
-            }
-        }        
     }
 
     // updates grid and draws a laser if inputted
@@ -332,7 +343,8 @@ class HuntingGame extends Component {
                     (<p>Phaser Energy: {this.phaser_energy}</p>) :
                     (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
                 }
-                <p>{this.state.foodGathered}</p>
+                <p>Food Gathered: {this.state.foodGathered} lbs</p>
+                <button onClick={this.props.toggleHunting}>Exit</button>
             </div>
             </>
         )
@@ -340,9 +352,3 @@ class HuntingGame extends Component {
 }
 
 export default connect()(HuntingGame);
-
-// might need this later ...
-
-// // copy state without referencing state
-//     for (var i = 0; i < this.state.grid.length; i++)
-//     newGrid[i] = this.state.grid[i].slice();
