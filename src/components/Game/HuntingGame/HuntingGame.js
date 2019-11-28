@@ -35,6 +35,7 @@ class HuntingGame extends Component {
         clearInterval(this.moveAnimals);
         clearInterval(this.spawnAnimal);
         clearInterval(this.timePlayedTimer);
+        // send hunting results to the DB so it will update on the user's save file
         this.props.dispatch({
             type: "UPLOAD_HUNTING_RESULTS", 
             payload: {
@@ -327,26 +328,34 @@ class HuntingGame extends Component {
 
     render(){
         return(
-            <>
-            <div id="huntingBoard">
-                <table id="huntingGrid">
-                    <tbody>
-                    {this.state.grid.map((row, rowIndex)=>(
-                    <tr key={rowIndex}>{row.map((column, columnIndex)=>(
-                        <td key={`${rowIndex}, ${columnIndex}`}>{column}</td>
-                    ))}</tr>
-                ))}
-                </tbody>
+            <div id="huntingGameView">
+                <table>
+                    <thead>
+                        <td>
+                            <div id="huntingBoard">
+                                <table id="huntingGrid">
+                                    <tbody>
+                                    {this.state.grid.map((row, rowIndex)=>(
+                                    <tr key={rowIndex}>{row.map((column, columnIndex)=>(
+                                        <td key={`${rowIndex}, ${columnIndex}`}>{column}</td>
+                                        ))}
+                                    </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td id="huntingInformation">
+                            <p>Time: {this.seconds}</p>
+                            {this.phaser_energy > 5? 
+                                (<p>Phaser Energy: {this.phaser_energy}</p>) :
+                                (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
+                            }
+                            <p>Food Gathered: {this.state.foodGathered} lbs</p>
+                            <button onClick={this.props.toggleHunting}>Exit</button></td>
+                    </thead>
                 </table>
-                <p>Time Elapsed: {this.seconds}</p>
-                {this.phaser_energy > 5? 
-                    (<p>Phaser Energy: {this.phaser_energy}</p>) :
-                    (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
-                }
-                <p>Food Gathered: {this.state.foodGathered} lbs</p>
-                <button onClick={this.props.toggleHunting}>Exit</button>
             </div>
-            </>
         )
     }
 }

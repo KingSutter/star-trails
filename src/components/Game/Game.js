@@ -367,12 +367,10 @@ class Game extends Component{
                         )}
                     </div>
                 )}
-                <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
             </div>
             ): (
             <div id="huntingView">
                 <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy}/>
-                <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
             </div> )}
         </div>
         ):(
@@ -390,7 +388,6 @@ class Game extends Component{
                 )}
             </div>
         )}
-    <span>{JSON.stringify(this.state,null,2)}</span>
             </>
         )
     }

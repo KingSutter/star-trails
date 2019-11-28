@@ -16,3 +16,14 @@
 #huntingBoard #energy {
     background-color: red;
 }
+
+#huntingGameView table, #huntingGameView td{
+    border: transparent;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: transparent;
+}
+
+#huntingInformation {
+    width: 200px
+} 
