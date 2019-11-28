@@ -6,7 +6,6 @@ import shipflying from './shipflying2.gif'
 
 // import components
 import HuntingGame from './HuntingGame/HuntingGame'
-import { tsExpressionWithTypeArguments, tsMethodSignature } from '@babel/types';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 

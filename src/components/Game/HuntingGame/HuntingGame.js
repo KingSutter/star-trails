@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import './HuntingGame.css'
-import { bigIntLiteral } from '@babel/types';
 
 
 class HuntingGame extends Component {
@@ -31,6 +30,7 @@ class HuntingGame extends Component {
         this.mapObjectsToGrid();
         this.phaser_energy = this.props.phaser_energy
     }
+
     componentWillUnmount(){
         clearInterval(this.moveAnimals);
         clearInterval(this.spawnAnimal);
@@ -208,10 +208,8 @@ class HuntingGame extends Component {
                 e.preventDefault();
                 if (this.phaser_energy > 0){
                     this.phaser_energy -= 1
-                    this.mapObjectsToGrid(this.state.hunter.position);
-                }else{
-                    alert("You're out of energy!");  
-                }
+                    this.mapObjectsToGrid(this.state.hunter.position); // this effectively will fire a laser
+                } // else don't do anything. Don't fire a laser
                 break;
         }
     }
@@ -309,6 +307,11 @@ class HuntingGame extends Component {
         this.mapObjectsToGrid();
     }
 
+    watchTime = () => {
+        if (this.seconds >= 60) this.props.toggleHunting();
+        else this.seconds += 1;
+    }
+
     // checks if any of the coordinates match an animal's coordinates
     checkForHit = (laserCoords) => {
         let updatedAnimals = JSON.parse(JSON.stringify(this.state.animals)) // creates a copy of animals in state
@@ -347,7 +350,7 @@ class HuntingGame extends Component {
                         </td>
                         <td id="huntingInformation">
                             <p>Time: {this.seconds}</p>
-                            {this.phaser_energy > 5? 
+                            {this.phaser_energy > 5 ? 
                                 (<p>Phaser Energy: {this.phaser_energy}</p>) :
                                 (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
                             }
