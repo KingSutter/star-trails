@@ -10,6 +10,7 @@ class HuntingGame extends Component {
     timePlayedTimer = '';
     seconds= 0; // dont neccessarily need a state update to count seconds elapsed. Just a semi-accurate counter.
     phaser_energy = this.props.phaser_energy; // same goes for energy.
+    phaserEnergyUsed = 0;
 
     state = {
         grid: [[]],
@@ -20,20 +21,23 @@ class HuntingGame extends Component {
         },
         animals: [],
         foodGathered: 0,
-
+        showingResults: false,
     }
+
     componentDidMount(){
         this.movementTimer = setInterval(this.moveAnimals, 150); // every .2 seconds
-        this.animalSpawnTimer = setInterval(this.spawnAnimal, 3000) // 50% chance an animal spawns every 3 seconds
-        this.timePlayedTimer = setInterval(()=>{this.seconds+=1}, 1000)
+        this.animalSpawnTimer = setInterval(this.spawnAnimal, 2000); // 50% chance an animal spawns every 3 seconds
+        this.timePlayedTimer = setInterval(this.watchTime, 1000);
         document.addEventListener('keydown', this.handleKeyPress);
         this.mapObjectsToGrid();
         this.phaser_energy = this.props.phaser_energy
     }
+
     componentWillUnmount(){
         clearInterval(this.moveAnimals);
         clearInterval(this.spawnAnimal);
         clearInterval(this.timePlayedTimer);
+        // send hunting results to the DB so it will update on the user's save file
         this.props.dispatch({
             type: "UPLOAD_HUNTING_RESULTS", 
             payload: {
@@ -113,95 +117,104 @@ class HuntingGame extends Component {
     
     handleKeyPress = (e) => {
         // event listeners for key presses
-        if (e.code === "ArrowUp") {
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇡",
-                    direction: "up",
+        switch (e.code){
+            case "ArrowUp": 
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇡",
+                        direction: "up",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "ArrowLeft":
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇠",
+                        direction: "left",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "ArrowRight":
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇢",
+                        direction: "right",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "ArrowDown":
+                e.preventDefault();
+                this.setState({
+                    hunter: {
+                        ...this.state.hunter,
+                        image: "⇣",
+                        direction: "down",
+                    }
+                });
+                this.mapObjectsToGrid();
+                break;
+            case "KeyW":
+                if(this.state.hunter.position[0] !== 0){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0]-1,this.state.hunter.position[1]]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "ArrowLeft"){
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇠",
-                    direction: "left",
+                break;
+            case "KeyA":
+                if(this.state.hunter.position[1] !== 0){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0],this.state.hunter.position[1]-1]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "ArrowRight"){
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇢",
-                    direction: "right",
+                break;
+            case "KeyS": 
+                if (this.state.hunter.position[0] !== this.state.grid.length-1){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0]+1,this.state.hunter.position[1]]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "ArrowDown"){
-            e.preventDefault();
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    image: "⇣",
-                    direction: "down",
+                break;
+            case "KeyD": 
+                if(this.state.hunter.position[1] !== this.state.grid.length-1){
+                    this.setState({
+                        hunter: {
+                            ...this.state.hunter,
+                            position: [this.state.hunter.position[0],this.state.hunter.position[1]+1]
+                        }
+                    });
+                    this.mapObjectsToGrid();
                 }
-            });
-            this.mapObjectsToGrid();
+                break;
+            case "Space":
+                e.preventDefault();
+                if (this.phaser_energy > 0){
+                    this.phaser_energy -= 1;
+                    this.phaserEnergyUsed += 1;
+                    this.mapObjectsToGrid(this.state.hunter.position); // this effectively will fire a laser
+                } // else don't do anything. Don't fire a laser
+                break;
         }
-        if (e.code === "KeyW" && this.state.hunter.position[0] !== 0){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0]-1,this.state.hunter.position[1]]
-                }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "KeyA" && this.state.hunter.position[1] !== 0){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0],this.state.hunter.position[1]-1]
-                }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "KeyS" && this.state.hunter.position[0] !== this.state.grid.length-1){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0]+1,this.state.hunter.position[1]]
-                }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "KeyD" && this.state.hunter.position[1] !== this.state.grid.length-1){
-            this.setState({
-                hunter: {
-                    ...this.state.hunter,
-                    position: [this.state.hunter.position[0],this.state.hunter.position[1]+1]
-                }
-            });
-            this.mapObjectsToGrid();
-        }
-        if (e.code === "Space" ){
-            e.preventDefault();
-            if (this.phaser_energy > 0){
-                this.phaser_energy -= 1
-                this.mapObjectsToGrid(this.state.hunter.position);
-            }else{
-                alert("You're out of energy!");  
-            }
-        }        
     }
 
     // updates grid and draws a laser if inputted
@@ -297,6 +310,11 @@ class HuntingGame extends Component {
         this.mapObjectsToGrid();
     }
 
+    watchTime = () => {
+        if (this.seconds >= 30) this.setState({showingResults: true});  // if game has been running for 30 seconds...
+        else this.seconds += 1; // else add 1 seconds to timer 
+    }
+
     // checks if any of the coordinates match an animal's coordinates
     checkForHit = (laserCoords) => {
         let updatedAnimals = JSON.parse(JSON.stringify(this.state.animals)) // creates a copy of animals in state
@@ -306,7 +324,7 @@ class HuntingGame extends Component {
                 animal.isAlive = false;
                 this.setState({
                     animals: updatedAnimals,
-                    foodGathered: this.state.foodGathered + this.randomInt(10, 15) // hitting an animal gives you 10-15 pounds of food
+                    foodGathered: this.state.foodGathered + this.randomInt(15, 25) // hitting an animal gives you 10-15 pounds of food
                 });
                 return true;
             }
@@ -316,33 +334,47 @@ class HuntingGame extends Component {
 
     render(){
         return(
-            <>
-            <div id="huntingBoard">
-                <table id="huntingGrid">
-                    <tbody>
-                    {this.state.grid.map((row, rowIndex)=>(
-                    <tr key={rowIndex}>{row.map((column, columnIndex)=>(
-                        <td key={`${rowIndex}, ${columnIndex}`}>{column}</td>
-                    ))}</tr>
-                ))}
-                </tbody>
-                </table>
-                <p>Time Elapsed: {this.seconds}</p>
-                {this.phaser_energy > 5? 
-                    (<p>Phaser Energy: {this.phaser_energy}</p>) :
-                    (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
-                }
-                <p>{this.state.foodGathered}</p>
+            <div id="huntingGameView">
+                {!this.state.showingResults ? (
+                <div id="huntingGame">
+                    <table>
+                        <thead>
+                            <td>
+                                <div id="huntingBoard">
+                                    <table id="huntingGrid">
+                                        <tbody>
+                                        {this.state.grid.map((row, rowIndex)=>(
+                                        <tr key={rowIndex}>{row.map((column, columnIndex)=>(
+                                            <td key={`${rowIndex}, ${columnIndex}`}>{column}</td>
+                                            ))}
+                                        </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                            <td id="huntingInformation">
+                                <p>Time: {this.seconds}</p>
+                                {this.phaser_energy > 5 ? 
+                                    (<p>Phaser Energy: {this.phaser_energy}</p>) :
+                                    (<p><span id="energy">Phaser Energy: {this.phaser_energy}</span></p>)
+                                }
+                                <p>Food Gathered: {this.state.foodGathered} lbs</p>
+                                <button onClick={()=>{this.setState({showingResults: true});}}>Exit</button></td>
+                        </thead>
+                    </table>
+                </div> 
+                ) : (
+                <div id="huntingResults">
+                    <h2>Time to leave!</h2>
+                    <h3>You gathered {this.state.foodGathered} pounds of food.</h3>
+                    <h3>You used {this.phaserEnergyUsed} phaser energy.</h3>
+                    <button onClick={()=>{this.setState({showingResults: false}); this.props.toggleHunting();}}>Continue</button>
+                </div>
+                )}
             </div>
-            </>
         )
     }
 }
 
 export default connect()(HuntingGame);
-
-// might need this later ...
-
-// // copy state without referencing state
-//     for (var i = 0; i < this.state.grid.length; i++)
-//     newGrid[i] = this.state.grid[i].slice();

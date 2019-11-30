@@ -21,6 +21,7 @@ class Game extends Component{
         outcomeChanges: {},
         endGame: false,
         hunting: false,
+        class_M_planet: false,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -31,11 +32,15 @@ class Game extends Component{
     }
 
     // will handle all logic for whether an event happens and send updated data to save
-    handleNewDay = () => {
+    handleNewDay = (noEvent = false) => {
         this.checkWinLoss();
         // if the rng function returns true, run a random scenario
-        const scenarioTrigger = this.randomInt(1,7)===1;    // if the random integer (1-7) returned is 1, an scenario will occur
-        if (scenarioTrigger){
+        const scenarioTrigger = this.randomInt(1,14);    // if the random integer (1-14) returned is 1, an scenario will occur
+        console.log(scenarioTrigger)
+        if (scenarioTrigger === 2) {  // 1 in 7 chance you will run into a class M planet to hunt
+            this.setState({scenarioTriggered: true, class_M_planet: true});
+        }
+        else if (scenarioTrigger === 1){
             let allScenarioIds = [];
             // get all scenarioIDs (DB may not have linear IDs)
             this.props.game.scenarios.forEach(scenario => {
@@ -56,7 +61,7 @@ class Game extends Component{
                 distance: this.props.game.saveData.distance + this.DistanceModifier(), // travel +distance based on modifier
                 food: this.checkResource(this.props.game.saveData.food, -10), // eat 10 food (-10)
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
-                phaser_energy: this.props.game.hunting.phaser_energy || this.props.game.saveData.phaser_energy,
+                phaser_energy: this.props.game.saveData.phaser_energy,
                 warp_coils: this.props.game.saveData.warp_coils,
                 antimatter_flow_regulators: this.props.game.saveData.antimatter_flow_regulators,
                 magnetic_constrictors: this.props.game.saveData.magnetic_constrictors,
@@ -199,18 +204,27 @@ class Game extends Component{
 
     // adjusts the crew's hunger status based on amount of food
     FoodModifier = () => {
+        let crew = [["captain_status", this.props.game.saveData.captain_status], ["medic_status", this.props.game.saveData.medic_status], ["engineer_status", this.props.game.saveData.engineer_status], ["helm_status", this.props.game.saveData.helm_status], ["tactical_status", this.props.game.saveData.tactical_status]]
         if (this.props.game.saveData.food === 0){
-            let crew = [["captain_status", this.props.game.saveData.captain_status], ["medic_status", this.props.game.saveData.medic_status], ["engineer_status", this.props.game.saveData.engineer_status], ["helm_status", this.props.game.saveData.helm_status], ["tactical_status", this.props.game.saveData.tactical_status]]
-            if (this.randomInt(0,10) < 9){ // 80% chance a random crew member becomes hungry
-                let changedCrew = {}
+            if (this.randomInt(0,10) < 9){ // 90% chance a random crew member becomes hungry
+                let changedCrew = {};
                 let indexToChange = this.randomInt(0,4);
                 // if that person is not already hungry, make it so
-                if (crew[indexToChange][1] !== "starving" && crew[indexToChange][1] !== "dead"){
+                if (crew[indexToChange][1] !== "starving" && crew[indexToChange][1] !== "dead" ){
                     changedCrew[crew[indexToChange][0]] = "starving";
                 }
                 return changedCrew;
             }
             else return crew;
+        }else { // will return crew members to health if you gather food again
+            let changedCrew = {};
+            let indexToChange = this.randomInt(0,4);
+            // if that person is not already hungry, make it so
+            if (crew[indexToChange][1] !== "healthy" && crew[indexToChange][1] !== "dead" && crew[indexToChange][1] !== "sick") {
+                changedCrew[crew[indexToChange][0]] = "healthy";
+            }
+            return changedCrew;
+            
         }
     }
 
@@ -224,6 +238,23 @@ class Game extends Component{
         if(modifier < 0 ) modifier = 0;
         
         return modifier;
+    }
+
+    toggleHunting = () => {
+        if (this.state.hunting){
+            this.setState({
+                hunting: false, 
+                scenarioTriggered: false,
+                class_M_planet: false,
+            });
+        }
+        else {
+            this.setState({
+                hunting: true, 
+                scenarioTriggered: false, 
+                class_M_planet: false
+            });
+        }
     }
 
     render(){
@@ -320,28 +351,37 @@ class Game extends Component{
                 ) : (
                     <div id="scenarioMainView">
                         {!this.state.outcomeTriggered ? (
-                            <div id="scenarioView">
-                                <h3>{this.state.scenario.prompt}</h3>
-                                <p id="optionButtons">
-                                <button onClick={()=>{this.handleOption(1)}} id="optionButton">{this.state.scenario.option1}</button><br/>
-                                <button onClick={()=>{this.handleOption(2)}} id="optionButton">{this.state.scenario.option2}</button>
-                                </p>
-                            </div>
+                            <>
+                            {!this.state.class_M_planet ? (
+                                <div id="scenarioView">
+                                    <h3>{this.state.scenario.prompt}</h3>
+                                    <p id="optionButtons">
+                                    <button onClick={()=>{this.handleOption(1)}} id="optionButton">{this.state.scenario.option1}</button><br/>
+                                    <button onClick={()=>{this.handleOption(2)}} id="optionButton">{this.state.scenario.option2}</button>
+                                    </p>
+                                </div>
+                            ) : (
+                                <div id="huntingScenarioView">
+                                    <h3>You find a class M planet with animals indigenous to it. Would you like to stop to go hunting?</h3>
+                                    <p id="optionButtons">
+                                    <button onClick={this.toggleHunting} id="optionButton">Yes</button><br/>
+                                    <button onClick={()=>{this.setState({scenarioTriggered: false, class_M_planet: false})}} id="optionButton">No</button>
+                                    </p>
+                                </div>
+                            )}
+                            </>
                         ) : (
                             <div id="outcomeView">
                                 <h3>{this.state.outcomeText}</h3>
-                                {/* <p>{JSON.stringify(this.state.outcomeChanges,null,2)}</p> */}
                                 <button onClick={this.handleContinue}>Continue</button>
                             </div>
                         )}
                     </div>
                 )}
-                <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
             </div>
             ): (
             <div id="huntingView">
-                <HuntingGame food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy}/>
-                <button onClick={()=>{this.setState({hunting: !this.state.hunting})}} className="buttons" id="newDayButton">Go hunting</button>
+                <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy}/>
             </div> )}
         </div>
         ):(
