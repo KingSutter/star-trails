@@ -59,7 +59,7 @@ class Game extends Component{
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
                 distance: this.props.game.saveData.distance + this.DistanceModifier(), // travel +distance based on modifier
-                food: this.checkResource(this.props.game.saveData.food, -10), // eat 10 food (-10)
+                food: this.checkResource(this.props.game.saveData.food, this.foodConsumption()), // eat 10 food by default
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
                 phaser_energy: this.props.game.saveData.phaser_energy,
                 warp_coils: this.props.game.saveData.warp_coils,
@@ -224,7 +224,6 @@ class Game extends Component{
                 changedCrew[crew[indexToChange][0]] = "healthy";
             }
             return changedCrew;
-            
         }
     }
 
@@ -255,6 +254,17 @@ class Game extends Component{
                 class_M_planet: false
             });
         }
+    }
+
+    // modifies how much food is consumed by day depending on who's alive
+    foodConsumption = () => {
+        let consumption = -10;
+        if (this.props.game.saveData.captain_status === "dead") consumption -= 2;
+        if (this.props.game.saveData.medic_status === "dead") consumption -= 2;
+        if (this.props.game.saveData.engineer_status === "dead") consumption -= 2;
+        if (this.props.game.saveData.helm_status === "dead") consumption -= 2;
+        if (this.props.game.saveData.tactical_status === "dead") consumption -= 2;
+        return consumption;
     }
 
     render(){
@@ -389,11 +399,15 @@ class Game extends Component{
                 {this.state.endGame==="win"? (
                     <div id="winView">
                         <p>You won!</p>
+                        <p>You travelled {this.props.game.saveData.distance} light years.</p>
+                        <p>You travelled for {this.props.game.saveData.days} days.</p>
                         <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 ):(
                     <div id="lossView">
-                        <p>You lost</p>
+                        <p>You lost!</p>
+                        <p>You travelled {this.props.game.saveData.distance} light years.</p>
+                        <p>You travelled for {this.props.game.saveData.days} days.</p>
                         <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 )}
