@@ -38,7 +38,6 @@ class Game extends Component{
         this.checkWinLoss();
         // if the rng function returns true, run a random scenario
         const scenarioTrigger = this.randomInt(1,14);    // if the random integer (1-14) returned is 1, an scenario will occur
-        console.log(scenarioTrigger)
         if (scenarioTrigger === 2) {  // 1 in 7 chance you will run into a class M planet to hunt
             this.setState({scenarioTriggered: true, specialScenario: (this.randomInt(0,1) ? "hunting" : "outpost") });
         }
@@ -58,16 +57,16 @@ class Game extends Component{
         }
         else{
             // // if you're out of food, count for how long
-            // if (this.props.game.saveData.food === 0){
-            //     this.setState({
-            //         daysWithoutFood: this.state.daysWithoutFood + 1,
-            //     })
-            // } else if (this.state.daysWithoutFood > 0){
-            //     this.setState({
-            //         daysWithoutFood: 0,
-            //     })
-            // }
-            // const changedCrew = this.checkDaysWithoutFood();
+            if (this.props.game.saveData.food === 0){
+                this.setState({
+                    daysWithoutFood: this.state.daysWithoutFood + 1,
+                })
+            } else if (this.state.daysWithoutFood > 0){
+                this.setState({
+                    daysWithoutFood: 0,
+                })
+            }
+            const changedCrew = this.checkDaysWithoutFood();
             // default new day
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
@@ -85,7 +84,7 @@ class Game extends Component{
                 helm_status: this.props.game.saveData.helm_status,
                 tactical_status: this.props.game.saveData.tactical_status,
                 ...this.FoodModifier(),
-                // ...changedCrew,
+                ...changedCrew,
             }
             this.updateSave(newSave);
             this.calculateCrewHealth();
@@ -127,9 +126,6 @@ class Game extends Component{
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
         const num = this.randomInt(0,100);
-        console.log("random num", num);
-        console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15);
-        console.log("num < rating", (num < (this.calculateCrewHealth() * 100) + 15));
         // currently the odds are 25% min (only one crew member alive) and 65% max (everyone is healthy) 
         return (num < (this.calculateCrewHealth() * 100) + 15) ? 0 : 1;
     }
@@ -298,9 +294,9 @@ class Game extends Component{
             for (let index = 0; index < 1; index++) {
                 let indexToKill = this.randomInt(0,4);
                 // if that person is not already dead, kill them
-                if (crew[indexToKill][1] !== "dead" && crew[indexToKill][1] === "hungry"){
+                if (crew[indexToKill][1] !== "dead" && crew[indexToKill][1] === "starving"){
                     changedCrew[crew[indexToKill][0]] = "dead";
-                }else{index-=1;}
+                }
             }
         }
         return changedCrew;
@@ -450,10 +446,10 @@ class Game extends Component{
                     </div>
                 ):(
                     <div id="lossView">
-                        <p>You lost!</p>
+                        <h2>You lost!</h2>
                         <p>You travelled {this.props.game.saveData.distance} light years.</p>
                         <p>You travelled for {this.props.game.saveData.day} days.</p>
-                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
+                        <button onClick={this.handleReturnToMenu} className="universalButton">Return to main menu</button>
                     </div>
                 )}
             </div>
