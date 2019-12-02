@@ -66,22 +66,22 @@ class Setup extends Component{
                 <div>
                     <h2>Crew</h2>
                     <ul>
-                        <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autocomplete="off" required /></li>
-                        <li>Chief of Medicine: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="medic" autocomplete="off" required /></li>
-                        <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autocomplete="off" required /></li>
-                        <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autocomplete="off" required /></li>
-                        <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autocomplete="off"  required /></li>
+                        <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autoComplete="off" required /></li>
+                        <li>Chief of Medicine: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="medic" autoComplete="off" required /></li>
+                        <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autoComplete="off" required /></li>
+                        <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autoComplete="off" required /></li>
+                        <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autoComplete="off"  required /></li>
                     </ul>
                     <h2>Food</h2>
-                    <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autocomplete="off" required /> Cost: ⌬1 per pound</ul>
+                    <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autoComplete="off" required /> Cost: ⌬1 per pound</ul>
                     <h2>Ammunition</h2>
-                    <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autocomplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts of energy</ul>
+                    <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autoComplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts of energy</ul>
                     <h2>Spare Parts</h2>
                     <ul>
-                    <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autocomplete="off" required /> Cost: ⌬40 per warp coil</li>
-                        <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="antimatter_flow_regulators" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per antimatter flow regulator</li>
-                        <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="magnetic_constrictors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per magnetic constrictor</li>
-                        <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="plasma_injectors" className="setUpInput" autocomplete="off" required /> Cost: ⌬10 per plasma injector</li>
+                    <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autoComplete="off" required /> Cost: ⌬40 per warp coil</li>
+                        <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="antimatter_flow_regulators" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per antimatter flow regulator</li>
+                        <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="magnetic_constrictors" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per magnetic constrictor</li>
+                        <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="plasma_injectors" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per plasma injector</li>
                     </ul>
                     <div id="bill">
                         <h2>Bill:</h2>

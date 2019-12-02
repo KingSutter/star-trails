@@ -23,6 +23,7 @@ class Game extends Component{
         endGame: false,
         specialScenario: false,
         playingSpecialScenario: false,
+        daysWithoutFood: 0,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -56,6 +57,17 @@ class Game extends Component{
             });
         }
         else{
+            // if you're out of food, count for how long
+            if (this.props.game.saveData.food === 0){
+                this.setState({
+                    daysWithoutFood: this.state.daysWithoutFood + 1,
+                })
+            } else if (this.state.daysWithoutFood > 0){
+                this.setState({
+                    daysWithoutFood: 0,
+                })
+            }
+            const changedCrew = this.checkDaysWithoutFood();
             // default new day
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
@@ -73,6 +85,7 @@ class Game extends Component{
                 helm_status: this.props.game.saveData.helm_status,
                 tactical_status: this.props.game.saveData.tactical_status,
                 ...this.FoodModifier(),
+                ...changedCrew,
             }
             this.updateSave(newSave);
             this.calculateCrewHealth();
@@ -86,7 +99,7 @@ class Game extends Component{
         let outcomeID = null;
         if (option === 1){ outcomeID = this.state.scenario.option1_outcomes[result]; } // if option1 was pressed...
         else{ outcomeID = this.state.scenario.option2_outcomes[result]; } // if option 2 was pressed...
-        // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
+        // get outcome by id
         let outcome = {}
         this.props.game.outcomes.forEach(OUTCOME => {
             if(OUTCOME.id === outcomeID){outcome = OUTCOME}
@@ -272,6 +285,22 @@ class Game extends Component{
         if (this.props.game.saveData.helm_status === "dead") consumption += 2;
         if (this.props.game.saveData.tactical_status === "dead") consumption += 2;
         return consumption;
+    }
+
+    // if the crew is without food for 14 days or more, a member may die
+    checkDaysWithoutFood = () => {
+        let changedCrew = {}
+        if (this.state.daysWithoutFood > 14){
+            let crew = [["captain_status", this.props.game.saveData.captain_status], ["medic_status", this.props.game.saveData.medic_status], ["engineer_status", this.props.game.saveData.engineer_status], ["helm_status", this.props.game.saveData.helm_status], ["tactical_status", this.props.game.saveData.tactical_status]]
+            for (let index = 0; index < 1; index++) {
+                let indexToKill = this.randomInt(0,4);
+                // if that person is not already dead, kill them
+                if (crew[indexToKill][1] !== "dead" && crew[indexToKill][1] === "hungry"){
+                    changedCrew[crew[indexToKill][0]] = "dead";
+                }else{index-=1;}
+            }
+        }
+        return changedCrew;
     }
 
     render(){
