@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
 import './Game.css';
-import shipflying from './shipflying2.gif'
+import shipflying from './shipflying2.gif';
 
 // import components
-import HuntingGame from './HuntingGame/HuntingGame'
+import HuntingGame from './HuntingGame/HuntingGame';
+import Outpost from './Outpost/Outpost';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -20,8 +21,10 @@ class Game extends Component{
         outcomeText: '',
         outcomeChanges: {},
         endGame: false,
+        specialScenario: false,
         hunting: false,
         class_M_planet: false,
+        outpost: false,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -32,7 +35,7 @@ class Game extends Component{
     }
 
     // will handle all logic for whether an event happens and send updated data to save
-    handleNewDay = (noEvent = false) => {
+    handleNewDay = () => {
         this.checkWinLoss();
         // if the rng function returns true, run a random scenario
         const scenarioTrigger = this.randomInt(1,14);    // if the random integer (1-14) returned is 1, an scenario will occur
@@ -107,14 +110,14 @@ class Game extends Component{
 
     // send newSave to DB and change respective values
     updateSave = (saveData) => {
-        this.props.dispatch({type: "UPDATE_SAVE", payload: saveData})
+        this.props.dispatch({type: "UPDATE_SAVE", payload: saveData});
     }
 
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
         const num = this.randomInt(0,100);
         console.log("random num", num);
-        console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15)
+        console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15);
         console.log("num < rating", (num < (this.calculateCrewHealth() * 100) + 15));
         // currently the odds are 25% min (only one crew member alive) and 65% max (everyone is healthy) 
         return (num < (this.calculateCrewHealth() * 100) + 15) ? 0 : 1;
@@ -155,9 +158,8 @@ class Game extends Component{
             helm_status: this.props.game.saveData.helm_status,
             tactical_status: this.props.game.saveData.tactical_status,
             ...changedCrew,
-        } 
+        };
     }
-
     // checks if resource change will go negative, if so, return 0, else return normal change
     checkResource = (current, change) => {
         if ((current + change) < 0) return 0;
@@ -240,18 +242,37 @@ class Game extends Component{
     }
 
     toggleHunting = () => {
-        if (this.state.hunting){
+        if (this.state.specialScenario){
             this.setState({
-                hunting: false, 
+                specialScenario: false, 
                 scenarioTriggered: false,
                 class_M_planet: false,
+                hunting: false,
             });
         }
         else {
             this.setState({
-                hunting: true, 
+                specialScenario: true, 
                 scenarioTriggered: false, 
-                class_M_planet: false
+                class_M_planet: false,
+                hunting: true,
+            });
+        }
+    }
+
+    toggleOutpost = () => {
+        if (this.state.specialScenario){
+            this.setState({
+                specialScenario: false, 
+                scenarioTriggered: false,
+                outpost: false,
+            });
+        }
+        else {
+            this.setState({
+                specialScenario: true, 
+                scenarioTriggered: false, 
+                outpost: true,
             });
         }
     }
@@ -272,7 +293,7 @@ class Game extends Component{
             <>
             {!this.state.endGame ? (
             <div className="gameView">
-            {!this.state.hunting ? (
+            {!this.state.specialScenario ? (
             <div id="mainGameView"> 
             {/* this is what displays when a scenario is NOT ongoing */}
                 <div id="shipImage">
@@ -357,7 +378,7 @@ class Game extends Component{
                 {!this.state.scenarioTriggered ? (
                     <div className="buttons">
                         <button onClick={this.handleNewDay} className="universalButton" id="newDayButton">New day</button>
-                    </div> 
+                    </div>
                 ) : (
                     <div id="scenarioMainView">
                         {!this.state.outcomeTriggered ? (
@@ -390,8 +411,12 @@ class Game extends Component{
                 )}
             </div>
             ): (
-            <div id="huntingView">
-                <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy}/>
+            <div id="specialScenario">
+                {this.state.hunting ?(
+                    <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy} />
+                ) : (
+                    <Outpost />
+                )}
             </div> )}
         </div>
         ):(
@@ -413,6 +438,7 @@ class Game extends Component{
                 )}
             </div>
         )}
+        <button onClick={this.toggleOutpost}>Toggle outpost</button>
             </>
         )
     }
