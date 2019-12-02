@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import './Game.css';
-import shipflying from './shipflying2.gif';
+import shipflying from './8BitShip.gif';
 
 // import components
 import HuntingGame from './HuntingGame/HuntingGame';
@@ -23,6 +23,7 @@ class Game extends Component{
         endGame: false,
         specialScenario: false,
         playingSpecialScenario: false,
+        daysWithoutFood: 0,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -37,7 +38,6 @@ class Game extends Component{
         this.checkWinLoss();
         // if the rng function returns true, run a random scenario
         const scenarioTrigger = this.randomInt(1,14);    // if the random integer (1-14) returned is 1, an scenario will occur
-        console.log(scenarioTrigger)
         if (scenarioTrigger === 2) {  // 1 in 7 chance you will run into a class M planet to hunt
             this.setState({scenarioTriggered: true, specialScenario: (this.randomInt(0,1) ? "hunting" : "outpost") });
         }
@@ -56,6 +56,17 @@ class Game extends Component{
             });
         }
         else{
+            // // if you're out of food, count for how long
+            if (this.props.game.saveData.food === 0){
+                this.setState({
+                    daysWithoutFood: this.state.daysWithoutFood + 1,
+                })
+            } else if (this.state.daysWithoutFood > 0){
+                this.setState({
+                    daysWithoutFood: 0,
+                })
+            }
+            const changedCrew = this.checkDaysWithoutFood();
             // default new day
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
@@ -73,6 +84,7 @@ class Game extends Component{
                 helm_status: this.props.game.saveData.helm_status,
                 tactical_status: this.props.game.saveData.tactical_status,
                 ...this.FoodModifier(),
+                ...changedCrew,
             }
             this.updateSave(newSave);
             this.calculateCrewHealth();
@@ -86,7 +98,7 @@ class Game extends Component{
         let outcomeID = null;
         if (option === 1){ outcomeID = this.state.scenario.option1_outcomes[result]; } // if option1 was pressed...
         else{ outcomeID = this.state.scenario.option2_outcomes[result]; } // if option 2 was pressed...
-        // get outcome by id (consider using dispatch for this, but be concerned about whether it is synchronous)
+        // get outcome by id
         let outcome = {}
         this.props.game.outcomes.forEach(OUTCOME => {
             if(OUTCOME.id === outcomeID){outcome = OUTCOME}
@@ -114,9 +126,6 @@ class Game extends Component{
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
         const num = this.randomInt(0,100);
-        console.log("random num", num);
-        console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15);
-        console.log("num < rating", (num < (this.calculateCrewHealth() * 100) + 15));
         // currently the odds are 25% min (only one crew member alive) and 65% max (everyone is healthy) 
         return (num < (this.calculateCrewHealth() * 100) + 15) ? 0 : 1;
     }
@@ -175,7 +184,10 @@ class Game extends Component{
             this.props.game.saveData.engineer_status === "dead" &&
             this.props.game.saveData.helm_status === "dead" &&
             this.props.game.saveData.tactical_status === "dead"
-        ){this.setState({endGame: "lose"});}
+        )
+        {
+            this.setState({endGame: "lose"});
+        }
     }
 
     // returns user to the main menu
@@ -272,6 +284,22 @@ class Game extends Component{
         if (this.props.game.saveData.helm_status === "dead") consumption += 2;
         if (this.props.game.saveData.tactical_status === "dead") consumption += 2;
         return consumption;
+    }
+
+    // if the crew is without food for 14 days or more, a member may die
+    checkDaysWithoutFood = () => {
+        let changedCrew = {}
+        if (this.state.daysWithoutFood > 14){
+            let crew = [["captain_status", this.props.game.saveData.captain_status], ["medic_status", this.props.game.saveData.medic_status], ["engineer_status", this.props.game.saveData.engineer_status], ["helm_status", this.props.game.saveData.helm_status], ["tactical_status", this.props.game.saveData.tactical_status]]
+            for (let index = 0; index < 1; index++) {
+                let indexToKill = this.randomInt(0,4);
+                // if that person is not already dead, kill them
+                if (crew[indexToKill][1] !== "dead" && crew[indexToKill][1] === "starving"){
+                    changedCrew[crew[indexToKill][0]] = "dead";
+                }
+            }
+        }
+        return changedCrew;
     }
 
     render(){
@@ -413,15 +441,15 @@ class Game extends Component{
                     <div id="winView">
                         <p>You won!</p>
                         <p>You travelled {this.props.game.saveData.distance} light years.</p>
-                        <p>You travelled for {this.props.game.saveData.days} days.</p>
-                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
+                        <p>You travelled for {this.props.game.saveData.day} days.</p>
+                        <button onClick={this.handleReturnToMenu} className="universalButton">Return to main menu</button>
                     </div>
                 ):(
                     <div id="lossView">
-                        <p>You lost!</p>
+                        <h2>You lost!</h2>
                         <p>You travelled {this.props.game.saveData.distance} light years.</p>
-                        <p>You travelled for {this.props.game.saveData.days} days.</p>
-                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
+                        <p>You travelled for {this.props.game.saveData.day} days.</p>
+                        <button onClick={this.handleReturnToMenu} className="universalButton">Return to main menu</button>
                     </div>
                 )}
             </div>

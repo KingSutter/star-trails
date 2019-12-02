@@ -1,21 +1,20 @@
 import React from 'react';
-import './Footer.css'
 
 let animatedBackground = true;
 
 const toggleBackground = () => {
   if(animatedBackground) {
-    document.body.style.background = 'url("/static/media/space.94b0019d.jpg")'; 
+    document.body.style.background = "url('./space.jpg')"; 
     animatedBackground=false;
   }else {
-    document.body.style.background = 'url("/static/media/twinklingStars.3096ed06.gif")'; 
+    document.body.style.background = "url('./twinklingStars.gif')"; 
     animatedBackground=true;
   }
 }
 
 const Footer = () => (
   <footer>
-    <button onClick={toggleBackground} className="universalButton">Toggle animated background</button>
+    <button onClick={toggleBackground} id="toggleBackgroundButton">Toggle animated background</button>
   </footer>
 );
 

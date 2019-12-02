@@ -212,6 +212,7 @@ class HuntingGame extends Component {
                     this.mapObjectsToGrid(this.state.hunter.position); // this effectively will fire a laser
                 } // else don't do anything. Don't fire a laser
                 break;
+            default: break;
         }
     }
 

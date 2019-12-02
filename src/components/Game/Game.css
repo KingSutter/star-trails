@@ -8,7 +8,7 @@
 }
 
 #shipGIF {
-    max-width: 300px;
+    max-width: 150px;
 }
 
 .gameView td{
@@ -58,8 +58,8 @@
     padding: 20px;
 }
 
-#crewGraph, #suppliesGraph, #progressBar, #date {
-    padding-left: 30px;
+.gameView {
+    margin-left: 3%;
 }
 
 #progressBar progress {
@@ -87,4 +87,10 @@
 
 #scenarioMainView{
     padding-left: 10%;
+}
+
+#gameResultView div {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
