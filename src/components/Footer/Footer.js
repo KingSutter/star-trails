@@ -4,10 +4,10 @@ let animatedBackground = true;
 
 const toggleBackground = () => {
   if(animatedBackground) {
-    document.body.style.background = 'url("/static/media/space.94b0019d.jpg")'; 
+    document.body.style.background = "url('./space.jpg')"; 
     animatedBackground=false;
   }else {
-    document.body.style.background = 'url("/static/media/twinklingStars.3096ed06.gif")'; 
+    document.body.style.background = "url('./twinklingStars.gif')"; 
     animatedBackground=true;
   }
 }
