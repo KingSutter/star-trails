@@ -2,25 +2,18 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0px;
     color: white;
-}
-
-.mainBg{
-    background-image: black url("../../images/space.jpg");
-}
-.animatedBg{
-    background-image: url("../../images/warpSpeed.gif");
+    background: black url("../../images/twinklingStars.gif");
 }
 
 .alert {
-    /* background-color: #ff4545; */
     margin: 50px;
 }
 
-.loginForm, .registerForm {
+.loginForm, .registerForm, .userPageView {
     background-color: transparent;
     width: 40%;
     height: 250px;
-    margin: 20px auto;
+    margin: auto;
     padding: 25px;
     border-radius: 2px;
 }
@@ -62,7 +55,3 @@ body {
     border-bottom:1px solid #444; 
     cursor: pointer;
 }
-/* .app {
-    background-image: url("../../images/warpSpeed.gif");
-    height: 100vh
- } */

@@ -25,7 +25,7 @@ import './App.css';
 class App extends Component {
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'})
-    document.body.style.backgroundImage = "url(static/media/space.c11a4173.jpg)";
+    // document.body.style.background = "url(static/media/space.c11a4173.jpg)";
   }
 
   render() {

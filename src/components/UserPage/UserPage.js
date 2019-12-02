@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { withRouter } from "react-router";
-import './UserPage.css';
-
 
 // this could also be written with destructuring parameters as:
 // const UserPage = ({ user }) => (
@@ -11,12 +9,12 @@ import './UserPage.css';
 
 class UserPage extends Component {
   // componentDidMount(){
-  //   document.body.style.backgroundImage = "url('static/media/warpSpeed.1deee33f.gif')";
-  //   document.body.style.backgroundRepeat = "no-repeat";
-  //   document.body.style.backgroundSize = "cover"
+  //   document.body.style.background = "url('static/media/warpSpeed.1deee33f.gif')";
+  //   // document.body.style.backgroundRepeat = "no-repeat";
+  //   // document.body.style.backgroundSize = "cover"
   // }
   // componentWillUnmount(){
-  //   document.body.style.backgroundImage = "url(static/media/space.c11a4173.jpg)";
+  //   document.body.style.background = "url(../../images/spacetwinkling.gif)";
   // }
   handleNewGame = () => {
     // if user already has a save - confirm with user
@@ -28,12 +26,11 @@ class UserPage extends Component {
   }
   render(){
     return (
-      <div className="containter">
+      <div className="userPageView">
         <h1 id="welcome">Welcome, { this.props.user.username }!</h1>
         <button onClick={this.handleNewGame} className="universalButton">New game</button><br/><br/>
         {this.props.user.save_id ? (<><button onClick={()=>{this.props.history.push('/game')}} className="universalButton">Continue</button><br/><br/></>):(<></>)}
         <LogOutButton className="log-in" />
-        <span>{JSON.stringify(this.props.user,null,2)}</span>
       </div>
       )
     }
