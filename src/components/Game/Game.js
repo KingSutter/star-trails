@@ -442,7 +442,7 @@ class Game extends Component{
                         <p>You won!</p>
                         <p>You travelled {this.props.game.saveData.distance} light years.</p>
                         <p>You travelled for {this.props.game.saveData.day} days.</p>
-                        <button onClick={this.handleReturnToMenu}>Return to main menu</button>
+                        <button onClick={this.handleReturnToMenu} className="universalButton">Return to main menu</button>
                     </div>
                 ):(
                     <div id="lossView">
