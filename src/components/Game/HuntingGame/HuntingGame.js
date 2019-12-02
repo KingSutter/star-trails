@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import './HuntingGame.css'
 
-
 class HuntingGame extends Component {
-
     movementTimer = '';
     animalSpawnTimer = '';
     timePlayedTimer = '';
@@ -236,7 +234,6 @@ class HuntingGame extends Component {
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ];
-        
         // map hunter
         newGrid[hunterPosition[0]][hunterPosition[1]] = this.state.hunter.image;
         // map animals

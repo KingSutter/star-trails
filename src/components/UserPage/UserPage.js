@@ -29,13 +29,11 @@ class UserPage extends Component {
   render(){
     return (
       <div className="containter">
-        <h1 id="welcome">
-          Welcome, { this.props.user.username }!
-        </h1>
+        <h1 id="welcome">Welcome, { this.props.user.username }!</h1>
         <button onClick={this.handleNewGame} className="universalButton">New game</button><br/><br/>
-        <button onClick={()=>{this.props.history.push('/game')}} className="universalButton">Continue</button><br/><br/>
+        {this.props.user.save_id ? (<><button onClick={()=>{this.props.history.push('/game')}} className="universalButton">Continue</button><br/><br/></>):(<></>)}
         <LogOutButton className="log-in" />
-        {/* <span>{JSON.stringify(this.props.user,null,2)}</span> */}
+        <span>{JSON.stringify(this.props.user,null,2)}</span>
       </div>
       )
     }

@@ -47,12 +47,12 @@ class Game extends Component{
                 allScenarioIds.push(scenario.id);
             });
             // get a random id from list of all random ids
-            const id = allScenarioIds[Math.floor(Math.random() * (allScenarioIds.length-1))]; 
+            const id = allScenarioIds[Math.floor(Math.random() * (allScenarioIds.length-1))];
             // refresh state with new scenario information
             this.setState({
                 scenarioTriggered: scenarioTrigger,
                 scenario: this.props.game.scenarios[id],
-            })
+            });
         }
         else{
             // default new day
@@ -259,11 +259,11 @@ class Game extends Component{
     // modifies how much food is consumed by day depending on who's alive
     foodConsumption = () => {
         let consumption = -10;
-        if (this.props.game.saveData.captain_status === "dead") consumption -= 2;
-        if (this.props.game.saveData.medic_status === "dead") consumption -= 2;
-        if (this.props.game.saveData.engineer_status === "dead") consumption -= 2;
-        if (this.props.game.saveData.helm_status === "dead") consumption -= 2;
-        if (this.props.game.saveData.tactical_status === "dead") consumption -= 2;
+        if (this.props.game.saveData.captain_status === "dead") consumption += 2;
+        if (this.props.game.saveData.medic_status === "dead") consumption += 2;
+        if (this.props.game.saveData.engineer_status === "dead") consumption += 2;
+        if (this.props.game.saveData.helm_status === "dead") consumption += 2;
+        if (this.props.game.saveData.tactical_status === "dead") consumption += 2;
         return consumption;
     }
 
