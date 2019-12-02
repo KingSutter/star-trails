@@ -413,14 +413,14 @@ class Game extends Component{
                     <div id="winView">
                         <p>You won!</p>
                         <p>You travelled {this.props.game.saveData.distance} light years.</p>
-                        <p>You travelled for {this.props.game.saveData.days} days.</p>
+                        <p>You travelled for {this.props.game.saveData.day} days.</p>
                         <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 ):(
                     <div id="lossView">
                         <p>You lost!</p>
                         <p>You travelled {this.props.game.saveData.distance} light years.</p>
-                        <p>You travelled for {this.props.game.saveData.days} days.</p>
+                        <p>You travelled for {this.props.game.saveData.day} days.</p>
                         <button onClick={this.handleReturnToMenu}>Return to main menu</button>
                     </div>
                 )}
