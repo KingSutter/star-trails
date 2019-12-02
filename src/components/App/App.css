@@ -5,6 +5,10 @@ body {
     background: black url("/twinklingStars.gif");
 }
 
+.app {
+    margin-left: 3%;
+}
+
 .alert {
     margin: 50px;
 }
