@@ -356,7 +356,7 @@ class Game extends Component{
                 <br/>
                 {!this.state.scenarioTriggered ? (
                     <div className="buttons">
-                        <button onClick={this.handleNewDay} id="newDayButton">New day</button>
+                        <button onClick={this.handleNewDay} className="universalButton" id="newDayButton">New day</button>
                     </div> 
                 ) : (
                     <div id="scenarioMainView">

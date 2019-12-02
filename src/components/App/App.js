@@ -25,7 +25,6 @@ import './App.css';
 class App extends Component {
   componentDidMount () {
     this.props.dispatch({type: 'FETCH_USER'})
-    // document.body.style.background = "url(static/media/space.c11a4173.jpg)";
   }
 
   render() {
@@ -78,7 +77,7 @@ class App extends Component {
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
           </Switch>
-          {/* <Footer /> */}
+          <Footer />
         </div>
       </Router>
   )}
