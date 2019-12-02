@@ -9,3 +9,7 @@
 .outpostButton {
     background-color: transparent
 }
+
+#outpostView thead, #outpostView tfoot{
+    background-color: rgba(46, 46, 46, .7);
+}
