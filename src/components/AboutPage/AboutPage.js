@@ -8,7 +8,7 @@ import React from 'react';
 const AboutPage = () => (
   <div>
     <div>
-      <p>
+      <div>
         Due to a malfunction of your ship's spore drive, you are stranded out in hostile Klingon territory with only your warp drive and impulse engine to get you home. It is up to you to get home safely. Luckily, your ship ended up in a system with a friendly Ferengi merchant who is sympathetic to your cause and is willing to sell you any parts or food you need for your journey in exchange for latinum.
         <br /><br/>
         <ul>
@@ -18,7 +18,7 @@ const AboutPage = () => (
           <li>This isn't a race, but keep in mind that the longer you stay in enemy territory, the higher chance you have getting discovered by the Klingons. They will most certainly make life harder for you.</li>
           <li>If you lose your entire critical crew compliment at any point in your journey, you lose. No save points to revert to, no do-overs. You must restart the entire game.</li>
         </ul>
-      </p>
+      </div>
     </div>
   </div>
 );
