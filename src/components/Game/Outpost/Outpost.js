@@ -18,6 +18,7 @@ class Outpost extends Component {
       availableInjectors: 0,
       total: 0,
       errorMessage: 'placeholder',
+      secondConfirmation: false,
     }
 
     componentDidMount(){
@@ -83,6 +84,14 @@ class Outpost extends Component {
       })
     }
 
+    // wraps up the changes made in the shop and saves it to the user's save state in the database
+    handleConfirm = () => {
+      
+    }
+
+    toggleConfirm = () => {
+      this.setState({secondConfirmation: !this.state.secondConfirmation})
+    }
 
     render(){
         return(
@@ -169,7 +178,14 @@ class Outpost extends Component {
                           <td>⌬{this.state.availableCredits}</td>
                         </tr>
                         <tr>
-                          <td colSpan="6"><button onClick={this.handleConfirm} id="confirmPurchaseButton" className="hoverEffect">Confirm</button></td>
+                          {!this.state.secondConfirmation ? (
+                            <td colSpan="6"><button onClick={this.toggleConfirm} id="confirmPurchaseButton" className="hoverEffect">Ready</button></td>
+                          ) : (
+                            <>
+                            <td colSpan="2"><button onClick={this.handleConfirm} id="confirmPurchaseButton" className="hoverEffect">Confirm</button></td>
+                            <td colSpan="4"><button onClick={this.toggleConfirm} id="confirmPurchaseButton" className="hoverEffect">Cancel</button></td>
+                            </>
+                          )}
                         </tr>
                     </tfoot>
                 </table>
