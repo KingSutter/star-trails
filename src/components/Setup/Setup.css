@@ -27,10 +27,13 @@
 }
 
 #startButton button:hover {
-    background-color: silver;
+    background-color: rgba(48, 48, 48, .7);
 }
 
-#setupView .exceeded{
-    background-color: red;
+#setupView input:out-of-range{
+    color: red;
 }
 
+#setupView input:focus{
+    background-color: rgba(48, 48, 48, .3);
+}

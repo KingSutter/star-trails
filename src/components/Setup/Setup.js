@@ -87,7 +87,7 @@ class Setup extends Component{
                         <h2>Bill:</h2>
                         <ul>
                             <li>Food: ⌬{this.state.food}</li>
-                            <li>Batteries: ⌬{this.state.batteries * 2}</li>
+                            <li>Batteries: ⌬{this.state.batteries}</li>
                             <li>Warp Coils: ⌬{this.state.warp_coils * 40}</li>
                             <li>Antimatter Flow Regulators: ⌬{this.state.antimatter_flow_regulators * 10}</li>
                             <li>Magnetic Constrictors: ⌬{this.state.magnetic_constrictors * 10}</li>

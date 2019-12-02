@@ -2,7 +2,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0px;
     color: white;
-    background: black url("../../images/twinklingStars.gif");
+    background: black url("../../images/space.jpg");
 }
 
 .alert {
@@ -41,7 +41,7 @@ body {
     background-color: transparent;
 }
 .log-in:hover, .log-out:hover, .register:hover, #logoutButton:hover, .universalButton:hover {
-  background-color: darkgray;
+  background-color: rgba(48, 48, 48, .7);
 }
 
 /* This line makes the "Register" and "Login" buttons look like links */
@@ -62,4 +62,4 @@ footer {
     width: 100%;
     height: 2.5rem;
     margin-bottom: 20px;
-  }
+}

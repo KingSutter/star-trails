@@ -34,7 +34,7 @@
 }
 
 .nav-link:hover {
-  background-color: darkgray;
+  background-color: rgba(48, 48, 48, .7);
 }
 
 .nav-right {

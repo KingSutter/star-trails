@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
 import './Game.css';
-import shipflying from './shipflying2.gif'
+import shipflying from './shipflying2.gif';
 
 // import components
-import HuntingGame from './HuntingGame/HuntingGame'
+import HuntingGame from './HuntingGame/HuntingGame';
+import Outpost from './Outpost/Outpost';
 
 // This is the main view the user will be at for the majority of the game
 // Here, the user can manage how fast they're going, the food rations, 
@@ -20,8 +21,8 @@ class Game extends Component{
         outcomeText: '',
         outcomeChanges: {},
         endGame: false,
-        hunting: false,
-        class_M_planet: false,
+        specialScenario: false,
+        playingSpecialScenario: false,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -32,13 +33,13 @@ class Game extends Component{
     }
 
     // will handle all logic for whether an event happens and send updated data to save
-    handleNewDay = (noEvent = false) => {
+    handleNewDay = () => {
         this.checkWinLoss();
         // if the rng function returns true, run a random scenario
         const scenarioTrigger = this.randomInt(1,14);    // if the random integer (1-14) returned is 1, an scenario will occur
         console.log(scenarioTrigger)
         if (scenarioTrigger === 2) {  // 1 in 7 chance you will run into a class M planet to hunt
-            this.setState({scenarioTriggered: true, class_M_planet: true});
+            this.setState({scenarioTriggered: true, specialScenario: (this.randomInt(0,1) ? "hunting" : "outpost") });
         }
         else if (scenarioTrigger === 1){
             let allScenarioIds = [];
@@ -58,7 +59,7 @@ class Game extends Component{
             // default new day
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
-                distance: this.props.game.saveData.distance + this.DistanceModifier(), // travel +distance based on modifier
+                distance: this.props.game.saveData.distance + this.distanceModifier(), // travel distance based on modifier
                 food: this.checkResource(this.props.game.saveData.food, this.foodConsumption()), // eat 10 food by default
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
                 phaser_energy: this.props.game.saveData.phaser_energy,
@@ -107,14 +108,14 @@ class Game extends Component{
 
     // send newSave to DB and change respective values
     updateSave = (saveData) => {
-        this.props.dispatch({type: "UPDATE_SAVE", payload: saveData})
+        this.props.dispatch({type: "UPDATE_SAVE", payload: saveData});
     }
 
     // calculate whether game will use outcome index 0 or 1 (0 being better, 1 being worse)
     calculateOutcome = () => {
         const num = this.randomInt(0,100);
         console.log("random num", num);
-        console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15)
+        console.log("crew health rating", (this.calculateCrewHealth() * 100) + 15);
         console.log("num < rating", (num < (this.calculateCrewHealth() * 100) + 15));
         // currently the odds are 25% min (only one crew member alive) and 65% max (everyone is healthy) 
         return (num < (this.calculateCrewHealth() * 100) + 15) ? 0 : 1;
@@ -141,7 +142,7 @@ class Game extends Component{
         }
         return {
             day: this.props.game.saveData.day + outcome.day,
-            distance: this.props.game.saveData.distance + outcome.distance + this.DistanceModifier(),
+            distance: this.props.game.saveData.distance + outcome.distance + this.distanceModifier(),
             food: this.checkResource(this.props.game.saveData.food, outcome.food),
             money: this.checkResource(this.props.game.saveData.money, outcome.money),
             phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy, outcome.phaser_energy),
@@ -155,9 +156,8 @@ class Game extends Component{
             helm_status: this.props.game.saveData.helm_status,
             tactical_status: this.props.game.saveData.tactical_status,
             ...changedCrew,
-        } 
+        };
     }
-
     // checks if resource change will go negative, if so, return 0, else return normal change
     checkResource = (current, change) => {
         if ((current + change) < 0) return 0;
@@ -228,7 +228,7 @@ class Game extends Component{
     }
 
     // adjusts the ship's speed based on spare materials
-    DistanceModifier = () => {
+    distanceModifier = () => {
         let modifier = 1
         if (this.props.game.saveData.warp_coils === 0) modifier -= .75;
         if (this.props.game.saveData.antimatter_flow_regulators === 0) modifier -= .1;
@@ -239,19 +239,26 @@ class Game extends Component{
         return modifier;
     }
 
-    toggleHunting = () => {
-        if (this.state.hunting){
+    toggleSpecialScenario = () => {
+        if (!this.state.playingSpecialScenario && this.state.specialScenario === "hunting"){
             this.setState({
-                hunting: false, 
+                specialScenario: false, 
                 scenarioTriggered: false,
-                class_M_planet: false,
+                playingSpecialScenario: "hunting"
+            });
+        }
+        else if (!this.state.playingSpecialScenario && this.state.specialScenario === "outpost"){
+            this.setState({
+                specialScenario: false,
+                scenarioTriggered: false,
+                playingSpecialScenario: "outpost"
             });
         }
         else {
             this.setState({
-                hunting: true, 
-                scenarioTriggered: false, 
-                class_M_planet: false
+                specialScenario: false,
+                scenarioTriggered: false,
+                playingSpecialScenario: false,
             });
         }
     }
@@ -272,7 +279,7 @@ class Game extends Component{
             <>
             {!this.state.endGame ? (
             <div className="gameView">
-            {!this.state.hunting ? (
+            {!this.state.playingSpecialScenario ? (
             <div id="mainGameView"> 
             {/* this is what displays when a scenario is NOT ongoing */}
                 <div id="shipImage">
@@ -357,12 +364,12 @@ class Game extends Component{
                 {!this.state.scenarioTriggered ? (
                     <div className="buttons">
                         <button onClick={this.handleNewDay} className="universalButton" id="newDayButton">New day</button>
-                    </div> 
+                    </div>
                 ) : (
                     <div id="scenarioMainView">
                         {!this.state.outcomeTriggered ? (
                             <>
-                            {!this.state.class_M_planet ? (
+                            {!this.state.specialScenario ? (
                                 <div id="scenarioView">
                                     <h3>{this.state.scenario.prompt}</h3>
                                     <p id="optionButtons">
@@ -371,11 +378,13 @@ class Game extends Component{
                                     </p>
                                 </div>
                             ) : (
-                                <div id="huntingScenarioView">
-                                    <h3>You find a class M planet with animals indigenous to it. Would you like to stop to go hunting?</h3>
+                                <div id="specialScenarioView">
+                                    <h3>{this.state.specialScenario==="hunting"? 
+                                    "You find a class M planet with animals indigenous to it. Would you like to stop to go hunting?" : 
+                                    "You encounter a friendly outpost with some merchants looking trade with you. Would you like to stop by?"}</h3>
                                     <p id="optionButtons">
-                                    <button onClick={this.toggleHunting} id="optionButton">Yes</button><br/>
-                                    <button onClick={()=>{this.setState({scenarioTriggered: false, class_M_planet: false})}} id="optionButton">No</button>
+                                    <button onClick={()=>{this.toggleSpecialScenario(this.state.specialScenario)}} id="optionButton">Yes</button><br/>
+                                    <button onClick={()=>{this.setState({scenarioTriggered: false, specialScenario: false})}} id="optionButton">No</button>
                                     </p>
                                 </div>
                             )}
@@ -389,9 +398,13 @@ class Game extends Component{
                     </div>
                 )}
             </div>
-            ): (
-            <div id="huntingView">
-                <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy}/>
+            ) : (
+            <div id="specialScenario">
+                {this.state.playingSpecialScenario === "hunting" ? (
+                    <HuntingGame toggleSpecialScenario={this.toggleSpecialScenario} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy} />
+                ) : (
+                    <Outpost saveData={this.props.game.saveData} distanceModifier={this.distanceModifier} toggleSpecialScenario={this.toggleSpecialScenario} />
+                )}
             </div> )}
         </div>
         ):(
@@ -413,7 +426,7 @@ class Game extends Component{
                 )}
             </div>
         )}
-            </>
+        </>
         )
     }
 }
