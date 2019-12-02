@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import './Game.css';
-import shipflying from './shipflying2.gif';
+import shipflying from './8BitShip.gif';
 
 // import components
 import HuntingGame from './HuntingGame/HuntingGame';
