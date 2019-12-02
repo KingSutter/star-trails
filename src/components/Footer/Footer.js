@@ -14,7 +14,7 @@ const toggleBackground = () => {
 
 const Footer = () => (
   <footer>
-    <button onClick={toggleBackground} className="universalButton">Toggle animated background</button>
+    <button onClick={toggleBackground} id="toggleBackgroundButton">Toggle animated background</button>
   </footer>
 );
 

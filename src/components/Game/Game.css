@@ -58,8 +58,8 @@
     padding: 20px;
 }
 
-#crewGraph, #suppliesGraph, #progressBar, #date {
-    padding-left: 30px;
+.gameView {
+    margin-left: 3%;
 }
 
 #progressBar progress {

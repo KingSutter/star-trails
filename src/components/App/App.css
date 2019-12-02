@@ -65,3 +65,9 @@ footer button{
     height: 2.5rem;
     margin-bottom: 20px;
 }
+
+#toggleBackgroundButton{
+    background-color: transparent;
+    color: white;
+    font-size: 14px;
+}
