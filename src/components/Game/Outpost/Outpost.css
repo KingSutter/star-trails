@@ -3,4 +3,9 @@
     margin-left: auto;
     margin-right: auto;
     background-color: transparent;
+    text-align: center;
+}
+
+.outpostButton {
+    background-color: transparent
 }

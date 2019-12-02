@@ -415,7 +415,7 @@ class Game extends Component{
                 {this.state.hunting ?(
                     <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy} />
                 ) : (
-                    <Outpost />
+                    <Outpost saveData={this.props.game.saveData}/>
                 )}
             </div> )}
         </div>
