@@ -57,17 +57,17 @@ class Game extends Component{
             });
         }
         else{
-            // if you're out of food, count for how long
-            if (this.props.game.saveData.food === 0){
-                this.setState({
-                    daysWithoutFood: this.state.daysWithoutFood + 1,
-                })
-            } else if (this.state.daysWithoutFood > 0){
-                this.setState({
-                    daysWithoutFood: 0,
-                })
-            }
-            const changedCrew = this.checkDaysWithoutFood();
+            // // if you're out of food, count for how long
+            // if (this.props.game.saveData.food === 0){
+            //     this.setState({
+            //         daysWithoutFood: this.state.daysWithoutFood + 1,
+            //     })
+            // } else if (this.state.daysWithoutFood > 0){
+            //     this.setState({
+            //         daysWithoutFood: 0,
+            //     })
+            // }
+            // const changedCrew = this.checkDaysWithoutFood();
             // default new day
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
@@ -85,7 +85,7 @@ class Game extends Component{
                 helm_status: this.props.game.saveData.helm_status,
                 tactical_status: this.props.game.saveData.tactical_status,
                 ...this.FoodModifier(),
-                ...changedCrew,
+                // ...changedCrew,
             }
             this.updateSave(newSave);
             this.calculateCrewHealth();
@@ -188,7 +188,10 @@ class Game extends Component{
             this.props.game.saveData.engineer_status === "dead" &&
             this.props.game.saveData.helm_status === "dead" &&
             this.props.game.saveData.tactical_status === "dead"
-        ){this.setState({endGame: "lose"});}
+        )
+        {
+            this.setState({endGame: "lose"});
+        }
     }
 
     // returns user to the main menu
