@@ -50,7 +50,7 @@
     padding: 10px
 }
 #optionButton:hover{
-    background-color: lightgray;
+    background-color: rgba(48, 48, 48, .7);
 }
 
 #optionText{

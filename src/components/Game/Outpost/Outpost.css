@@ -6,10 +6,24 @@
     text-align: center;
 }
 
-.outpostButton {
+#outpostView button {
     background-color: transparent
 }
 
-#outpostView thead, #outpostView tfoot{
-    background-color: rgba(46, 46, 46, .7);
+#outpostView .header, .footer{
+    background-color: rgba(46, 46, 46, .3);
+}
+
+#confirmPurchaseButton {
+    width: 100%;
+    font-size: 20px;
+}
+
+.hoverEffect:hover, #outpostView button:hover {
+    background-color: rgba(48, 48, 48, .9);
+}
+
+#warning{
+    background-color: transparent;
+    color: transparent
 }
