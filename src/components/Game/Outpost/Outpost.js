@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import './Outpost.css';
+import {connect} from 'react-redux';
 
 class Outpost extends Component {
     state = {
@@ -86,11 +87,28 @@ class Outpost extends Component {
 
     // wraps up the changes made in the shop and saves it to the user's save state in the database
     handleConfirm = () => {
-      
+      const newSave = {
+        day: this.props.saveData.day + 1,
+        distance: this.props.saveData.distance,
+        food: this.state.food + this.state.availableFood, 
+        money: this.state.availableCredits,
+        phaser_energy: this.props.saveData.phaser_energy + (this.state.batteries * 20),
+        warp_coils: this.state.availableCoils + this.state.coils,
+        antimatter_flow_regulators: this.state.availableRegulators + this.state.regulators,
+        magnetic_constrictors: this.state.availableConstrictors + this.state.constrictors,
+        plasma_injectors: this.state.availableInjectors + this.state.injectors,
+        captain_status: this.props.saveData.captain_status,
+        medic_status: this.props.saveData.medic_status,
+        engineer_status: this.props.saveData.engineer_status,
+        helm_status: this.props.saveData.helm_status,
+        tactical_status: this.props.saveData.tactical_status,
+      };
+      this.props.dispatch({type: "UPDATE_SAVE", payload: newSave});
+      this.props.toggleOutpost();
     }
 
     toggleConfirm = () => {
-      this.setState({secondConfirmation: !this.state.secondConfirmation})
+      this.setState({secondConfirmation: !this.state.secondConfirmation});
     }
 
     render(){
@@ -117,7 +135,7 @@ class Outpost extends Component {
                           <td><button onClick={()=>this.incrementItem("food",1,10)} className="outpostButton">+</button><button onClick={()=>this.decrementItem("food",1,10)} className="outpostButton">-</button><button onClick={()=>this.resetItem("food",1)}>C</button></td>
                           <td>{this.state.availableFood + this.state.food}</td>
                           <td>{this.state.food}</td>
-                          <td>⌬{this.state.food * 1}</td>
+                          <td>⌬{this.state.food}</td>
                         </tr>
                         <tr>
                           <td>Batteries</td>
@@ -189,9 +207,10 @@ class Outpost extends Component {
                         </tr>
                     </tfoot>
                 </table>
+                <span>{JSON.stringify(this.state,null,2)}</span>
             </div>
         )
     }
 }
 
-export default Outpost;
+export default connect()(Outpost);

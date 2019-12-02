@@ -61,7 +61,7 @@ class Game extends Component{
             // default new day
             const newSave = {
                 day: this.props.game.saveData.day + 1, // next day
-                distance: this.props.game.saveData.distance + this.DistanceModifier(), // travel +distance based on modifier
+                distance: this.props.game.saveData.distance + this.distanceModifier(), // travel distance based on modifier
                 food: this.checkResource(this.props.game.saveData.food, this.foodConsumption()), // eat 10 food by default
                 money: this.props.game.saveData.money, // the rest below will remain the same, but need to be here for the update route
                 phaser_energy: this.props.game.saveData.phaser_energy,
@@ -144,7 +144,7 @@ class Game extends Component{
         }
         return {
             day: this.props.game.saveData.day + outcome.day,
-            distance: this.props.game.saveData.distance + outcome.distance + this.DistanceModifier(),
+            distance: this.props.game.saveData.distance + outcome.distance + this.distanceModifier(),
             food: this.checkResource(this.props.game.saveData.food, outcome.food),
             money: this.checkResource(this.props.game.saveData.money, outcome.money),
             phaser_energy: this.checkResource(this.props.game.saveData.phaser_energy, outcome.phaser_energy),
@@ -230,7 +230,7 @@ class Game extends Component{
     }
 
     // adjusts the ship's speed based on spare materials
-    DistanceModifier = () => {
+    distanceModifier = () => {
         let modifier = 1
         if (this.props.game.saveData.warp_coils === 0) modifier -= .75;
         if (this.props.game.saveData.antimatter_flow_regulators === 0) modifier -= .1;
@@ -415,7 +415,7 @@ class Game extends Component{
                 {this.state.hunting ?(
                     <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy} />
                 ) : (
-                    <Outpost saveData={this.props.game.saveData}/>
+                    <Outpost saveData={this.props.game.saveData} distanceModifier={this.distanceModifier} toggleOutpost={this.toggleOutpost} />
                 )}
             </div> )}
         </div>
