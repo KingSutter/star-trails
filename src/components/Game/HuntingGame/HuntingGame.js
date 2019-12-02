@@ -366,7 +366,7 @@ class HuntingGame extends Component {
                     <h2>Time to leave!</h2>
                     <h3>You gathered {this.state.foodGathered} pounds of food.</h3>
                     <h3>You used {this.phaserEnergyUsed} phaser energy.</h3>
-                    <button onClick={()=>{this.setState({showingResults: false}); this.props.toggleHunting();}}>Continue</button>
+                    <button onClick={()=>{this.setState({showingResults: false}); this.props.toggleSpecialScenario("hunting");}}>Continue</button>
                 </div>
                 )}
             </div>

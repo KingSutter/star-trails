@@ -22,9 +22,7 @@ class Game extends Component{
         outcomeChanges: {},
         endGame: false,
         specialScenario: false,
-        hunting: false,
-        class_M_planet: false,
-        outpost: false,
+        playingSpecialScenario: false,
     }
 
     // get all relevant data from the DB for use throughout the entirety of the game
@@ -41,7 +39,7 @@ class Game extends Component{
         const scenarioTrigger = this.randomInt(1,14);    // if the random integer (1-14) returned is 1, an scenario will occur
         console.log(scenarioTrigger)
         if (scenarioTrigger === 2) {  // 1 in 7 chance you will run into a class M planet to hunt
-            this.setState({scenarioTriggered: true, class_M_planet: true});
+            this.setState({scenarioTriggered: true, specialScenario: (this.randomInt(0,1) ? "hunting" : "outpost") });
         }
         else if (scenarioTrigger === 1){
             let allScenarioIds = [];
@@ -241,38 +239,26 @@ class Game extends Component{
         return modifier;
     }
 
-    toggleHunting = () => {
-        if (this.state.specialScenario){
+    toggleSpecialScenario = () => {
+        if (!this.state.playingSpecialScenario && this.state.specialScenario === "hunting"){
             this.setState({
                 specialScenario: false, 
                 scenarioTriggered: false,
-                class_M_planet: false,
-                hunting: false,
+                playingSpecialScenario: "hunting"
+            });
+        }
+        else if (!this.state.playingSpecialScenario && this.state.specialScenario === "outpost"){
+            this.setState({
+                specialScenario: false,
+                scenarioTriggered: false,
+                playingSpecialScenario: "outpost"
             });
         }
         else {
             this.setState({
-                specialScenario: true, 
-                scenarioTriggered: false, 
-                class_M_planet: false,
-                hunting: true,
-            });
-        }
-    }
-
-    toggleOutpost = () => {
-        if (this.state.specialScenario){
-            this.setState({
-                specialScenario: false, 
+                specialScenario: false,
                 scenarioTriggered: false,
-                outpost: false,
-            });
-        }
-        else {
-            this.setState({
-                specialScenario: true, 
-                scenarioTriggered: false, 
-                outpost: true,
+                playingSpecialScenario: false,
             });
         }
     }
@@ -293,7 +279,7 @@ class Game extends Component{
             <>
             {!this.state.endGame ? (
             <div className="gameView">
-            {!this.state.specialScenario ? (
+            {!this.state.playingSpecialScenario ? (
             <div id="mainGameView"> 
             {/* this is what displays when a scenario is NOT ongoing */}
                 <div id="shipImage">
@@ -383,7 +369,7 @@ class Game extends Component{
                     <div id="scenarioMainView">
                         {!this.state.outcomeTriggered ? (
                             <>
-                            {!this.state.class_M_planet ? (
+                            {!this.state.specialScenario ? (
                                 <div id="scenarioView">
                                     <h3>{this.state.scenario.prompt}</h3>
                                     <p id="optionButtons">
@@ -392,11 +378,13 @@ class Game extends Component{
                                     </p>
                                 </div>
                             ) : (
-                                <div id="huntingScenarioView">
-                                    <h3>You find a class M planet with animals indigenous to it. Would you like to stop to go hunting?</h3>
+                                <div id="specialScenarioView">
+                                    <h3>{this.state.specialScenario==="hunting"? 
+                                    "You find a class M planet with animals indigenous to it. Would you like to stop to go hunting?" : 
+                                    "You encounter a friendly outpost with some merchants looking trade with you. Would you like to stop by?"}</h3>
                                     <p id="optionButtons">
-                                    <button onClick={this.toggleHunting} id="optionButton">Yes</button><br/>
-                                    <button onClick={()=>{this.setState({scenarioTriggered: false, class_M_planet: false})}} id="optionButton">No</button>
+                                    <button onClick={()=>{this.toggleSpecialScenario(this.state.specialScenario)}} id="optionButton">Yes</button><br/>
+                                    <button onClick={()=>{this.setState({scenarioTriggered: false, specialScenario: false})}} id="optionButton">No</button>
                                     </p>
                                 </div>
                             )}
@@ -410,12 +398,12 @@ class Game extends Component{
                     </div>
                 )}
             </div>
-            ): (
+            ) : (
             <div id="specialScenario">
-                {this.state.hunting ?(
-                    <HuntingGame toggleHunting={this.toggleHunting} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy} />
+                {this.state.playingSpecialScenario === "hunting" ? (
+                    <HuntingGame toggleSpecialScenario={this.toggleSpecialScenario} food={this.props.game.saveData.food} phaser_energy={this.props.game.saveData.phaser_energy} />
                 ) : (
-                    <Outpost saveData={this.props.game.saveData} distanceModifier={this.distanceModifier} toggleOutpost={this.toggleOutpost} />
+                    <Outpost saveData={this.props.game.saveData} distanceModifier={this.distanceModifier} toggleSpecialScenario={this.toggleSpecialScenario} />
                 )}
             </div> )}
         </div>
@@ -438,8 +426,7 @@ class Game extends Component{
                 )}
             </div>
         )}
-        <button onClick={this.toggleOutpost}>Toggle outpost</button>
-            </>
+        </>
         )
     }
 }

@@ -104,7 +104,7 @@ class Outpost extends Component {
         tactical_status: this.props.saveData.tactical_status,
       };
       this.props.dispatch({type: "UPDATE_SAVE", payload: newSave});
-      this.props.toggleOutpost();
+      this.props.toggleSpecialScenario("outpost");
     }
 
     toggleConfirm = () => {
@@ -207,7 +207,6 @@ class Outpost extends Component {
                         </tr>
                     </tfoot>
                 </table>
-                <span>{JSON.stringify(this.state,null,2)}</span>
             </div>
         )
     }
