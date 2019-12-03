@@ -11,7 +11,7 @@ class RegisterPage extends Component {
   registerUser = (event) => {
     event.preventDefault();
 
-    if (this.state.username && this.state.password && this.state.password === this.state.confirmPassword) {
+    if (this.state.username && this.state.password && (this.state.password === this.state.confirmPassword)) {
       this.props.dispatch({
         type: 'REGISTER',
         payload: {
@@ -99,6 +99,7 @@ class RegisterPage extends Component {
             Login
           </button>
         </center>
+        <span>{JSON.stringify(this.state,null,2)}</span>
       </div>
     );
   }

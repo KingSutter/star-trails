@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import './Setup.css';
 import {withRouter} from 'react-router-dom';
-import { throwStatement } from '@babel/types';
 
+let messageTimer = '';
 class Setup extends Component{
     state= {
         captain: '',
@@ -32,7 +32,7 @@ class Setup extends Component{
         if (this.state.exceededLimit){
             this.setState({message: "You cannot be in debt. Please fix your bill accordingly", confirm: 0});
             document.getElementById("message").style.color = "red";
-            const messageTimer = setInterval(()=>{document.getElementById("message").style.color = "transparent"; clearInterval(messageTimer)},5000)
+            messageTimer = setInterval(()=>{document.getElementById("message").style.color = "transparent";},5000)
             return 0;
         }else {
             // if the user confirms, create a save for the user and push to the main game page
@@ -43,6 +43,9 @@ class Setup extends Component{
             }
             this.setState({confirm: true})
         } 
+    }
+    componentWillUnmount(){
+        clearInterval(messageTimer)
     }
     
     // handles the changing of any input and changes that respective input in state
