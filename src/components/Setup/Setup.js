@@ -111,9 +111,9 @@ class Setup extends Component{
                         <h3 id="message" align="center">{this.state.message}</h3><br/>
                         <div id="startButton">
                             {!this.state.confirm  ? (
-                                <button className="universalButton" type="submit">Start your journey</button>
+                                <button className="universalButton" type="submit">Ready</button>
                             ): (
-                                <button className="universalButton" type="submit">Confirm</button>
+                                <button className="universalButton" type="submit">Start your journey</button>
                             )}
                         </div>
                     </div>

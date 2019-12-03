@@ -35,6 +35,18 @@
     max-height: 100px;
 }
 
+::-webkit-scrollbar{
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+    background: white;
+}
+
+::-webkit-scrollbar-corner{
+    background: transparent;
+}
+
 #usersTable td{
     width: 200px;
     font-size: 20px;
