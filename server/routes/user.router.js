@@ -259,7 +259,7 @@ router.post('/save', rejectUnauthenticated, (req,res) => {
     WHERE "accounts".save_id = "save".id
     AND "accounts".id = $20;`
     console.log(req.body)
-    pool.query(queryText,[0, 0, req.body.food, req.body.money, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, "healthy", req.body.medic, "healthy", req.body.engineer, "healthy", req.body.helm, "healthy", req.body.tactical, "healthy", req.user.id])
+    pool.query(queryText,[0, 0, req.body.food, req.body.available, req.body.phaser_energy, req.body.warp_coils, req.body.antimatter_flow_regulators, req.body.magnetic_constrictors, req.body.plasma_injectors, req.body.captain, "healthy", req.body.medic, "healthy", req.body.engineer, "healthy", req.body.helm, "healthy", req.body.tactical, "healthy", req.user.id])
     .then(() => {
       res.sendStatus(200);
     }).catch((error)=>{

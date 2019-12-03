@@ -42,3 +42,7 @@
     max-height: 0px;
     color: transparent;
 }
+
+.exceeded {
+    color:red
+}
