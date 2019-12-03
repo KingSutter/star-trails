@@ -303,7 +303,7 @@ class Admin extends Component {
                     <table>
                         <thead>
                             <tr>
-                                <td>ID</td>
+                                <td id="IDnumber">ID</td>
                                 <td>Prompt</td>
                                 <td>Option1</td>
                                 <td>Option2</td>
@@ -327,16 +327,16 @@ class Admin extends Component {
                                     {String(this.state.scenarioEditInput.id) !== String(scenario.id) ? (
                                     <>
                                     <td>{scenario.id}</td>
-                                    <td>{scenario.prompt}</td>
-                                    <td>{scenario.option1}</td>
-                                    <td>{scenario.option2}</td>
-                                    <td>{scenario.good_outcome}</td>
+                                    <td><div className="scrollable">{scenario.prompt}</div></td>
+                                    <td><div className="scrollable">{scenario.option1}</div></td>
+                                    <td><div className="scrollable">{scenario.option2}</div></td>
+                                    <td><div className="scrollable">{scenario.good_outcome}</div>   </td>
                                     <td>{scenario.good_outcome_id}</td>
-                                    <td>{scenario.bad_outcome}</td>
+                                    <td><div className="scrollable">{scenario.bad_outcome}</div></td>
                                     <td>{scenario.bad_outcome_id}</td>
-                                    <td>{scenario.neutral_outcome}</td>
+                                    <td><div className="scrollable">{scenario.neutral_outcome}</div></td>
                                     <td>{scenario.neutral_outcome_id}</td>
-                                    <td>{scenario.non_neutral_outcome}</td>
+                                    <td><div className="scrollable">{scenario.non_neutral_outcome}</div></td>
                                     <td>{scenario.non_neutral_outcome_id}</td>
                                     <td>[ {scenario.option1_outcomes[0]} , {scenario.option1_outcomes[1]} ]</td>
                                     <td>[ {scenario.option2_outcomes[0]} , {scenario.option2_outcomes[1]} ]</td>
@@ -360,6 +360,7 @@ class Admin extends Component {
                                     <td>[{this.state.scenarioEditInput.good_outcome_id}, {this.state.scenarioEditInput.bad_outcome_id}]</td>
                                     <td>[{this.state.scenarioEditInput.neutral_outcome_id}, {this.state.scenarioEditInput.non_neutral_outcome_id}]</td>
                                     <td><button onClick={this.handleSubmitEditScenario}>Submit</button></td>
+                                    <td></td>
                                     </>}
                                 </tr>
                             ))}
@@ -492,7 +493,6 @@ class Admin extends Component {
                         </table>
                     </div>
                 )}
-        <span>{JSON.stringify(this.state.outcomeEditInput,null,2)}</span>
             </div>
         )
     }

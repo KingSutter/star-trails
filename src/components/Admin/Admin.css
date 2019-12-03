@@ -1,13 +1,12 @@
-.adminView form {
-    max-height: 0px;
-}
-
 .adminView table {
     border-collapse: collapse;
-  }
+    table-layout: fixed;
+    text-align: center;
+}
   
 .adminView td {
     border: 1px solid white;
+    max-width: 100px;
 }
 .adminView button {
     background-color: transparent;
@@ -19,9 +18,24 @@
     background-color: transparent;
     color: white;
     border: transparent;
-    height: 20px;
+    height: 100px;
+    max-width: 100px;
 }
 
 ::placeholder{
     color: lightgray;
+}
+
+.scrollable {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: scroll;
+    max-height: 100px;
+}
+
+#usersTable td{
+    width: 200px;
+    font-size: 20px;
 }

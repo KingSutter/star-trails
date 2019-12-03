@@ -42,24 +42,19 @@
 }
 
 #optionButton{
-    /* font-size: 30px; */
-    background-color: white;
+    background-color: transparent;
     width: 60%;
-    color: black;
+    color: white;
     margin: 10px;
     padding: 10px
 }
 #optionButton:hover{
-    background-color: rgba(48, 48, 48, .7);
+    background-color: rgba(255, 255, 255, .4);
 }
 
 #optionText{
     font-size: 20px;
     padding: 20px;
-}
-
-.gameView {
-    margin-left: 3%;
 }
 
 #progressBar progress {
