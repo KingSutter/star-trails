@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import './Setup.css';
 import {withRouter} from 'react-router-dom';
+import { throwStatement } from '@babel/types';
 
 class Setup extends Component{
     state= {
@@ -20,6 +21,8 @@ class Setup extends Component{
         available: 950,
         phaser_energy: 0,
         exceededLimit: false,
+        message: "placeholder",
+        confirm: false,
     }
 
     // sends all data to server and associates that save data with the current user
@@ -27,13 +30,19 @@ class Setup extends Component{
         e.preventDefault();
         // if the user is trying to spend more money than they have. Make them correct that
         if (this.state.exceededLimit){
-            alert("You cannot be in debt. Please fix your bill accordingly")
+            this.setState({message: "You cannot be in debt. Please fix your bill accordingly", confirm: 0});
+            document.getElementById("message").style.color = "red";
+            const messageTimer = setInterval(()=>{document.getElementById("message").style.color = "transparent"; clearInterval(messageTimer)},5000)
             return 0;
-        }
-        // if the user confirms, create a save for the user and push to the main game page
-        if(window.confirm("Is everything here okay?")){
-            this.props.dispatch({type: "CREATE_SAVE", payload: this.state, history: this.props.history})
-        }
+        }else {
+            // if the user confirms, create a save for the user and push to the main game page
+            this.setState({message: "Are you ready?"});
+            document.getElementById("message").style.color = "white"
+            if(this.state.confirm){
+                this.props.dispatch({type: "CREATE_SAVE", payload: this.state, history: this.props.history})
+            }
+            this.setState({confirm: true})
+        } 
     }
     
     // handles the changing of any input and changes that respective input in state
@@ -63,47 +72,51 @@ class Setup extends Component{
         return(
             <div id="setupView">
                 <form onSubmit={this.createSaveAndStart}>
-                <div>
-                    <h2>Crew</h2>
-                    <ul>
-                        <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autoComplete="off" required /></li>
-                        <li>Chief of Medicine: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="medic" autoComplete="off" required /></li>
-                        <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autoComplete="off" required /></li>
-                        <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autoComplete="off" required /></li>
-                        <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autoComplete="off"  required /></li>
-                    </ul>
-                    <h2>Food</h2>
-                    <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autoComplete="off" required /> Cost: ⌬1 per pound</ul>
-                    <h2>Ammunition</h2>
-                    <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autoComplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts of energy</ul>
-                    <h2>Spare Parts</h2>
-                    <ul>
-                    <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autoComplete="off" required /> Cost: ⌬40 per warp coil</li>
-                        <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="antimatter_flow_regulators" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per antimatter flow regulator</li>
-                        <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="magnetic_constrictors" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per magnetic constrictor</li>
-                        <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="plasma_injectors" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per plasma injector</li>
-                    </ul>
-                    <div id="bill">
-                        <h2>Bill:</h2>
+                    <div>
+                        <h2>Crew</h2>
                         <ul>
-                            <li>Food: ⌬{this.state.food}</li>
-                            <li>Batteries: ⌬{this.state.batteries}</li>
-                            <li>Warp Coils: ⌬{this.state.warp_coils * 40}</li>
-                            <li>Antimatter Flow Regulators: ⌬{this.state.antimatter_flow_regulators * 10}</li>
-                            <li>Magnetic Constrictors: ⌬{this.state.magnetic_constrictors * 10}</li>
-                            <li>Plasma Injectors: ⌬{this.state.plasma_injectors * 10}</li>
+                            <li>Captain: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="captain" autoComplete="off" required /></li>
+                            <li>Chief of Medicine: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="medic" autoComplete="off" required /></li>
+                            <li>Chief Engineer: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="engineer" autoComplete="off" required /></li>
+                            <li>Helm: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="helm" autoComplete="off" required /></li>
+                            <li>Tactical: <input onChange={this.handleNameChange} placeholder="name" className="setUpInput" name="tactical" autoComplete="off"  required /></li>
                         </ul>
+                        <h2>Food</h2>
+                        <ul><input onChange={this.handleChange} placeholder="pounds" type="number" min="0" name="food" className="setUpInput" autoComplete="off" required /> Cost: ⌬1 per pound</ul>
+                        <h2>Ammunition</h2>
+                        <ul><input onChange={this.handleChange} placeholder="batteries" type="number" min="0" name="batteries" className="setUpInput" autoComplete="off" required /> Cost: ⌬2 per battery. Each battery gets you 20 phaser blasts of energy</ul>
+                        <h2>Spare Parts</h2>
+                        <ul>
+                        <li><input onChange={this.handleChange} placeholder="warp coils" type="number" min="0" max="9" name="warp_coils" className="setUpInput" autoComplete="off" required /> Cost: ⌬40 per warp coil</li>
+                            <li><input onChange={this.handleChange} placeholder="regulators" type="number" min="0" max="3" name="antimatter_flow_regulators" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per antimatter flow regulator</li>
+                            <li><input onChange={this.handleChange} placeholder="constrictors" type="number" min="0" max="3" name="magnetic_constrictors" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per magnetic constrictor</li>
+                            <li><input onChange={this.handleChange} placeholder="injectors" type="number" min="0" max="3" name="plasma_injectors" className="setUpInput" autoComplete="off" required /> Cost: ⌬10 per plasma injector</li>
+                        </ul>
+                        <div id="bill">
+                            <h2>Bill:</h2>
+                            <ul>
+                                <li>Food: ⌬{this.state.food}</li>
+                                <li>Batteries: ⌬{this.state.batteries}</li>
+                                <li>Warp Coils: ⌬{this.state.warp_coils * 40}</li>
+                                <li>Antimatter Flow Regulators: ⌬{this.state.antimatter_flow_regulators * 10}</li>
+                                <li>Magnetic Constrictors: ⌬{this.state.magnetic_constrictors * 10}</li>
+                                <li>Plasma Injectors: ⌬{this.state.plasma_injectors * 10}</li>
+                            </ul>
+                        </div>
+                        {/* Conditionally render Available Credits to highlight when negative */}
+                        {!this.state.exceededLimit ? 
+                            (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
+                            (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
+                        <div id="totalCredits">Total Credits: ⌬{this.state.money}</div>
+                        <h3 id="message" align="center">{this.state.message}</h3><br/>
+                        <div id="startButton">
+                            {!this.state.confirm  ? (
+                                <button className="universalButton" type="submit">Start your journey</button>
+                            ): (
+                                <button className="universalButton" type="submit">Confirm</button>
+                            )}
+                        </div>
                     </div>
-                    {/* Conditionally render Available Credits to highlight when negative */}
-                    {!this.state.exceededLimit ? 
-                        (<div id="availableCredits">Available Credits: ⌬{this.state.available}</div>) :
-                        (<div id="availableCredits"><span className="exceeded">Available Credits: ⌬{this.state.available}</span></div>)}
-                    <div id="totalCredits">Total Credits: ⌬{this.state.money}</div>
-                    <div id="startButton" className="universalButton">
-                        <button  className="universalButton" type="submit">Start your journey</button>
-                    </div>
-                </div>
-                {/* <span>{JSON.stringify(this.state,null,2)}</span> */}
                 </form>
             </div>
         )

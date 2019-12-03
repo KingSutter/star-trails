@@ -8,7 +8,7 @@ class UserPage extends Component {
     confimation: false,
   }
   handleNewGame = () => {
-    // if user already has a save - confirm with user
+    // if user already has a save - confirm with user. Else just go to the setup page
     if (this.props.user.save_id !== null){
       this.setState({confimation: true})
     }else{this.props.history.push('/setup')}

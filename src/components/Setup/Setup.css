@@ -37,3 +37,8 @@
 #setupView input:focus{
     background-color: rgba(48, 48, 48, .3);
 }
+
+#message{
+    max-height: 0px;
+    color: transparent;
+}
