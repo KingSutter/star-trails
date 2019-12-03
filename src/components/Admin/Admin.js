@@ -233,8 +233,6 @@ class Admin extends Component {
 
     // user can edit entire row when called
     handleEditOutcomeClick = (outcome, e) => {
-        console.log("edit outcome click called", outcome);
-        
         this.setState({
             outcomeEditInput: {
                 id: e.target.name,
