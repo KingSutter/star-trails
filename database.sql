@@ -55,7 +55,7 @@ CREATE TABLE "scenarios" (
 CREATE TABLE "outcomes" (
 	"id" serial PRIMARY KEY,
 	"day" integer default '1',
-	"distance" real default '200',
+	"distance" real default '1',
 	"food" integer default '-10',
 	"money" integer default '0',
 	"phaser_energy" integer default '0',
