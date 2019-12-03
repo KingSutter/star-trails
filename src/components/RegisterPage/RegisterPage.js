@@ -99,7 +99,6 @@ class RegisterPage extends Component {
             Login
           </button>
         </center>
-        <span>{JSON.stringify(this.state,null,2)}</span>
       </div>
     );
   }
